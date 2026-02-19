@@ -83,6 +83,12 @@
     </style>
 </head>
 <body>
+    <!-- Skip to content link for keyboard users -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- ARIA live region for dynamic announcements -->
+    <div id="aria-live" class="aria-live aria-live-polite" aria-live="polite"></div>
+    
     <!-- Header Section -->
     <header>
         <div class="container">
@@ -94,7 +100,7 @@
         </div>
     </header>
 
-    <main>
+    <main id="main-content" tabindex="-1">
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
@@ -117,9 +123,14 @@
     </section>
 
     <!-- Functionalities Section -->
-    <section class="functionalities" id="functionalities">
+    <section class="functionalities" id="functionalities" data-icon="🔧">
+        <div class="section-nav">
+            <span class="section-nav-indicator active" data-target="functionalities"></span>
+            <span class="section-nav-indicator" data-target="team"></span>
+        </div>
         <div class="container">
             <h3 class="section-title">Key Functionalities</h3>
+            <p class="section-subtitle">Discover the powerful features that make Remote Labs accessible and efficient for all users</p>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
@@ -147,9 +158,14 @@
     </section>
 
     <!-- Team Section -->
-    <section class="team" id="team">
+    <section class="team" id="team" data-icon="👥">
+        <div class="section-nav">
+            <span class="section-nav-indicator" data-target="functionalities"></span>
+            <span class="section-nav-indicator active" data-target="team"></span>
+        </div>
         <div class="container">
             <h3 class="section-title">Meet Our Team</h3>
+            <p class="section-subtitle">Get to know the dedicated professionals behind Remote Labs who make 24/7 access to physical experiments possible</p>
             <div class="team-grid">
                 <div class="team-member">
                     <div class="team-photo-container">
@@ -254,6 +270,42 @@
         // Load polyfills for older browsers
         document.write('<script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,es2015,es2016,es2017,es2018,es2019,es2020"><\/script>');
         document.write('<script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2/dist/css-vars-ponyfill.min.js"><\/script>');
+    </script>
+    <!-- DIRECT SMOOTH SCROLLING FIX - Simple inline script -->
+    <script>
+        // Simple smooth scrolling that works everywhere
+        document.addEventListener('DOMContentLoaded', function() {
+            // Enable CSS smooth scrolling
+            document.documentElement.style.scrollBehavior = 'smooth';
+            
+            // Handle anchor links directly
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Handle back-to-top button
+            const backToTop = document.querySelector('.back-to-top');
+            if (backToTop) {
+                backToTop.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+            
+            console.log('Direct smooth scrolling initialized');
+        });
     </script>
     
     <!-- Add security and performance meta tags -->
