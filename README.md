@@ -12,8 +12,9 @@ A clean, professional, and highly compatible one-page website for Remote Labs - 
 - **📱 Responsive Design**: Works flawlessly on desktops, tablets, and mobile devices
 - **🎨 Modern UI**: Clean, professional layout with smooth animations
 - **🔗 Easy Navigation**: Fixed header with direct link to Remote Labs platform
-- **📝 Comprehensive Sections**: Hero, Functionalities, Benefits, Team, and Footer
+- **📝 Comprehensive Sections**: Hero, Functionalities, Team, and Footer
 - **🎓 TU/e Branding**: Color scheme aligned with Eindhoven University of Technology
+- **🚀 Smooth Scrolling**: Enhanced navigation with smooth scroll behavior on all anchor links
 
 ### Advanced UX Enhancements
 - **🎯 Sticky Navigation**: Header shrinks on scroll for better space utilization
@@ -21,6 +22,8 @@ A clean, professional, and highly compatible one-page website for Remote Labs - 
 - **✨ Enhanced Interactions**: Improved hover states and micro-interactions
 - **👆 Touch Feedback**: Visual responses to touch interactions on mobile
 - **⌨️ Keyboard Navigation**: Full keyboard support for accessibility
+- **🎯 Section Navigation**: Visual indicators showing current section with quick navigation
+- **📊 Scroll Progress**: Visual progress bar showing page scroll position
 
 ### Performance & Optimization
 - **🚀 Lazy Loading**: Images and iframes load only when visible
@@ -28,6 +31,7 @@ A clean, professional, and highly compatible one-page website for Remote Labs - 
 - **📦 Minified Assets**: Optimized CSS and JavaScript files
 - **💾 Caching Strategies**: Service Worker and cache manifest for offline support
 - **📊 Performance Monitoring**: Built-in page load time tracking
+- **🎯 Direct Smooth Scrolling**: Inline script ensures smooth scrolling works immediately
 
 ### Accessibility & Inclusivity
 - **🔠 ARIA Labels**: Screen reader support for all interactive elements
