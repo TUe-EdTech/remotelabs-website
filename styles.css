@@ -15,6 +15,85 @@
     --gray-900: #111827;
 }
 
+/* Browser-specific fixes */
+/* IE10+ */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    /* IE10+ specific fixes */
+    .feature-card, .team-member {
+        display: block;
+    }
+    
+    /* Flexbox fixes for IE */
+    header .container {
+        display: -ms-flexbox;
+        -ms-flex-direction: row;
+    }
+    
+    /* Grid fallback for IE */
+    .features-grid, .benefits-grid, .team-grid {
+        display: -ms-grid;
+    }
+}
+
+/* Safari specific fixes */
+@media not all and (min-resolution: 0.001dpcm) {
+    @supports (-webkit-appearance: none) {
+        /* Safari specific fixes */
+        .back-to-top {
+            -webkit-backface-visibility: hidden;
+            -webkit-transform: translateZ(0);
+        }
+        
+        /* Smooth scrolling for Safari */
+        html {
+            scroll-behavior: auto;
+        }
+    }
+}
+
+/* Firefox specific fixes */
+@-moz-document url-prefix() {
+    /* Firefox specific fixes */
+    .feature-card:hover {
+        transform: translateY(-3px) !important;
+    }
+    
+    /* Fix for Firefox flexbox issues */
+    header.scrolled {
+        padding: 1rem 0 !important;
+    }
+}
+
+/* Edge specific fixes */
+@supports (-ms-ime-align: auto) {
+    /* Edge specific fixes */
+    .hero-cta-button {
+        padding: 0.85rem 2rem !important;
+    }
+}
+
+/* Older browser fallbacks */
+.grid-fallback {
+    display: block;
+}
+
+.no-flexbox header .container {
+    display: block;
+}
+
+.no-cssgrid .features-grid,
+.no-cssgrid .benefits-grid,
+.no-cssgrid .team-grid {
+    display: block;
+}
+
+.no-cssgrid .feature-card,
+.no-cssgrid .benefit-item,
+.no-cssgrid .team-member {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -36,6 +115,38 @@ body {
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+/* Back to Top Button */
+.back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 50px;
+    height: 50px;
+    background-color: var(--highlight-color);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    z-index: 999;
+}
+
+.back-to-top:hover {
+    background-color: var(--black);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.back-to-top:focus {
+    outline: 2px solid var(--black);
+    outline-offset: 2px;
 }
 
 main {
@@ -90,7 +201,12 @@ header {
     width: 100%;
     top: 0;
     z-index: 1000;
-    transition: box-shadow 0.2s ease;
+    transition: box-shadow 0.2s ease, padding 0.2s ease;
+}
+
+header.scrolled {
+    padding: 1rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 header .container {
@@ -118,7 +234,7 @@ header .container {
     letter-spacing: -0.5px;
 }
 
-.cta-button {
+.cta-button, .hero-cta-button {
     font-family: 'Gilroy Bold', sans-serif;
     background-color: var(--black);
     color: var(--white);
@@ -130,6 +246,21 @@ header .container {
     letter-spacing: 0.5px;
     transition: all 0.2s ease;
     border: 2px solid var(--black);
+    display: inline-block;
+}
+
+.hero-cta-button {
+    font-size: 1.1rem;
+    padding: 0.85rem 2rem;
+    margin-bottom: 2rem;
+    background-color: var(--highlight-color);
+    border-color: var(--highlight-color);
+}
+
+.hero-cta-button:hover {
+    background-color: var(--black);
+    color: var(--white);
+    transform: translateY(-2px);
 }
 
 .cta-button:hover {
@@ -190,6 +321,14 @@ section {
     padding: 6rem 0;
 }
 
+section:nth-child(even) {
+    background-color: var(--gray-50);
+}
+
+section:nth-child(odd) {
+    background-color: var(--white);
+}
+
 .section-title {
     font-family: 'Gilroy Bold', sans-serif;
     text-align: center;
@@ -232,6 +371,11 @@ section {
     border-color: var(--gray-200);
 }
 
+.feature-card:focus-within {
+    outline: 2px solid var(--highlight-color);
+    outline-offset: 4px;
+}
+
 .feature-icon {
     font-size: 2rem;
     color: var(--highlight-color);
@@ -249,33 +393,116 @@ section {
     color: var(--gray-600);
 }
 
-/* Benefits Section - Clean Black & White */
+
+=======
+/* Benefits Section - Distinct Visual Style */
+.benefits {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(37, 99, 235, 0.02) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.benefits::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--highlight-color) 0%, rgba(37, 99, 235, 0.3) 100%);
+}
+
 .benefits-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-bottom: 4rem;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2.5rem;
+    margin: 3rem 0;
 }
 
 .benefit-item {
-    text-align: center;
-    padding: 1.5rem;
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(37, 99, 235, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.benefit-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--highlight-color) 0%, rgba(37, 99, 235, 0.5) 100%);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+.benefit-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(37, 99, 235, 0.15);
+    border-color: rgba(37, 99, 235, 0.2);
+}
+
+.benefit-item:hover::before {
+    transform: translateX(0);
 }
 
 .benefit-icon {
-    font-size: 2rem;
-    color: var(--black);
-    margin-bottom: 1.5rem;
+    font-size: 2.2rem;
+    color: var(--highlight-color);
+    margin-bottom: 1.2rem;
+    background: rgba(37, 99, 235, 0.08);
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.benefit-item:hover .benefit-icon {
+    background: rgba(37, 99, 235, 0.15);
+    transform: scale(1.1);
 }
 
 .benefit-item h4 {
     font-family: 'Gilroy Bold', sans-serif;
     color: var(--black);
     margin-bottom: 1rem;
+    font-size: 1.3rem;
+    position: relative;
 }
 
 .benefit-item p {
-    color: var(--gray-600);
+    color: var(--gray-700);
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* Number badges for benefits */
+.benefit-item h4::before {
+    content: attr(data-number);
+    position: absolute;
+    left: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background: var(--highlight-color);
+    color: white;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Publications Section - Clean Black & White */
@@ -380,42 +607,120 @@ section {
     transform: translateX(2px);
 }
 
-/* Team Section - Clean Black & White */
+/* Team Section - Distinct Card Style */
+.team {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.03) 0%, rgba(0, 0, 0, 0.01) 100%);
+}
+
 .team-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
     margin-top: 3rem;
 }
 
 .team-member {
     text-align: center;
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--gray-100);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.team-member::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gray-300) 0%, var(--gray-200) 100%);
+    transform: scaleX(0.8);
+}
+
+.team-member:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-color: var(--gray-200);
+}
+
+.team-photo-container {
+    position: relative;
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .team-photo {
     width: 100%;
-    height: 250px;
+    height: 280px;
     object-fit: cover;
-    border-radius: 12px;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease;
+    transition: transform 0.3s ease;
 }
 
-.team-photo:hover {
-    transform: scale(1.02);
+.team-member:hover .team-photo {
+    transform: scale(1.05) rotate(1deg);
+}
+
+.team-photo-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    padding: 1.5rem 1rem 1rem;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.team-member:hover .team-photo-overlay {
+    transform: translateY(0);
 }
 
 .team-member h4 {
     font-family: 'Gilroy Bold', sans-serif;
     color: var(--black);
     margin-bottom: 0.5rem;
+    font-size: 1.2rem;
 }
 
 .team-role {
     font-family: 'Lato', sans-serif;
     color: var(--gray-600);
     font-style: normal;
+    font-weight: 500;
+}
+
+/* Team social links */
+.team-social {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+.team-member:hover .team-social {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.team-social a {
+    color: var(--gray-500);
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+}
+
+.team-social a:hover {
+    color: var(--highlight-color);
+    transform: translateY(-2px);
 }
 
 /* Sticky Footer */
@@ -501,6 +806,64 @@ footer {
     }
 }
 
+/* Mobile UX Enhancements */
+.scroll-indicator {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    background: rgba(37, 99, 235, 0.9);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    z-index: 1000;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.scroll-indicator i {
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Reduced motion styles */
+body.reduce-motion *,
+body.reduce-motion *::before,
+body.reduce-motion *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+}
+
+/* Touch target enhancements */
+.touch-target-enhanced {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 12px;
+    transition: background-color 0.1s ease;
+}
+
+.touch-target-enhanced:active {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
 /* Animations - Quick and Snappy */
 @keyframes fadeInUp {
     from {
@@ -519,49 +882,168 @@ footer {
 
 /* Responsive Design - Mobile First */
 @media (max-width: 768px) {
+    /* Mobile typography optimizations */
+    body {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+    
+    h1, h2, h3, h4 {
+        line-height: 1.2;
+    }
+    
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
+        line-height: 1.15;
+        letter-spacing: -0.5px;
     }
     
     .hero-subtitle {
-        font-size: 1.1rem;
+        font-size: 1.05rem;
+        line-height: 1.45;
+        letter-spacing: 0.2px;
     }
     
+    p, .lato-regular {
+        font-size: 0.95rem;
+        line-height: 1.55;
+    }
+    
+    /* Mobile spacing optimizations */
+    section {
+        padding: 3rem 0;
+    }
+    
+    .container {
+        padding: 0 15px;
+    }
+    
+    /* Mobile header optimizations */
     header .container {
         flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .logo-text {
+        font-size: 1.3rem;
+    }
+    
+    /* Mobile grid optimizations */
+    .features-grid, .benefits-grid, .team-grid {
+        grid-template-columns: 1fr;
         gap: 1.5rem;
     }
     
-    .features-grid, .benefits-grid, .team-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    section {
-        padding: 4rem 0;
-    }
-    
-    .cta-button {
+    /* Mobile button optimizations */
+    .cta-button, .hero-cta-button {
         width: 100%;
         text-align: center;
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 8px;
+    }
+    
+    /* Mobile feature card optimizations */
+    .feature-card, .benefit-item {
+        padding: 1.8rem 1.5rem;
+    }
+    
+    /* Mobile team member optimizations */
+    .team-photo {
+        height: 220px;
+    }
+    
+    /* Mobile back-to-top button */
+    .back-to-top {
+        width: 48px;
+        height: 48px;
+        bottom: 1.2rem;
+        right: 1.2rem;
+        font-size: 1.3rem;
+    }
+    
+    /* Mobile menu toggle */
+    .mobile-menu-toggle {
+        display: block !important;
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        background: rgba(0,0,0,0.8);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        z-index: 1001;
+    }
+    
+    .mobile-menu-toggle:focus {
+        outline: 2px solid white;
+        outline-offset: 2px;
     }
 }
 
 @media (max-width: 480px) {
-    .hero-title {
-        font-size: 2rem;
+    /* Extra small device typography */
+    body {
+        font-size: 15px;
     }
     
-    h1 { font-size: 2.2rem; }
-    h2 { font-size: 2rem; }
-    h3 { font-size: 1.7rem; }
-    h4 { font-size: 1.3rem; }
+    .hero-title {
+        font-size: 1.8rem;
+        line-height: 1.1;
+    }
     
-    .cta-button {
-        padding: 0.75rem 1.25rem;
-        font-size: 0.85rem;
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.8rem; }
+    h3 { font-size: 1.6rem; }
+    h4 { font-size: 1.2rem; }
+    
+    p, .lato-regular {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    
+    /* Extra small device spacing */
+    .cta-button, .hero-cta-button {
+        padding: 0.9rem 1.2rem;
+        font-size: 0.95rem;
     }
     
     .container {
-        padding: 0 1rem;
+        padding: 0 0.8rem;
+    }
+    
+    section {
+        padding: 2.5rem 0;
+    }
+    
+    /* Extra small device component optimizations */
+    .feature-card, .benefit-item {
+        padding: 1.5rem 1rem;
+    }
+    
+    .team-photo {
+        height: 200px;
+    }
+    
+    /* Extra small device back-to-top button */
+    .back-to-top {
+        width: 44px;
+        height: 44px;
+        bottom: 0.8rem;
+        right: 0.8rem;
+        font-size: 1.1rem;
+    }
+    
+    /* Mobile menu toggle for extra small devices */
+    .mobile-menu-toggle {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+        right: 0.7rem;
+        top: 0.7rem;
     }
 }
