@@ -21,7 +21,84 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #000; background: #fff; -webkit-text-size-adjust: 100%; }
-        header { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1.5rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; }
+        
+        /* Work in Progress Banner - High visibility */
+        .wip-banner {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #fff;
+            text-align: center;
+            padding: 0.75rem 1rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10000;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            animation: pulse 2s infinite alternate;
+        }
+        
+        .wip-banner .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .wip-banner i {
+            animation: bounce 1s infinite alternate;
+        }
+        
+        .wip-banner-close {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            line-height: 1;
+            opacity: 0.8;
+            transition: opacity 0.2s ease;
+        }
+        
+        .wip-banner-close:hover {
+            opacity: 1;
+        }
+        
+        @keyframes pulse {
+            from { 
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            to {
+                box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+            }
+        }
+        
+        @keyframes bounce {
+            from { 
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-3px);
+            }
+        }
+        
+        /* Adjust header positioning to account for banner */
+        header { 
+            background: #fff; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+            padding: 1.5rem 0; 
+            position: fixed; 
+            width: 100%; 
+            top: 48px; /* Adjusted for WIP banner height */
+            z-index: 1000; 
+        }
+        
         .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
         .logo { display: flex; align-items: center; gap: 0.75rem; }
         .cta-button { background: #000; color: #fff; padding: 0.85rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.95rem; }
@@ -37,11 +114,27 @@
             .hero-title { font-size: 2.2rem; }
             .hero-subtitle { font-size: 1rem; }
             .cta-button, .hero-cta-button { width: 100%; padding: 1rem; font-size: 1rem; }
+            
+            /* Mobile adjustments for WIP banner */
+            .wip-banner { 
+                font-size: 0.85rem; 
+                padding: 0.6rem 0.8rem;
+            }
+            .wip-banner-close { 
+                right: 0.8rem;
+                font-size: 1.1rem;
+            }
         }
         
         @media (max-width: 480px) {
             .hero-title { font-size: 1.8rem; }
             .container { padding: 0 10px; }
+            
+            /* Small mobile adjustments */
+            .wip-banner { 
+                font-size: 0.8rem; 
+                padding: 0.5rem 0.6rem;
+            }
         }
     </style>
     
@@ -83,6 +176,18 @@
     </style>
 </head>
 <body>
+    <!-- Work in Progress Banner - High visibility notification -->
+    <div class="wip-banner" id="wip-banner">
+        <div class="container">
+            <i class="fas fa-tools"></i>
+            <span>🚧 This website is a work in progress. Some features may be incomplete or subject to change.</span>
+            <i class="fas fa-tools"></i>
+        </div>
+        <button class="wip-banner-close" id="wip-banner-close" aria-label="Close work in progress notification">
+            ×
+        </button>
+    </div>
+    
     <!-- Skip to content link for keyboard users -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
     
@@ -93,7 +198,7 @@
     <header>
         <div class="container">
             <div class="logo">
-                <img src="logo.png" alt="Remote Labs Logo" class="logo-img" loading="lazy" width="120" height="40">
+                <img src="assets/logo.png" alt="Remote Labs Logo" class="logo-img" loading="lazy" width="120" height="40">
                 <h1 class="logo-text">Remote Labs</h1>
             </div>
             <a href="https://remotelabs.tue.nl" class="cta-button" aria-label="Go to Remote Labs platform">Go to Remote Labs</a>
@@ -108,17 +213,16 @@
             <p class="hero-subtitle">Enabling students and professionals to conduct real lab experiments remotely</p>
             <a href="#functionalities" class="hero-cta-button" aria-label="Explore Remote Labs features">Explore Features</a>
             <div style="padding:56.25% 0 0 0;position:relative;">
-  <iframe
-    src="https://player.vimeo.com/video/1166031884?badge=0&amp;autoplay=1&amp;muted=1&amp;loop=1&amp;controls=0&amp;title=0&amp;byline=0&amp;portrait=0"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowfullscreen
-    style="position:absolute;top:0;left:0;width:100%;height:100%;"
-    title="TUe - Remote Labs"
-    loading="lazy"
-    sandbox="allow-same-origin allow-scripts allow-popups allow-forms">
-  </iframe>
-</div>
+                <iframe
+                    src="https://player.vimeo.com/video/1166031884?autoplay=1&amp;muted=1&amp;loop=1&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                    frameborder="0"
+                    allow="autoplay; fullscreen; clipboard-write; encrypted-media; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    style="position:absolute;top:0;left:0;width:100%;height:100%;"
+                    title="TU/e - Remote Labs"
+                    loading="lazy">
+                </iframe>
+            </div>
 
     </section>
 
@@ -169,7 +273,7 @@
             <div class="team-grid">
                 <div class="team-member">
                     <div class="team-photo-container">
-                        <img src="team1.jpg" alt="Team Member 1" class="team-photo" loading="lazy" width="300" height="300">
+                        <img src="assets/team1.jpg" alt="Team Member 1" class="team-photo" loading="lazy" width="300" height="300">
                         <div class="team-photo-overlay">
                             <h4 style="color: white; margin: 0; font-size: 1.1rem;">John Smith</h4>
                         </div>
@@ -184,7 +288,7 @@
                 </div>
                 <div class="team-member">
                     <div class="team-photo-container">
-                        <img src="team2.jpg" alt="Team Member 2" class="team-photo" loading="lazy" width="300" height="300">
+                        <img src="assets/team2.jpg" alt="Team Member 2" class="team-photo" loading="lazy" width="300" height="300">
                         <div class="team-photo-overlay">
                             <h4 style="color: white; margin: 0; font-size: 1.1rem;">Emily Davis</h4>
                         </div>
@@ -199,7 +303,7 @@
                 </div>
                 <div class="team-member">
                     <div class="team-photo-container">
-                        <img src="team3.jpg" alt="Team Member 3" class="team-photo" loading="lazy" width="300" height="300">
+                        <img src="assets/team3.jpg" alt="Team Member 3" class="team-photo" loading="lazy" width="300" height="300">
                         <div class="team-photo-overlay">
                             <h4 style="color: white; margin: 0; font-size: 1.1rem;">Robert Wilson</h4>
                         </div>
@@ -264,13 +368,42 @@
     <!-- Load minified JavaScript with defer for better performance -->
     <script src="script.min.js" defer></script>
     <!-- Fallback to regular JS if minified version fails -->
-    <noscript><script src="script.js" defer></script></noscript>
+    <noscript><link rel="stylesheet" href="styles.css"></noscript>
     <!-- IE11 polyfills and compatibility -->
     <script nomodule>
         // Load polyfills for older browsers
         document.write('<script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,es2015,es2016,es2017,es2018,es2019,es2020"><\/script>');
         document.write('<script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2/dist/css-vars-ponyfill.min.js"><\/script>');
     </script>
+    <!-- WORK IN PROGRESS BANNER - High visibility notification -->
+    <script>
+        // Work in Progress Banner functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const wipBanner = document.getElementById('wip-banner');
+            const closeButton = document.getElementById('wip-banner-close');
+            
+            if (wipBanner && closeButton) {
+                // Check if user has already dismissed the banner
+                if (localStorage.getItem('wipBannerDismissed') === 'true') {
+                    wipBanner.style.display = 'none';
+                    // Adjust header position when banner is hidden
+                    const header = document.querySelector('header');
+                    if (header) header.style.top = '0';
+                }
+                
+                // Close button functionality
+                closeButton.addEventListener('click', function() {
+                    wipBanner.style.display = 'none';
+                    // Adjust header position when banner is hidden
+                    const header = document.querySelector('header');
+                    if (header) header.style.top = '0';
+                    // Remember user preference
+                    localStorage.setItem('wipBannerDismissed', 'true');
+                });
+            }
+        });
+    </script>
+    
     <!-- DIRECT SMOOTH SCROLLING FIX - Simple inline script -->
     <script>
         // Simple smooth scrolling that works everywhere
@@ -345,6 +478,8 @@
     </script>
     
     <!-- Add cache manifest for offline support -->
-    <html manifest="cache.manifest">
+    <link rel="manifest" href="cache.manifest">
+    <!-- Vimeo Player API -->
+    <script src="https://player.vimeo.com/api/player.js"></script>
 </body>
 </html>

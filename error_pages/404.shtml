@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="description" content="Remote Labs - 404 Page Not Found Error">
+    <meta name="theme-color" content="#2563eb">
+    <title>Remote Labs - 404 Page Not Found</title>
+    
+    <!-- Critical CSS for error pages -->
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif; 
+            line-height: 1.6; 
+            color: #000; 
+            background: #fff; 
+            -webkit-text-size-adjust: 100%;
+        }
+        
+        :root {
+            --highlight-color: #2563eb;
+            --black: #000000;
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+        
+        header { 
+            background: #fff; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+            padding: 1.5rem 0; 
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            z-index: 1000; 
+        }
+        
+        .container { 
+            width: 100%; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 15px; 
+        }
+        
+        .logo { 
+            display: flex; 
+            align-items: center; 
+            gap: 0.75rem; 
+        }
+        
+        .cta-button { 
+            background: #000; 
+            color: #fff; 
+            padding: 0.85rem 1.5rem; 
+            border-radius: 6px; 
+            text-decoration: none; 
+            font-weight: 700; 
+            font-size: 0.95rem; 
+        }
+        
+        .error-container { 
+            padding: 150px 0 100px; 
+            text-align: center; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center;
+        }
+        
+        .error-code { 
+            font-size: 6rem; 
+            font-weight: 900; 
+            color: var(--highlight-color); 
+            margin-bottom: 1rem; 
+            line-height: 1;
+        }
+        
+        .error-title { 
+            font-size: 2.5rem; 
+            margin-bottom: 1.5rem; 
+            line-height: 1.2; 
+            color: var(--black);
+        }
+        
+        .error-description { 
+            font-size: 1.1rem; 
+            max-width: 700px; 
+            margin: 0 auto 2.5rem; 
+            line-height: 1.6; 
+            color: var(--gray-700);
+        }
+        
+        .error-cta-button { 
+            background: var(--highlight-color); 
+            color: #fff; 
+            padding: 1rem 2rem; 
+            border-radius: 8px; 
+            text-decoration: none; 
+            font-weight: 700; 
+            margin-bottom: 1.5rem; 
+            display: inline-block; 
+            font-size: 1rem; 
+            transition: all 0.2s ease;
+        }
+        
+        .error-cta-button:hover { 
+            background: var(--black); 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .error-cta-button:focus { 
+            outline: 2px solid var(--black); 
+            outline-offset: 2px;
+        }
+        
+        .error-illustration { 
+            margin: 3rem 0; 
+            max-width: 400px; 
+            width: 100%;
+        }
+        
+        .error-illustration img { 
+            width: 100%; 
+            height: auto;
+        }
+        
+        footer { 
+            background: var(--gray-50); 
+            padding: 3rem 0 2rem; 
+            margin-top: auto; 
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        .footer-wrapper { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 20px;
+        }
+        
+        .footer-main { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 2rem; 
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h4 { 
+            margin-bottom: 1rem; 
+            font-size: 1.1rem; 
+            color: var(--black);
+        }
+        
+        .footer-section ul { 
+            list-style: none;
+        }
+        
+        .footer-section ul li { 
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-section ul li a { 
+            color: var(--gray-600); 
+            text-decoration: none; 
+            transition: color 0.2s ease;
+        }
+        
+        .footer-section ul li a:hover { 
+            color: var(--highlight-color);
+        }
+        
+        .footer-bottom { 
+            text-align: center; 
+            padding-top: 2rem; 
+            border-top: 1px solid var(--gray-200); 
+            color: var(--gray-500); 
+            font-size: 0.9rem;
+        }
+        
+        /* Mobile-specific styles */
+        @media (max-width: 768px) {
+            .container { 
+                padding: 0 12px; 
+            }
+            
+            .error-container { 
+                padding: 120px 0 80px; 
+            }
+            
+            .error-code { 
+                font-size: 4rem; 
+            }
+            
+            .error-title { 
+                font-size: 2rem; 
+            }
+            
+            .error-description { 
+                font-size: 1rem; 
+            }
+            
+            .error-cta-button { 
+                width: 100%; 
+                padding: 1rem; 
+                font-size: 1rem; 
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .error-code { 
+                font-size: 3rem; 
+            }
+            
+            .container { 
+                padding: 0 10px; 
+            }
+        }
+        
+        /* Animation for error page elements */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .error-code, .error-title, .error-description, .error-cta-button {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .error-code { animation-delay: 0.1s; }
+        .error-title { animation-delay: 0.2s; }
+        .error-description { animation-delay: 0.3s; }
+        .error-cta-button { animation-delay: 0.4s; }
+        
+        /* Skip to content link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--highlight-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            z-index: 100;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+        
+        /* ARIA live region for dynamic announcements */
+        .aria-live {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+    
+    <!-- Load Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Load Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Skip to content link for keyboard users -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- ARIA live region for dynamic announcements -->
+    <div id="aria-live" class="aria-live aria-live-polite" aria-live="polite"></div>
+    
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="/assets/logo.png" alt="Remote Labs Logo" class="logo-img" loading="lazy" width="120" height="40">
+                <h1 class="logo-text">Remote Labs</h1>
+            </div>
+            <a href="https://remotelabs.tue.nl" class="cta-button" aria-label="Go to Remote Labs platform">Go to Remote Labs</a>
+        </div>
+    </header>
+
+    <main id="main-content" tabindex="-1">
+        <div class="error-container">
+            <div class="error-code">404</div>
+            <h2 class="error-title">Page Not Found</h2>
+            <p class="error-description">The page you're looking for doesn't exist or has been moved. It might have been deleted or the URL may have changed. Let's get you back on track!</p>
+            
+            <div class="error-illustration">
+                <img src="/assets/error-illustration.svg" alt="404 Page Not Found illustration" loading="lazy" width="400" height="300">
+            </div>
+            
+            <a href="/" class="error-cta-button" aria-label="Return to homepage">Return to Homepage</a>
+            
+            <div class="error-actions" style="margin-top: 2rem;">
+                <a href="#" class="error-action-link" style="color: var(--highlight-color); text-decoration: none; margin: 0 1rem; font-weight: 600;" aria-label="Search our site">
+                    <i class="fas fa-search"></i> Search Site
+                </a>
+                <a href="#" class="error-action-link" style="color: var(--highlight-color); text-decoration: none; margin: 0 1rem; font-weight: 600;" aria-label="Contact support">
+                    <i class="fas fa-headset"></i> Contact Support
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-wrapper">
+            <div class="footer-main">
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="#functionalities">Features</a></li>
+                        <li><a href="#team">Team</a></li>
+                        <li><a href="https://remotelabs.tue.nl">Go to Remote Labs</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <div>
+                        <p>Eindhoven University of Technology</p>
+                        <p>Den Dolech 2, 5612 AZ Eindhoven</p>
+                        <p>info@remotelabs.tue.nl</p>
+                        <p>+31 (0)40 247 9111</p>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Remote Labs</h3>
+                    <p>24/7 Access to Physical Lab Experiments, Anywhere</p>
+                    <p>&copy; 2026 Remote Labs. All rights reserved.</p>
+                    <p>Part of Eindhoven University of Technology</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>Error 404 - Page Not Found</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Basic smooth scrolling -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Enable CSS smooth scrolling
+            document.documentElement.style.scrollBehavior = 'smooth';
+            
+            // Handle anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+        
+        // Announce error page for accessibility
+        setTimeout(() => {
+            const liveRegion = document.getElementById('aria-live');
+            if (liveRegion) {
+                liveRegion.textContent = 'You have reached a Remote Labs error page. Error 404: Page Not Found. The requested page could not be found.';
+            }
+        }, 500);
+    </script>
+</body>
+</html>

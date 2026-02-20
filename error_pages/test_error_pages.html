@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Error Pages</title>
+    <style>
+        body {
+            font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #000;
+            background: #fff;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #2563eb;
+            margin-bottom: 2rem;
+        }
+        
+        .error-test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .error-test-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .error-test-card:hover {
+            border-color: #2563eb;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+        }
+        
+        .error-test-card h3 {
+            color: #2563eb;
+            margin-bottom: 0.5rem;
+        }
+        
+        .error-test-card p {
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+        
+        .error-test-card a {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .error-test-card a:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+        
+        .success-message {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 2rem 0;
+            border-left: 4px solid #10b981;
+        }
+    </style>
+</head>
+<body>
+    <h1>Remote Labs Error Pages Test</h1>
+    
+    <div class="success-message">
+        <strong>✅ Success!</strong> All error pages have been created successfully in the <code>error_pages/</code> directory.
+    </div>
+    
+    <p>Below are the error pages that have been created. Each page follows the same design language as the main website and includes:</p>
+    
+    <ul style="margin: 1rem 0 2rem 2rem;">
+        <li>Consistent header with Remote Labs branding</li>
+        <li>Large error code display</li>
+        <li>Clear error title and description</li>
+        <li>Illustration placeholder</li>
+        <li>Primary call-to-action button</li>
+        <li>Contextual action links</li>
+        <li>Full footer with navigation</li>
+        <li>Responsive design for all devices</li>
+        <li>Accessibility features (skip links, ARIA live regions)</li>
+        <li>Smooth scrolling and animations</li>
+    </ul>
+    
+    <h2>Available Error Pages</h2>
+    
+    <div class="error-test-grid">
+        <div class="error-test-card">
+            <h3>400.shtml</h3>
+            <p>Bad Request - The server couldn't understand the request due to invalid syntax.</p>
+            <a href="400.shtml" target="_blank">View Page</a>
+        </div>
+        
+        <div class="error-test-card">
+            <h3>401.shtml</h3>
+            <p>Unauthorized - Authentication is required to access this resource.</p>
+            <a href="401.shtml" target="_blank">View Page</a>
+        </div>
+        
+        <div class="error-test-card">
+            <h3>403.shtml</h3>
+            <p>Forbidden - You don't have permission to access this resource.</p>
+            <a href="403.shtml" target="_blank">View Page</a>
+        </div>
+        
+        <div class="error-test-card">
+            <h3>404.shtml</h3>
+            <p>Not Found - The requested page doesn't exist or has been moved.</p>
+            <a href="404.shtml" target="_blank">View Page</a>
+        </div>
+        
+        <div class="error-test-card">
+            <h3>500.shtml</h3>
+            <p>Internal Server Error - Something went wrong on the server side.</p>
+            <a href="500.shtml" target="_blank">View Page</a>
+        </div>
+    </div>
+    
+    <h2 style="margin-top: 3rem;">Implementation Notes</h2>
+    
+    <div style="background: #f3f4f6; padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+        <h3>For Web Server Configuration</h3>
+        <p>To use these error pages on your web server, add the following configuration:</p>
+        
+        <h4>Apache (.htaccess)</h4>
+        <pre style="background: #1f2937; color: #f3f4f6; padding: 1rem; border-radius: 6px; overflow-x: auto;">ErrorDocument 400 /error_pages/400.shtml
+ErrorDocument 401 /error_pages/401.shtml
+ErrorDocument 403 /error_pages/403.shtml
+ErrorDocument 404 /error_pages/404.shtml
+ErrorDocument 500 /error_pages/500.shtml</pre>
+        
+        <h4>Nginx (nginx.conf)</h4>
+        <pre style="background: #1f2937; color: #f3f4f6; padding: 1rem; border-radius: 6px; overflow-x: auto;">error_page 400 /error_pages/400.shtml;
+error_page 401 /error_pages/401.shtml;
+error_page 403 /error_pages/403.shtml;
+error_page 404 /error_pages/404.shtml;
+error_page 500 /error_pages/500.shtml;</pre>
+        
+        <h4>IIS (web.config)</h4>
+        <pre style="background: #1f2937; color: #f3f4f6; padding: 1rem; border-radius: 6px; overflow-x: auto;">&lt;system.web&gt;
+    &lt;customErrors mode="On"&gt;
+        &lt;error statusCode="400" redirect="/error_pages/400.shtml" /&gt;
+        &lt;error statusCode="401" redirect="/error_pages/401.shtml" /&gt;
+        &lt;error statusCode="403" redirect="/error_pages/403.shtml" /&gt;
+        &lt;error statusCode="404" redirect="/error_pages/404.shtml" /&gt;
+        &lt;error statusCode="500" redirect="/error_pages/500.shtml" /&gt;
+    &lt;/customErrors&gt;
+&lt;/system.web&gt;</pre>
+    </div>
+    
+    <h2 style="margin-top: 3rem;">Customization Options</h2>
+    
+    <div style="background: #fef3c7; padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+        <p>You can easily customize these error pages by editing the .shtml files:</p>
+        
+        <ul style="margin: 1rem 0 0 2rem;">
+            <li><strong>Change colors:</strong> Modify the CSS variables in the :root section</li>
+            <li><strong>Update text:</strong> Edit the error titles and descriptions</li>
+            <li><strong>Add illustrations:</strong> Replace the placeholder image paths with your own SVG illustrations</li>
+            <li><strong>Modify actions:</strong> Change the action links and buttons</li>
+            <li><strong>Adjust layout:</strong> Modify the CSS grid and responsive breakpoints</li>
+        </ul>
+    </div>
+</body>
+</html>

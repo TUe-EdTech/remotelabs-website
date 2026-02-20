@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="description" content="Remote Labs - 24/7 Access to Physical Lab Experiments at Eindhoven University of Technology">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512x512.png">
+    <title>Remote Labs - 24/7 Access to Physical Lab Experiments</title>
+    <!-- Preload critical resources -->
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" crossorigin="anonymous">
+    
+    <!-- Critical CSS (inline for above-the-fold content) -->
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #000; background: #fff; -webkit-text-size-adjust: 100%; }
+        header { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1.5rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; }
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+        .logo { display: flex; align-items: center; gap: 0.75rem; }
+        .cta-button { background: #000; color: #fff; padding: 0.85rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.95rem; }
+        .hero { padding: 120px 0 80px; text-align: center; }
+        .hero-title { font-size: 2.8rem; margin-bottom: 1.2rem; line-height: 1.1; }
+        .hero-subtitle { font-size: 1.1rem; max-width: 90%; margin: 0 auto 2rem; line-height: 1.5; }
+        .hero-cta-button { background: #2563eb; color: #fff; padding: 0.9rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: 700; margin-bottom: 1.5rem; display: inline-block; font-size: 1rem; }
+        
+        /* Mobile-specific critical CSS */
+        @media (max-width: 768px) {
+            .container { padding: 0 12px; }
+            .hero { padding: 100px 0 60px; }
+            .hero-title { font-size: 2.2rem; }
+            .hero-subtitle { font-size: 1rem; }
+            .cta-button, .hero-cta-button { width: 100%; padding: 1rem; font-size: 1rem; }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-title { font-size: 1.8rem; }
+            .container { padding: 0 10px; }
+        }
+    </style>
+    
+    <!-- Load minified CSS asynchronously with IE11 fallback -->
+    <link rel="stylesheet" href="styles.min.css" media="print" onload="this.media='all'">
+    <!--[if lt IE 9]>
+    <link rel="stylesheet" href="styles.css">
+    <![endif]-->
+    <!-- Fallback to regular CSS if minified version fails -->
+    <noscript><link rel="stylesheet" href="styles.css"></noscript>
+    
+    <!-- Load fonts with display=swap for better performance -->
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <!-- Font fallback for older browsers -->
+    <style>
+        /* Fallback fonts for browsers that don't support Google Fonts */
+        @font-face {
+            font-family: 'Lato Fallback';
+            src: local('Arial'), local('Helvetica Neue'), local('Helvetica'), local('sans-serif');
+        }
+        @font-face {
+            font-family: 'Poppins Fallback';
+            src: local('Arial Black'), local('Impact'), local('sans-serif');
+            font-weight: 700;
+        }
+    </style>
+    
+    <!-- Load Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @font-face {
+            font-family: 'Gilroy Bold';
+            src: url('https://fonts.cdnfonts.com/css/gilroy-bold') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to content link for keyboard users -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- ARIA live region for dynamic announcements -->
+    <div id="aria-live" class="aria-live aria-live-polite" aria-live="polite"></div>
+    
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="assets/logo.png" alt="Remote Labs Logo" class="logo-img" loading="lazy" width="120" height="40">
+                <h1 class="logo-text">Remote Labs</h1>
+            </div>
+            <a href="https://remotelabs.tue.nl" class="cta-button" aria-label="Go to Remote Labs platform">Go to Remote Labs</a>
+        </div>
+    </header>
+
+    <main id="main-content" tabindex="-1">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2 class="hero-title">24/7 Access to Physical Lab Experiments, Anywhere</h2>
+            <p class="hero-subtitle">Enabling students and professionals to conduct real lab experiments remotely</p>
+            <a href="#functionalities" class="hero-cta-button" aria-label="Explore Remote Labs features">Explore Features</a>
+            <div style="padding:56.25% 0 0 0;position:relative;">
+                <iframe
+                    src="https://player.vimeo.com/video/1166031884?autoplay=1&amp;muted=1&amp;loop=1&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                    frameborder="0"
+                    allow="autoplay; fullscreen; clipboard-write; encrypted-media; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    style="position:absolute;top:0;left:0;width:100%;height:100%;"
+                    title="TU/e - Remote Labs"
+                    loading="lazy">
+                </iframe>
+            </div>
+
+    </section>
+
+    <!-- Functionalities Section -->
+    <section class="functionalities" id="functionalities" data-icon="🔧">
+        <div class="section-nav">
+            <span class="section-nav-indicator active" data-target="functionalities"></span>
+            <span class="section-nav-indicator" data-target="team"></span>
+        </div>
+        <div class="container">
+            <h3 class="section-title">Key Functionalities</h3>
+            <p class="section-subtitle">Discover the powerful features that make Remote Labs accessible and efficient for all users</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h4>24/7 Access</h4>
+                    <p>Conduct physical lab experiments anytime, from anywhere in the world.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h4>Real-time Interaction</h4>
+                    <p>Direct control and real-time feedback from actual lab equipment.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h4>Easy Booking</h4>
+                    <p>Simple interface for scheduling and managing your experiments.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team" id="team" data-icon="👥">
+        <div class="section-nav">
+            <span class="section-nav-indicator" data-target="functionalities"></span>
+            <span class="section-nav-indicator active" data-target="team"></span>
+        </div>
+        <div class="container">
+            <h3 class="section-title">Meet Our Team</h3>
+            <p class="section-subtitle">Get to know the dedicated professionals behind Remote Labs who make 24/7 access to physical experiments possible</p>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="team-photo-container">
+                        <img src="assets/team1.jpg" alt="Team Member 1" class="team-photo" loading="lazy" width="300" height="300">
+                        <div class="team-photo-overlay">
+                            <h4 style="color: white; margin: 0; font-size: 1.1rem;">John Smith</h4>
+                        </div>
+                    </div>
+                    <h4>John Smith</h4>
+                    <p class="team-role">Project Lead</p>
+                    <div class="team-social">
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="team-photo-container">
+                        <img src="assets/team2.jpg" alt="Team Member 2" class="team-photo" loading="lazy" width="300" height="300">
+                        <div class="team-photo-overlay">
+                            <h4 style="color: white; margin: 0; font-size: 1.1rem;">Emily Davis</h4>
+                        </div>
+                    </div>
+                    <h4>Emily Davis</h4>
+                    <p class="team-role">Technical Director</p>
+                    <div class="team-social">
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="team-photo-container">
+                        <img src="assets/team3.jpg" alt="Team Member 3" class="team-photo" loading="lazy" width="300" height="300">
+                        <div class="team-photo-overlay">
+                            <h4 style="color: white; margin: 0; font-size: 1.1rem;">Robert Wilson</h4>
+                        </div>
+                    </div>
+                    <h4>Robert Wilson</h4>
+                    <p class="team-role">Educational Specialist</p>
+                    <div class="team-social">
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <!-- Basic Footer -->
+    <footer>
+        <div class="footer-wrapper">
+            <div class="footer-main">
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#functionalities">Features</a></li>
+                        <li><a href="#benefits">Benefits</a></li>
+                        <li><a href="#team">Team</a></li>
+                        <li><a href="https://remotelabs.tue.nl">Go to Remote Labs</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Publications</h4>
+                    <div class="publications">
+                        <div><a href="#">Remote Labs in Higher Education</a><br><span>Journal of Engineering Education • 2023</span></div>
+                        <div><a href="#">Scalability of Remote Labs</a><br><span>IEEE Transactions • 2022</span></div>
+                        <div><a href="#">Real-time Experimentation</a><br><span>Intl Journal • 2023</span></div>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <div>
+                        <p>Eindhoven University of Technology</p>
+                        <p>Den Dolech 2, 5612 AZ Eindhoven</p>
+                        <p>info@remotelabs.tue.nl</p>
+                        <p>+31 (0)40 247 9111</p>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Remote Labs</h3>
+                    <p>24/7 Access to Physical Lab Experiments, Anywhere</p>
+                    <p>&copy; 2026 Remote Labs. All rights reserved.</p>
+                    <p>Part of Eindhoven University of Technology</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Load minified JavaScript with defer for better performance -->
+    <script src="script.min.js" defer></script>
+    <!-- Fallback to regular JS if minified version fails -->
+    <noscript><link rel="stylesheet" href="styles.css"></noscript>
+    <!-- IE11 polyfills and compatibility -->
+    <script nomodule>
+        // Load polyfills for older browsers
+        document.write('<script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,es2015,es2016,es2017,es2018,es2019,es2020"><\/script>');
+        document.write('<script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2/dist/css-vars-ponyfill.min.js"><\/script>');
+    </script>
+    <!-- DIRECT SMOOTH SCROLLING FIX - Simple inline script -->
+    <script>
+        // Simple smooth scrolling that works everywhere
+        document.addEventListener('DOMContentLoaded', function() {
+            // Enable CSS smooth scrolling
+            document.documentElement.style.scrollBehavior = 'smooth';
+            
+            // Handle anchor links directly
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Handle back-to-top button
+            const backToTop = document.querySelector('.back-to-top');
+            if (backToTop) {
+                backToTop.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+            
+            console.log('Direct smooth scrolling initialized');
+        });
+    </script>
+    
+    <!-- Add security and performance meta tags -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com https://player.vimeo.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://player.vimeo.com; connect-src 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
+    <!-- Add performance monitoring and caching headers -->
+    <script>
+        // Performance monitoring setup
+        window.addEventListener('load', function() {
+            const perfData = window.performance.timing;
+            const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+            console.log('Page loaded in', pageLoadTime, 'ms');
+            
+            // Log additional performance metrics
+            if (window.performance && window.performance.getEntries) {
+                const resources = window.performance.getEntriesByType("resource");
+                console.log('Resources loaded:', resources.length);
+            }
+        });
+        
+        // Service Worker registration for caching (placeholder)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(
+                    function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    },
+                    function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    }
+                );
+            });
+        }
+    </script>
+    
+    <!-- Add cache manifest for offline support -->
+    <link rel="manifest" href="cache.manifest">
+    <!-- Vimeo Player API -->
+    <script src="https://player.vimeo.com/api/player.js"></script>
+</body>
+</html>

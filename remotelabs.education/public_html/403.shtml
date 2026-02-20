@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Forbidden - Remote Labs">
+    <title>403 - Forbidden | Remote Labs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #374151; background: #fff; }
+        .container { width: 100%; max-width: 800px; margin: 0 auto; padding: 2rem; }
+        header { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; }
+        .logo { display: flex; align-items: center; gap: 1rem; }
+        .logo-img { height: 30px; width: auto; }
+        .logo-text { font-family: 'Gilroy Bold', 'Poppins', sans-serif; font-weight: 700; font-size: 1.2rem; }
+        main { margin-top: 80px; padding: 2rem 0; }
+        .error-code { font-size: 4rem; font-weight: 700; color: #2563eb; margin-bottom: 1rem; }
+        .error-title { font-size: 2rem; font-weight: 700; color: #111827; margin-bottom: 1rem; }
+        .error-message { font-size: 1.1rem; color: #6b7280; margin-bottom: 2rem; }
+        .cta-button { display: inline-block; background: #2563eb; color: #fff; padding: 0.85rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: all 0.2s ease; }
+        .cta-button:hover { background: #1d4ed8; transform: translateY(-2px); }
+        footer { background: #111827; color: #d1d5db; padding: 2rem 0; margin-top: 4rem; }
+        .footer-content { text-align: center; }
+        .footer-content p { margin-bottom: 0.5rem; }
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .error-code { font-size: 3rem; }
+            .error-title { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="logo.png" alt="Remote Labs Logo" class="logo-img" loading="lazy" width="120" height="40">
+                <h1 class="logo-text">Remote Labs</h1>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="container">
+            <div class="error-code">403</div>
+            <h2 class="error-title">Forbidden</h2>
+            <p class="error-message">You don't have permission to access this page. Please contact the site administrator if you believe this is a mistake.</p>
+            <a href="/" class="cta-button">Return to Homepage</a>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 Remote Labs. All rights reserved.</p>
+                <p>Part of Eindhoven University of Technology</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
