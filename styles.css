@@ -2241,3 +2241,341 @@ html[lang="en"] {
         top: 0.7rem;
     }
 }
+/* Screen reader only utility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Enhanced keyboard focus styles */
+.keyboard-focus-visible {
+    outline: 3px solid var(--highlight-color);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+/* Improved skip link visibility */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--highlight-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    z-index: 1000;
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* CSS Best Practices - Utility Classes */
+.u-margin-top-none { margin-top: 0 !important; }
+.u-margin-bottom-none { margin-bottom: 0 !important; }
+.u-padding-none { padding: 0 !important; }
+.u-text-center { text-align: center !important; }
+.u-text-left { text-align: left !important; }
+.u-text-right { text-align: right !important; }
+.u-display-none { display: none !important; }
+.u-display-block { display: block !important; }
+.u-display-flex { display: flex !important; }
+.u-flex-column { flex-direction: column !important; }
+.u-justify-center { justify-content: center !important; }
+.u-align-center { align-items: center !important; }
+.u-gap-1 { gap: 1rem !important; }
+.u-gap-2 { gap: 2rem !important; }
+
+/* Responsive utility classes */
+@media (max-width: 768px) {
+    .u-mobile-text-center { text-align: center !important; }
+    .u-mobile-display-none { display: none !important; }
+    .u-mobile-display-block { display: block !important; }
+    .u-mobile-flex-column { flex-direction: column !important; }
+}
+
+/* CSS Architecture - BEM-like naming convention */
+/* Block: Feature Card */
+.feature-card {
+    /* Element: Icon */
+    &__icon {
+        font-size: 2rem;
+        color: var(--highlight-color);
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Element: Title */
+    &__title {
+        font-family: 'Gilroy Bold', sans-serif;
+        color: var(--black);
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+    }
+    
+    /* Element: Description */
+    &__description {
+        color: var(--gray-600);
+    }
+    
+    /* Modifier: Hover state */
+    &--hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        border-color: var(--gray-200);
+    }
+}
+
+/* CSS Architecture - Component-based organization */
+/* Component: Button */
+.btn {
+    font-family: 'Gilroy Bold', sans-serif;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    
+    /* Modifier: Primary */
+    &--primary {
+        background-color: var(--highlight-color);
+        color: var(--white);
+        border-color: var(--highlight-color);
+        
+        &:hover {
+            background-color: var(--black);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+    }
+    
+    /* Modifier: Secondary */
+    &--secondary {
+        background-color: var(--black);
+        color: var(--white);
+        border-color: var(--black);
+        
+        &:hover {
+            background-color: var(--white);
+            color: var(--black);
+            transform: translateY(-1px);
+        }
+    }
+}
+
+/* CSS Architecture - Design System Variables */
+:root {
+    /* Spacing system */
+    --space-xxs: 0.25rem;
+    --space-xs: 0.5rem;
+    --space-sm: 0.75rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-xxl: 3rem;
+    --space-xxxl: 4rem;
+    
+    /* Border radius system */
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
+    --radius-full: 9999px;
+    
+    /* Shadow system */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.12);
+    
+    /* Transition system */
+    --transition-fast: all 0.15s ease;
+    --transition-normal: all 0.25s ease;
+    --transition-slow: all 0.35s ease;
+}
+
+/* Mobile UX Enhancements */
+@media (max-width: 768px) {
+    /* Larger touch targets for mobile */
+    .cta-button,
+    .hero-cta-button,
+    .feature-card,
+    .team-member {
+        min-height: 48px;
+        min-width: 48px;
+    }
+    
+    /* Better mobile spacing */
+    .container {
+        padding: 0 12px;
+    }
+    
+    /* Mobile-specific header */
+    header {
+        padding: 1rem 0;
+    }
+    
+    /* Mobile navigation improvements */
+    .logo-text {
+        font-size: 1.2rem;
+    }
+    
+    /* Mobile hero section */
+    .hero {
+        padding: 80px 0 50px;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    /* Mobile feature cards */
+    .feature-card {
+        padding: 1.5rem 1rem;
+    }
+    
+    /* Mobile team members */
+    .team-photo {
+        height: 220px;
+    }
+    
+    /* Mobile footer improvements */
+    .footer-main {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+/* Tablet UX Enhancements */
+@media (min-width: 769px) and (max-width: 1024px) {
+    /* Tablet-specific adjustments */
+    .container {
+        max-width: 960px;
+    }
+    
+    /* Tablet grid layouts */
+    .features-grid,
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Tablet typography */
+    .hero-title {
+        font-size: 2.8rem;
+    }
+}
+
+/* Desktop UX Enhancements */
+@media (min-width: 1025px) {
+    /* Desktop container */
+    .container {
+        max-width: 1200px;
+    }
+    
+    /* Desktop grid layouts */
+    .features-grid,
+    .team-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    /* Desktop typography */
+    .hero-title {
+        font-size: 3.5rem;
+    }
+    
+    /* Desktop navigation */
+    header .container {
+        max-width: 1200px;
+    }
+}
+
+/* Visual hierarchy improvements */
+section {
+    position: relative;
+    z-index: 1;
+}
+
+section:nth-child(odd) {
+    z-index: 2;
+}
+
+section:nth-child(even) {
+    z-index: 1;
+}
+
+/* Section overlap effect */
+section::before {
+    content: ;
+    position: absolute;
+    top: -50px;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: linear-gradient(to bottom, transparent, var(--white));
+    z-index: -1;
+}
+
+section:nth-child(even)::before {
+    background: linear-gradient(to bottom, transparent, var(--gray-50));
+}
+
+/* Enhanced hover effects */
+.feature-card,
+.team-member {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, box-shadow;
+}
+
+.feature-card:hover,
+.team-member:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Smooth transitions */
+.cta-button,
+.hero-cta-button {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Loading states */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.is-loading {
+    animation: pulse 1.5s ease-in-out infinite;
+    pointer-events: none;
+    opacity: 0.8;
+}

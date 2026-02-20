@@ -1256,3 +1256,120 @@ function addMobileUXEnhancements() {
         }
     }, true);
 }
+/* Enhanced keyboard navigation */
+document.addEventListener('DOMContentLoaded', function() {
+    // Add keyboard focus styles to all interactive elements
+    const interactiveElements = document.querySelectorAll('a[href], button, [tabindex="0"], [role="button"], input, select, textarea');
+    
+    interactiveElements.forEach(element => {
+        element.addEventListener('focus', function() {
+            this.classList.add('keyboard-focus-visible');
+        });
+        
+        element.addEventListener('blur', function() {
+            this.classList.remove('keyboard-focus-visible');
+        });
+    });
+    
+    // Skip to content functionality
+    const skipLink = document.querySelector(.skip-link);
+    if (skipLink) {
+        skipLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) {
+                mainContent.setAttribute('tabindex', -1);
+                mainContent.focus();
+            }
+        });
+    }
+});
+
+/* JavaScript Best Practices - Error Handling */
+window.addEventListener('error', function(event) {
+    console.error('Global error caught:', event.error || event.message);
+    
+    // Send error to analytics if available
+    if (window.ga) {
+        ga('send', 'event', 'JavaScript Error', event.message, {
+            'nonInteraction': true
+        });
+    }
+});
+
+/* JavaScript Best Practices - Feature Detection */
+const detectFeatures = function() {
+    const features = {
+        cssGrid: 'CSS' in window && 'supports' in CSS && CSS.supports('display', 'grid'),
+        cssVariables: window.CSS && CSS.supports('--foo', 'bar'),
+        intersectionObserver: 'IntersectionObserver' in window,
+        serviceWorker: 'serviceWorker' in navigator,
+        fetch: 'fetch' in window,
+        passiveEvents: testPassiveEventSupport()
+    };
+    
+    return features;
+};
+
+/* JavaScript Best Practices - Debounce Function */
+const debounce = function(func, wait) {
+    let timeout;
+    return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            func.apply(context, args);
+        }, wait);
+    };
+};
+
+/* JavaScript Best Practices - Throttle Function */
+const throttle = function(func, limit) {
+    let lastFunc;
+    let lastRan;
+    return function() {
+        const context = this;
+        const args = arguments;
+        if (!lastRan) {
+            func.apply(context, args);
+            lastRan = Date.now();
+        } else {
+            clearTimeout(lastFunc);
+            lastFunc = setTimeout(() => {
+                if ((Date.now() - lastRan) >= limit) {
+                    func.apply(context, args);
+                    lastRan = Date.now();
+                }
+            }, limit - (Date.now() - lastRan));
+        }
+    };
+};
+
+/* Apply best practices to existing functions */
+// Add error handling to smooth scrolling
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        setupSmoothScrolling();
+    } catch (error) {
+        console.error('Smooth scrolling setup failed:', error);
+    }
+});
+
+// Add error handling to section navigation
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        setupSectionNavigation();
+    } catch (error) {
+        console.error('Section navigation setup failed:', error);
+    }
+});
+
+// Add error handling to micro-interactions
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        setupMicroInteractions();
+    } catch (error) {
+        console.error('Micro-interactions setup failed:', error);
+    }
+});
