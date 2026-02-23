@@ -1,0 +1,25 @@
+{
+  "name": "remotelabs-website",
+  "version": "1.0.0",
+  "description": "A clean, professional one-page website for Remote Labs - 24/7 Access to Physical Lab Experiments at Eindhoven University of Technology.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KarelAarts/remotelabs-website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/KarelAarts/remotelabs-website/issues"
+  },
+  "homepage": "https://github.com/KarelAarts/remotelabs-website#readme",
+  "devDependencies": {
+    "clean-css": "^5.3.3",
+    "uglify-js": "^3.19.3"
+  }
+}

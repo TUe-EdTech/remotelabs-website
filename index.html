@@ -27,85 +27,22 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #000; background: #fff; -webkit-text-size-adjust: 100%; }
         
-        /* Work in Progress Banner - High visibility */
-        .wip-banner {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: #fff;
-            text-align: center;
-            padding: 0.75rem 1rem;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 10000;
-            font-weight: 600;
-            font-size: 0.95rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            animation: pulse 2s infinite alternate;
-        }
-        
-        .wip-banner .container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-        
-        .wip-banner i {
-            animation: bounce 1s infinite alternate;
-        }
-        
-        .wip-banner-close {
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 0.25rem;
-            line-height: 1;
-            opacity: 0.8;
-            transition: opacity 0.2s ease;
-        }
-        
-        .wip-banner-close:hover {
-            opacity: 1;
-        }
-        
-        @keyframes pulse {
-            from { 
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            }
-            to {
-                box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
-            }
-        }
-        
-        @keyframes bounce {
-            from { 
-                transform: translateY(0);
-            }
-            to {
-                transform: translateY(-3px);
-            }
-        }
-        
-        /* Adjust header positioning to account for banner */
+
+
+        /* Header styling */
         header { 
             background: #fff; 
             box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
             padding: 1.5rem 0; 
             position: fixed; 
             width: 100%; 
-            top: 48px; /* Adjusted for WIP banner height */
+            top: 0;
             z-index: 1000; 
         }
         
         .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
         .logo { display: flex; align-items: center; gap: 0.75rem; }
+        .logo-text { font-family: 'Poppins', 'Arial Black', Impact, sans-serif; font-weight: 700; font-size: 1.5rem; color: var(--black); text-decoration: none; }
         .cta-button { background: #000; color: #fff; padding: 0.85rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.95rem; }
         .hero { padding: 120px 0 80px; text-align: center; }
         .hero-title { font-size: 2.8rem; margin-bottom: 1.2rem; line-height: 1.1; }
@@ -120,26 +57,12 @@
             .hero-subtitle { font-size: 1rem; }
             .cta-button, .hero-cta-button { width: 100%; padding: 1rem; font-size: 1rem; }
             
-            /* Mobile adjustments for WIP banner */
-            .wip-banner { 
-                font-size: 0.85rem; 
-                padding: 0.6rem 0.8rem;
-            }
-            .wip-banner-close { 
-                right: 0.8rem;
-                font-size: 1.1rem;
-            }
         }
         
         @media (max-width: 480px) {
             .hero-title { font-size: 1.8rem; }
             .container { padding: 0 10px; }
             
-            /* Small mobile adjustments */
-            .wip-banner { 
-                font-size: 0.8rem; 
-                padding: 0.5rem 0.6rem;
-            }
         }
     </style>
     
@@ -181,17 +104,7 @@
     </style>
 </head>
 <body>
-    <!-- Work in Progress Banner - High visibility notification -->
-    <div class="wip-banner" id="wip-banner">
-        <div class="container">
-            <i class="fas fa-tools"></i>
-            <span>🚧 This website is a work in progress. Some features may be incomplete or subject to change.</span>
-            <i class="fas fa-tools"></i>
-        </div>
-        <button class="wip-banner-close" id="wip-banner-close" aria-label="Close work in progress notification">
-            ×
-        </button>
-    </div>
+
     
     <!-- Skip to content link for keyboard users -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -202,11 +115,12 @@
     <!-- Header Section -->
     <header role="banner">
         <div class="container">
-            <div class="logo">
-                <img src="assets/logo.png" alt="Remote Labs Logo" class="logo-img" loading="lazy" width="120" height="40">
-                <h1 class="logo-text">Remote Labs</h1>
+            <div class="header-content">
+                <div class="logo">
+                    <a href="/" class="logo-text" aria-label="Go to Remote Labs homepage">Remote Labs</a>
+                </div>
+                <a href="https://remotelabs.tue.nl" class="cta-button" aria-label="Go to Remote Labs platform">Go to Remote Labs</a>
             </div>
-            <a href="https://remotelabs.tue.nl" class="cta-button" aria-label="Go to Remote Labs platform">Go to Remote Labs</a>
         </div>
     </header>
 
@@ -217,62 +131,26 @@
             <h2 class="hero-title">24/7 Access to Physical Lab Experiments, Anywhere</h2>
         <h1 class="sr-only">Remote Labs - 24/7 Access to Physical Lab Experiments</h1>
             <p class="hero-subtitle">Enabling students and professionals to conduct real lab experiments remotely</p>
-            <a href="#functionalities" class="hero-cta-button" aria-label="Explore Remote Labs features">Explore Features</a>
-            <div style="padding:56.25% 0 0 0;position:relative;">
+            <a href="#benefits" class="hero-cta-button" aria-label="Explore Remote Labs features">Explore Features</a>
+            <div style="padding:56.25% 0 0 0;position:relative;" class="video-embed-wrapper">
                 <iframe
-                    src="https://player.vimeo.com/video/1166031884?autoplay=1&amp;muted=1&amp;loop=1&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                    src="https://player.vimeo.com/video/1166031884?autoplay=1&amp;muted=1&amp;loop=1&amp;background=1&amp;controls=0&amp;badge=0&amp;autopause=0&amp;?pip=0&amp;player_id=0&amp;app_id=58479&amp;title=0&amp;byline=0&amp;portrait=0"
                     frameborder="0"
                     allow="autoplay; fullscreen; clipboard-write; encrypted-media; web-share"
                     referrerpolicy="strict-origin-when-cross-origin"
                     style="position:absolute;top:0;left:0;width:100%;height:100%;"
                     title="TU/e - Remote Labs"
-                    loading="lazy">
+                    loading="lazy"
+                    allowfullscreen>
                 </iframe>
+                <!-- Overlay to visually hide / block the browser Picture-in-Picture control -->
+                <div class="video-pip-block" aria-hidden="true"></div>
             </div>
 
     </section>
 
-    <!-- Functionalities Section -->
-    <section class="functionalities" id="functionalities" data-icon="🔧">
-        <div class="section-nav">
-            <span class="section-nav-indicator active" data-target="functionalities"></span>
-            <span class="section-nav-indicator" data-target="team"></span>
-        </div>
-        <div class="container">
-            <h3 class="section-title">Key Functionalities</h3>
-            <p class="section-subtitle">Discover the powerful features that make Remote Labs accessible and efficient for all users</p>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <h4>24/7 Access</h4>
-                    <p>Conduct physical lab experiments anytime, from anywhere in the world.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-cogs"></i>
-                    </div>
-                    <h4>Real-time Interaction</h4>
-                    <p>Direct control and real-time feedback from actual lab equipment.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <h4>Easy Booking</h4>
-                    <p>Simple interface for scheduling and managing your experiments.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Team Section -->
-    <section class="team" id="team" data-icon="👥">
-        <div class="section-nav">
-            <span class="section-nav-indicator" data-target="functionalities"></span>
-            <span class="section-nav-indicator active" data-target="team"></span>
-        </div>
+    <!-- Team Section - Hidden -->
+    <section class="team hidden-section" id="team">
         <div class="container">
             <h3 class="section-title">Meet Our Team</h3>
             <p class="section-subtitle">Get to know the dedicated professionals behind Remote Labs who make 24/7 access to physical experiments possible</p>
@@ -325,6 +203,84 @@
             </div>
         </div>
     </section>
+
+    <!-- Contact Section - Optimized for Conversion -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="contact-header">
+                <h3 class="section-title">Interested in Remote Labs?</h3>
+                <p class="section-subtitle">We are actively looking for applications within both education and industry to pilot our Remote Labs platform.</p>
+            </div>
+            
+            <div class="contact-content">
+                <!-- Value Proposition with Visual Emphasis -->
+                <div class="value-prop">
+                    <div class="value-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h4 class="benefits-title" id="benefits">Key Benefits of Remote Labs</h4>
+                    <p class="benefits-intro">Transform your research and education with our cutting-edge platform:</p>
+                </div>
+                
+                <!-- Benefits Grid - Visual and Scannable -->
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h5>24/7 Access</h5>
+                        <p>Conduct physical lab experiments anytime, from anywhere in the world</p>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h5>Easy Booking</h5>
+                        <p>Simple interface for scheduling and managing your experiments</p>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-laptop"></i>
+                        </div>
+                        <h5>Remote Flexibility</h5>
+                        <p>Perform experiments without physical lab constraints</p>
+                    </div>
+                </div>
+                
+                <!-- Social Proof / Trust Indicators -->
+                <div class="trust-indicators">
+                    <p class="trust-text">
+                        <i class="fas fa-check-circle"></i>
+                        Trusted by leading universities and research institutions
+                    </p>
+                </div>
+                
+                <!-- Clear Call-to-Action -->
+                <div class="cta-section">
+                    <p class="cta-intro">Interested in exploring Remote Labs for your institution or organization?</p>
+                    
+                    <div class="contact-actions">
+                        <a href="mailto:k.m.a.aarts@tue.nl?subject=Remote%20Labs%20Interest" class="contact-button primary">
+                            <i class="fas fa-envelope"></i> Contact Us
+                        </a>
+                        <a href="#" class="contact-button demo-button">
+                            <i class="fas fa-calendar-alt"></i> Book a Demo
+                        </a>
+                    </div>
+                    
+                    <p class="cta-subtext">We'd love to discuss how we can collaborate with you.</p>
+                </div>
+                
+                <!-- Secondary CTA with Personal Touch -->
+                <div class="secondary-cta">
+                    <p>Have questions? Let's discuss how we can collaborate:</p>
+                    <a href="mailto:k.m.a.aarts@tue.nl?subject=Remote%20Labs%20Interest" class="direct-contact">k.m.a.aarts@tue.nl</a>
+                </div>
+            </div>
+        </div>
+    </section>
     </main>
 
     <!-- Basic Footer -->
@@ -335,9 +291,8 @@
                     <h4>Quick Links</h4>
                     <ul>
                         <li><a href="#">Home</a></li>
-                        <li><a href="#functionalities">Features</a></li>
-                        <li><a href="#benefits">Benefits</a></li>
-                        <li><a href="#team">Team</a></li>
+                        <li><a href="#contact">Benefits</a></li>
+                        <li><a href="#contact">Contact</a></li>
                         <li><a href="https://remotelabs.tue.nl">Go to Remote Labs</a></li>
                     </ul>
                 </div>
@@ -345,9 +300,43 @@
                 <div class="footer-section">
                     <h4>Publications</h4>
                     <div class="publications">
-                        <div><a href="#">Remote Labs in Higher Education</a><br><span>Journal of Engineering Education • 2023</span></div>
-                        <div><a href="#">Scalability of Remote Labs</a><br><span>IEEE Transactions • 2022</span></div>
-                        <div><a href="#">Real-time Experimentation</a><br><span>Intl Journal • 2023</span></div>
+                             <!-- Publication 1: Edit title, URL, journal, and year below -->
+                        <div class="publication-item">
+                            <a href="https://agdb.nl/nieuws/vrij-inpluggen-voor-elk-niveau/" class="publication-title" target="_blank" rel="noopener noreferrer">Vrij inpluggen voor elk niveau</a>
+                            <div class="publication-meta">
+                                <span class="publication-journal">AGDB</span>
+                                <span class="publication-year">• 2025</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Publication 2: Edit title, URL, journal, and year below -->
+                        <div class="publication-item">
+                            <a href="https://doi.org/10.1007/s12528-022-09331-4" class="publication-title" target="_blank" rel="noopener noreferrer">Remote Labs in Higher Education</a>
+                            <div class="publication-meta">
+                                <span class="publication-journal">Journal of Engineering Education</span>
+                                <span class="publication-year">• 2022</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Publication 3: Edit title, URL, journal, and year below -->
+                        <div class="publication-item">
+                            <a href="https://www.tue.nl/nieuws-en-evenementen/nieuwsoverzicht/22-04-2020-practica-vanuit-huis-dankzij-remote-labs" class="publication-title" target="_blank" rel="noopener noreferrer">Practica vanuit huis dankzij Remote Labs</a>
+                            <div class="publication-meta">
+                                <span class="publication-journal">TU/e</span>
+                                <span class="publication-year">• 2023</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Add more publications here by copying the pattern above -->
+                        <!-- 
+                        <div class="publication-item">
+                            <a href="URL_HERE" class="publication-title">TITLE_HERE</a>
+                            <div class="publication-meta">
+                                <span class="publication-journal">JOURNAL_HERE</span>
+                                <span class="publication-year">• YEAR_HERE</span>
+                            </div>
+                        </div>
+                        -->
                     </div>
                 </div>
                 
@@ -356,7 +345,7 @@
                     <div>
                         <p>Eindhoven University of Technology</p>
                         <p>Den Dolech 2, 5612 AZ Eindhoven</p>
-                        <p>info@remotelabs.tue.nl</p>
+                        <p><a href="mailto:k.m.a.aarts@tue.nl?subject=Remote%20Labs%20Inquiry">k.m.a.aarts@tue.nl</a></p>
                         <p>+31 (0)40 247 9111</p>
                     </div>
                 </div>
@@ -381,34 +370,7 @@
         document.write('<script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,es2015,es2016,es2017,es2018,es2019,es2020"><\/script>');
         document.write('<script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2/dist/css-vars-ponyfill.min.js"><\/script>');
     </script>
-    <!-- WORK IN PROGRESS BANNER - High visibility notification -->
-    <script>
-        // Work in Progress Banner functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const wipBanner = document.getElementById('wip-banner');
-            const closeButton = document.getElementById('wip-banner-close');
-            
-            if (wipBanner && closeButton) {
-                // Check if user has already dismissed the banner
-                if (localStorage.getItem('wipBannerDismissed') === 'true') {
-                    wipBanner.style.display = 'none';
-                    // Adjust header position when banner is hidden
-                    const header = document.querySelector('header');
-                    if (header) header.style.top = '0';
-                }
-                
-                // Close button functionality
-                closeButton.addEventListener('click', function() {
-                    wipBanner.style.display = 'none';
-                    // Adjust header position when banner is hidden
-                    const header = document.querySelector('header');
-                    if (header) header.style.top = '0';
-                    // Remember user preference
-                    localStorage.setItem('wipBannerDismissed', 'true');
-                });
-            }
-        });
-    </script>
+
     
     <!-- DIRECT SMOOTH SCROLLING FIX - Simple inline script -->
     <script>
@@ -454,6 +416,7 @@
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="Strict-Transport-Security" content="max-age=63072000; includeSubDomains; preload">
     <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=()">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     
     <!-- Add performance monitoring and caching headers -->
     <script>
@@ -501,6 +464,13 @@
     
     <!-- Add cache manifest for offline support -->
     <link rel="manifest" href="cache.manifest">
+    <!-- Do Not Track Respect -->
+    <script>
+        // Respect Do Not Track browser setting
+        if (navigator.doNotTrack === "1" || navigator.msDoNotTrack === "1") {
+            console.log("Do Not Track enabled - respecting user privacy");
+        }
+    </script>
     <!-- Vimeo Player API -->
     <script src="https://player.vimeo.com/api/player.js"></script>
 </body>
