@@ -1,172 +1,354 @@
-# AI Agent Development Guide for RemoteLabs Website
+# Remote Labs Website Development Guide
 
-This document provides guidelines for AI agents working on the RemoteLabs website project to ensure consistency, efficiency, and maintainability.
+**Comprehensive documentation for developers working on the Remote Labs website project.**
 
-## Project Structure Overview
+## 📋 Table of Contents
+
+1. [Project Overview](#-project-overview)
+2. [Getting Started](#-getting-started)
+3. [Project Structure](#-project-structure)
+4. [Development Guidelines](#-development-guidelines)
+5. [Code Standards](#-code-standards)
+6. [Common Tasks](#-common-tasks)
+7. [Testing & Quality Assurance](#-testing--quality-assurance)
+8. [Deployment](#-deployment)
+9. [Maintenance](#-maintenance)
+10. [Troubleshooting](#-troubleshooting)
+
+## 🎯 Project Overview
+
+This guide provides comprehensive documentation for the Remote Labs website at Eindhoven University of Technology. It covers everything from basic setup to advanced development practices.
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Basic knowledge of HTML, CSS, and JavaScript
+- Text editor (VS Code recommended)
+- Node.js (for minification tools)
+- Git (for version control)
+
+### Setup Instructions
+
+```bash
+# Clone the repository
+git clone https://github.com/KarelAarts/remotelabs-website.git
+cd remotelabs-website
+
+# Install dependencies
+npm install
+
+# Start development
+# Simply open index.html in your browser
+```
+
+## 📁 Project Structure
 
 ```
 remotelabs-website/
-├── assets/                  # Static assets (images, fonts, etc.)
-├── error_pages/            # Custom error pages
-├── node_modules/           # Node.js dependencies
-├── .git/                   # Git repository
-├── .gitattributes          # Git attributes
-├── README.md               # Project documentation
-├── cookie_consent.html     # Cookie consent template
-├── dnt_script.html         # Do Not Track script
 ├── index.html              # Main landing page
 ├── index_backup.html       # Backup of main page
+├── styles.css              # Full CSS stylesheet
+├── styles.min.css          # Minified CSS (production)
+├── script.js               # Full JavaScript
+├── script.min.js          # Minified JavaScript (production)
+├── assets/                 # Static assets (images, fonts)
+├── error_pages/            # Custom error pages (400, 401, 403, 404, 500)
+├── privacy.html            # Privacy policy page
+├── cookie_consent.html     # Cookie consent template
+├── dnt_script.html         # Do Not Track script
+├── sw.js                   # Service worker for offline support
 ├── package.json            # Node.js package configuration
 ├── package-lock.json       # Dependency lock file
-├── privacy.html            # Privacy policy page
-├── script.js               # Main JavaScript file
-├── script.min.js           # Minified JavaScript
-├── styles.css              # Main stylesheet
-├── styles.min.css          # Minified stylesheet
-└── sw.js                   # Service worker
+├── .gitattributes          # Git configuration
+└── README.md               # Project documentation
 ```
 
-## Development Guidelines
+## 🛠️ Development Guidelines
 
-### 1. File Naming Conventions
-- Use lowercase with hyphens for file names (e.g., `new-feature.html`)
-- JavaScript files should use `.js` extension
-- CSS files should use `.css` extension
-- Backup files should append `_backup` before extension
+### File Naming Conventions
+- **HTML/CSS/JS**: `lowercase-with-hyphens.ext`
+- **Backup files**: `original_backup.ext`
+- **Images**: `descriptive-name.jpg/png`
+- **Folders**: `lowercase_with_underscores/`
 
-### 2. HTML Structure
-- Maintain semantic HTML5 structure
-- Use proper indentation (2 spaces)
-- Include appropriate meta tags for SEO
-- Follow accessibility best practices (ARIA labels, alt text)
+### HTML Standards
+- **Semantic HTML5**: Use `<header>`, `<main>`, `<footer>`, etc.
+- **Accessibility**: Include ARIA labels, alt text, proper heading hierarchy
+- **Meta Tags**: Maintain SEO and social media meta tags
+- **Indentation**: 2 spaces (consistent with existing code)
 
-### 3. CSS Guidelines
-- Use the existing styles.css as reference
-- Follow BEM (Block Element Modifier) methodology
-- Organize styles by component/functionality
-- Use CSS variables for colors and common values
-- Mobile-first approach with responsive design
+### CSS Architecture
+- **Methodology**: BEM (Block Element Modifier)
+- **Organization**: Group styles by component/functionality
+- **Variables**: Use CSS variables for colors and common values
+- **Responsive**: Mobile-first approach with appropriate breakpoints
+- **Specificity**: Keep specificity low, avoid `!important`
 
-### 4. JavaScript Standards
-- Use ES6+ features where supported
-- Follow existing code patterns in script.js
-- Implement proper error handling
-- Use event delegation for dynamic elements
-- Comment complex logic for maintainability
+### JavaScript Practices
+- **ES6+ Features**: Use modern JavaScript (arrow functions, template literals, etc.)
+- **Modularity**: Keep functions small and focused
+- **Error Handling**: Implement proper try/catch blocks
+- **DOM Ready**: Ensure DOM is loaded before manipulation
+- **Comments**: Document complex logic and non-obvious code
 
-### 5. Performance Considerations
-- Minify production assets (script.min.js, styles.min.css)
-- Optimize images before adding to assets/
-- Implement lazy loading where appropriate
-- Cache static assets properly
+### Performance Best Practices
+- **Minification**: Always minify for production
+- **Image Optimization**: Compress images before adding
+- **Lazy Loading**: Implement for non-critical resources
+- **Caching**: Leverage browser caching headers
+- **CDN**: Use CDN for external libraries
 
-## Extension Points
+## 📜 Code Standards
 
-### Adding New Pages
-1. Create new HTML file following existing structure
-2. Add link to navigation in index.html if needed
-3. Create corresponding CSS styles in styles.css
-4. Add any required JavaScript to script.js
-5. Test across browsers and devices
+### HTML Example
+```html
+<!-- Good: Semantic, accessible, properly indented -->
+<section class="feature-card" aria-labelledby="feature-title">
+  <h2 id="feature-title" class="feature-card__title">Feature Title</h2>
+  <p class="feature-card__description">Description text goes here.</p>
+  <button class="feature-card__cta" aria-label="Learn more about feature">Learn More</button>
+</section>
+```
+
+### CSS Example
+```css
+/* Good: BEM methodology, mobile-first, commented */
+.feature-card {
+  /* Block styles */
+  background: var(--white);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.feature-card__title {
+  /* Element styles */
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--black);
+}
+
+.feature-card--highlighted {
+  /* Modifier styles */
+  border: 2px solid var(--primary-color);
+}
+
+@media (min-width: 768px) {
+  .feature-card {
+    padding: 2rem;
+  }
+}
+```
+
+### JavaScript Example
+```javascript
+// Good: Modular, well-commented, error handling
+/**
+ * Initialize feature cards with animation
+ * @param {string} containerSelector - CSS selector for container
+ */
+function initFeatureCards(containerSelector) {
+  try {
+    const container = document.querySelector(containerSelector);
+    if (!container) return;
+    
+    const cards = container.querySelectorAll('.feature-card');
+    
+    cards.forEach((card, index) => {
+      // Add animation with delay
+      card.style.animationDelay = `${index * 100}ms`;
+      card.classList.add('animate-fade-in');
+    });
+  } catch (error) {
+    console.error('Error initializing feature cards:', error);
+  }
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  initFeatureCards('.features-section');
+});
+```
+
+## 🎯 Common Tasks
+
+### Adding a New Page
+1. **Create HTML file**: Follow existing structure
+2. **Add to navigation**: Update `index.html` header
+3. **Create styles**: Add to `styles.css` (grouped by component)
+4. **Add functionality**: Update `script.js` if needed
+5. **Test**: Verify across browsers and devices
+
+### Updating Content
+1. **Text changes**: Edit directly in `index.html`
+2. **Image updates**: Replace files in `assets/` and update references
+3. **Style adjustments**: Modify `styles.css`
+4. **Functionality**: Update `script.js`
 
 ### Adding New Features
-1. Identify the appropriate file(s) to modify
-2. Follow existing code patterns
-3. Add necessary HTML elements
-4. Implement CSS styling
-5. Add JavaScript functionality
-6. Test thoroughly
+1. **Plan**: Document requirements and approach
+2. **Implement**: Follow existing patterns
+3. **Test**: Verify functionality and performance
+4. **Document**: Update README if significant changes
 
 ### Modifying Existing Components
-1. Review current implementation
-2. Make minimal, focused changes
-3. Ensure backward compatibility
-4. Update any dependent code
-5. Test all affected functionality
+1. **Review**: Understand current implementation
+2. **Change**: Make minimal, focused updates
+3. **Test**: Ensure no regressions
+4. **Document**: Note changes if they affect usage
 
-## Testing Requirements
+## 🧪 Testing & Quality Assurance
 
-- Test in Chrome, Firefox, Safari, and Edge
-- Verify mobile responsiveness
-- Check console for errors
-- Validate HTML/CSS
-- Test performance metrics
-- Verify accessibility compliance
+### Testing Checklist
+- [ ] Chrome, Firefox, Safari, Edge
+- [ ] Mobile responsiveness (320px to 1200px)
+- [ ] Console error-free
+- [ ] HTML/CSS validation
+- [ ] Accessibility audit
+- [ ] Performance metrics (Lighthouse)
+- [ ] Cross-browser compatibility
 
-## Version Control
+### Validation Tools
+- **HTML**: https://validator.w3.org/
+- **CSS**: https://jigsaw.w3.org/css-validator/
+- **Accessibility**: https://wave.webaim.org/
+- **Performance**: Chrome DevTools Lighthouse
 
-- Commit messages should be descriptive
-- Reference related issues when applicable
-- Keep commits focused on single features/fixes
-- Update documentation as needed
+### Performance Targets
+- **Lighthouse Score**: 90+ (Performance, Accessibility, SEO)
+- **Load Time**: < 2 seconds (3G connection)
+- **Page Size**: < 1MB (including images)
+- **Requests**: < 20 HTTP requests
 
-## Deployment Process
+## 🚀 Deployment
 
-1. Test all changes locally
-2. Minify assets if modified
-3. Commit changes with clear message
-4. Push to appropriate branch
-5. Create pull request for review
-6. Merge after approval
-7. Monitor production deployment
+### Preparation
+1. **Minify assets**:
+   ```bash
+   npm run minify-css
+   npm run minify-js
+   ```
+2. **Test production build** locally
+3. **Update version** in package.json if significant changes
 
-## AI Agent Specific Notes
+### Deployment Options
 
-- Always read existing code before making changes
-- Follow the principle of minimal intervention
-- Document any assumptions made
-- Ask for clarification when requirements are unclear
-- Maintain consistent code style with existing project
-- Prioritize maintainability over clever optimizations
+#### GitHub Pages
+```bash
+# Push to gh-pages branch
+git subtree push --prefix remotelabs-website origin gh-pages
+```
 
-## Common Patterns
+#### Netlify/Vercel
+1. Connect GitHub repository
+2. Set build command: `npm run build`
+3. Set publish directory: `/`
+4. Deploy
 
-### Navigation Updates
-When adding new navigation items:
-1. Update the header section in index.html
-2. Add corresponding CSS styles
-3. Implement any required JavaScript handlers
+#### Traditional Hosting
+1. Upload all files via FTP/SFTP
+2. Configure domain pointing
+3. Set up HTTPS
+4. Test live site
 
-### Form Handling
-For new forms:
-1. Add form HTML with proper validation attributes
-2. Style form elements consistently
-3. Implement client-side validation
-4. Add form submission handler
+### Post-Deployment
+- Verify all links work
+- Check analytics setup
+- Monitor performance
+- Set up error monitoring
 
-### Component Reuse
-When creating reusable components:
-1. Define clear component boundaries
-2. Use consistent naming conventions
-3. Document component usage
-4. Implement with reusability in mind
+## 🔧 Maintenance
 
-## Troubleshooting Guide
+### Regular Tasks
+- **Content Updates**: Monthly review
+- **Dependency Updates**: Quarterly
+- **Browser Testing**: Before major releases
+- **Performance Audit**: Quarterly
+- **Backup**: Before major changes
 
-### Common Issues
-- **CSS not applying**: Check specificity and load order
-- **JavaScript errors**: Verify DOM ready state and element existence
-- **Responsive issues**: Test with browser dev tools
-- **Performance bottlenecks**: Use Chrome DevTools profiling
+### Version Control
+- **Commit Messages**: Descriptive and concise
+- **Branching**: Feature branches for new development
+- **Tags**: Version tags for releases
+- **Issues**: Track bugs and features
 
-### Debugging Tips
-- Use console.log() strategically
-- Check browser console for errors
-- Validate HTML structure
-- Test with different screen sizes
-- Verify cross-browser compatibility
+### Documentation Updates
+- Update README.md for significant changes
+- Keep AGENTS.md current
+- Document major architectural decisions
+- Maintain change log
 
-## Future Enhancements
+## 🐛 Troubleshooting
 
-Potential areas for improvement:
-- Component library implementation
-- Build system automation
-- Testing framework integration
-- Performance monitoring
-- Analytics integration
+### Common Issues & Solutions
 
-## Contact Information
+#### CSS Not Applying
+- **Cause**: Specificity conflict or load order
+- **Solution**: Check browser dev tools, adjust specificity
 
-For questions about this guide or project-specific concerns, refer to the project documentation or contact the development team.
+#### JavaScript Errors
+- **Cause**: DOM not ready or element not found
+- **Solution**: Use DOMContentLoaded, add null checks
 
-Last updated: 2024-02-23
+#### Responsive Issues
+- **Cause**: Missing breakpoints or incorrect units
+- **Solution**: Test with device emulation, adjust media queries
+
+#### Performance Problems
+- **Cause**: Large images or render-blocking resources
+- **Solution**: Optimize images, defer non-critical JS
+
+### Debugging Workflow
+1. **Reproduce**: Identify exact steps to reproduce
+2. **Isolate**: Narrow down the problematic code
+3. **Research**: Check documentation and similar issues
+4. **Fix**: Implement minimal solution
+5. **Test**: Verify fix works
+6. **Document**: Note the solution for future reference
+
+## 📚 Additional Resources
+
+### Learning Materials
+- **HTML/CSS**: MDN Web Docs
+- **JavaScript**: JavaScript.info
+- **Accessibility**: WebAIM
+- **Performance**: Google Web Fundamentals
+
+### Tools
+- **Code Editor**: VS Code with ESLint, Prettier
+- **Browser Testing**: BrowserStack
+- **Performance**: WebPageTest
+- **Design**: Figma/Adobe XD
+
+## 🤝 Handover Information
+
+### For New Developers
+1. **Repository Access**: GitHub credentials
+2. **Hosting Access**: Deployment credentials
+3. **Analytics**: Umami dashboard access
+4. **Domain**: DNS management access
+5. **Documentation**: This guide and README
+
+### Transition Checklist
+- [ ] Provide all access credentials
+- [ ] Walk through deployment process
+- [ ] Explain content update procedure
+- [ ] Demonstrate common tasks
+- [ ] Answer questions
+- [ ] Provide contact for follow-up
+
+## 📬 Support
+
+For questions about this project:
+1. Check the README.md first
+2. Review this development guide
+3. Consult the git history for context
+4. Contact the development team
+
+---
+
+**Last updated**: 2024-02-27
+
+**Maintainer**: Development Team
+
+**License**: MIT License
