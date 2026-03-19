@@ -9,19 +9,20 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://player.vimeo.com" crossorigin>
-    <link rel="apple-touch-icon" href="/icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512x512.png">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512x512.png">
     <title>Remote Labs - 24/7 Access to Physical Lab Experiments</title>
     <!-- Preload critical resources -->
     <link rel="preload" href="styles.css" as="style">
     <link rel="preload" href="script.min.js" as="script">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" crossorigin="anonymous">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" crossorigin="anonymous"
+          integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" referrerpolicy="no-referrer">
     
     <!-- Critical CSS (inline for above-the-fold content) -->
     <style>
@@ -76,7 +77,7 @@
     <noscript><link rel="stylesheet" href="styles.css"></noscript>
     
     <!-- Load fonts with display=swap for better performance -->
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
     <!-- Font fallback for older browsers -->
     <style>
@@ -137,12 +138,12 @@
                 <iframe
                     src="https://player.vimeo.com/video/1166031884?autoplay=1&amp;muted=1&amp;loop=1&amp;background=1&amp;controls=0&amp;badge=0&amp;autopause=0&amp;?pip=0&amp;player_id=0&amp;app_id=58479&amp;title=0&amp;byline=0&amp;portrait=0"
                     frameborder="0"
-                    allow="autoplay; fullscreen; clipboard-write; encrypted-media; web-share"
+                    allow="autoplay; clipboard-write; encrypted-media; web-share"
+                    allowfullscreen
                     referrerpolicy="strict-origin-when-cross-origin"
                     style="position:absolute;top:0;left:0;width:100%;height:100%;"
                     title="TU/e - Remote Labs"
-                    loading="lazy"
-                    allowfullscreen>
+                    loading="lazy">
                 </iframe>
                 <!-- Overlay to visually hide / block the browser Picture-in-Picture control -->
                 <div class="video-pip-block" aria-hidden="true"></div>
@@ -296,7 +297,12 @@
                         <li><a href="#contact">Contact</a></li>
                         <li><a href="https://remotelabs.tue.nl">Go to Remote Labs</a></li>
                         <br>
-                        <a href="https://status.remotelabs.education" target="_blank" rel="noopener"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fstatus.remotelabs.education%2Fshield-badges%2Fstatus.json&style=for-the-badge" loading="lazy" alt="Phare badge"></a>                </div>
+                        <div class="status-badge-container">
+                            <a href="https://status.remotelabs.education" target="_blank" rel="noopener">
+                                <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fstatus.remotelabs.education%2Fshield-badges%2Fstatus.json&style=for-the-badge" loading="lazy" alt="Phare badge" class="status-badge">
+                            </a>
+                        </div>
+                </div>
                 
                 <div class="footer-section">
                     <h4>Publications</h4>
@@ -357,7 +363,7 @@
                     <p>&copy; 2026 Remote Labs. All rights reserved.</p>
                     <p>Part of Eindhoven University of Technology</p>
                     <br>
-                <div>
+                </div>
             </div>
         </div>
     </footer>
@@ -411,10 +417,8 @@
         });
     </script>
     
-    <!-- Enhanced Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com https://player.vimeo.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://player.vimeo.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'
+    <!-- Security headers should be set via HTTP headers, not meta tags -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="Strict-Transport-Security" content="max-age=63072000; includeSubDomains; preload">
     <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=()">
@@ -424,9 +428,9 @@
     <script>
         // Performance monitoring setup
         window.addEventListener('load', function() {
-            const perfData = window.performance.timing;
-            const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
-            console.log('Page loaded in', pageLoadTime, 'ms');
+            // Use modern Performance API instead of deprecated timing API
+            const pageLoadTime = performance.now();
+            console.log('Page loaded in', pageLoadTime.toFixed(2), 'ms');
             
             // Performance budget check
             const performanceBudget = 2000; // 2 seconds budget
@@ -450,7 +454,9 @@
         });
         
         // Service Worker registration for caching (placeholder)
-        if ('serviceWorker' in navigator) {
+        // Only register on HTTP/HTTPS protocols, not file://
+        if ('serviceWorker' in navigator && 
+            (window.location.protocol === 'https:' || window.location.protocol === 'http:')) {
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register('/sw.js').then(
                     function(registration) {

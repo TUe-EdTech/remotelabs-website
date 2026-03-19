@@ -17,14 +17,15 @@
     <!-- Preload critical resources -->
     <link rel="preload" href="styles.css" as="style">
     <link rel="preload" href="script.min.js" as="script">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" crossorigin="anonymous">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" crossorigin="anonymous"
+          integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==">
     <!-- Load minified CSS asynchronously with IE11 fallback -->
     <link rel="stylesheet" href="styles.min.css" media="print" onload="this.media='all'">
     <!--[if lt IE 9]><link rel="stylesheet" href="styles.css"><![endif]-->
     <noscript><link rel="stylesheet" href="styles.css"></noscript>
     <!-- Load fonts with display=swap for better performance -->
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght=700&display=swap" rel="stylesheet" crossorigin="anonymous">
     <style>
         .logo-text { font-family: 'Poppins', 'Arial Black', Impact, sans-serif; font-weight: 700; font-size: 1.5rem; color: #000; text-decoration: none; }
     </style>
@@ -160,9 +161,9 @@
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <script>
         window.addEventListener('load', function() {
-            const perfData = window.performance.timing;
-            const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
-            console.log('Page loaded in', pageLoadTime, 'ms');
+            // Use modern Performance API instead of deprecated timing API
+            const pageLoadTime = performance.now();
+            console.log('Page loaded in', pageLoadTime.toFixed(2), 'ms');
         });
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {

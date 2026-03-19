@@ -18,11 +18,13 @@
 /* Smooth Scrolling for entire page - ENHANCED */
 html {
     scroll-behavior: smooth !important;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 /* Ensure smooth scrolling is applied to all scrollable elements */
 body {
     overscroll-behavior: contain;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 /* Fallback for Safari - use scrollIntoView polyfill */
@@ -40,6 +42,54 @@ body {
     to {
         scroll-behavior: smooth;
     }
+}
+
+/* Status badge styles - Prevent horizontal expansion */
+.status-badge-container {
+    display: inline-block;
+    overflow: hidden;
+    max-width: 100%;
+    margin-top: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 120px; /* Minimum width to prevent jumping */
+    max-width: 200px; /* Maximum width constraint */
+}
+
+/* Debug: Add visual indicator if horizontal scrolling is possible */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 0, 0, 0.5);
+    z-index: 9999;
+    display: none;
+}
+
+body.allow-horizontal-scroll::after {
+    display: block;
+}
+
+.status-badge {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    width: auto;
+    max-height: 30px;
+    object-fit: contain;
+}
+
+/* Ensure footer doesn't expand horizontally */
+.footer-main {
+    overflow-x: hidden;
+}
+
+.footer-section {
+    min-width: 0; /* Prevent flex items from expanding */
 }
 
 /* Browser-specific fixes */
@@ -1149,6 +1199,9 @@ footer {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1.5rem;
+    overflow-x: hidden; /* Prevent horizontal expansion */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .footer-section h4 {
@@ -1579,7 +1632,12 @@ footer {
 }
 
 .scroll-indicator i {
-    animation: bounce 2s infinite;
+    /* Removed infinite bounce animation that was causing layout shifts */
+    transition: transform 0.3s ease;
+}
+
+.scroll-indicator:hover i {
+    transform: translateY(-5px);
 }
 
 @keyframes bounce {
@@ -1908,13 +1966,20 @@ body.reduce-motion *::after {
 .value-prop {
     text-align: center;
     margin-bottom: 3rem;
+    /* contain any scaled child so that it doesn't push the page wider */
+    overflow-x: hidden;
 }
 
 .value-icon {
     font-size: 2.5rem;
     color: var(--highlight-color);
     margin-bottom: 1rem;
-    animation: pulse 2s infinite;
+    /* Removed infinite pulse animation that was causing layout shifts */
+    transition: transform 0.3s ease;
+}
+
+.value-icon:hover {
+    transform: scale(1.05);
 }
 
 .benefits-title {
