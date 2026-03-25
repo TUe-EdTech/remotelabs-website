@@ -18,83 +18,26 @@
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="icon-512x512.png">
     <title>Remote Labs - 24/7 Access to Physical Lab Experiments</title>
-    <!-- Preload critical resources -->
     <link rel="preload" href="styles.css" as="style">
     <link rel="preload" href="script.min.js" as="script">
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" crossorigin="anonymous"
           integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" referrerpolicy="no-referrer">
     
-    <!-- Critical CSS (inline for above-the-fold content) -->
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #000; background: #fff; -webkit-text-size-adjust: 100%; }
-        
-
-
-        /* Header styling */
-        header { 
-            background: #fff; 
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
-            padding: 1.5rem 0; 
-            position: fixed; 
-            width: 100%; 
-            top: 0;
-            z-index: 1000; 
-        }
-        
-        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-        .logo { display: flex; align-items: center; gap: 0.75rem; }
-        .logo-text { font-family: 'Poppins', 'Arial Black', Impact, sans-serif; font-weight: 700; font-size: 1.5rem; color: var(--black); text-decoration: none; }
-        .cta-button { background: #000; color: #fff; padding: 0.85rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.95rem; }
-        .hero { padding: 120px 0 80px; text-align: center; }
-        .hero-title { font-size: 2.8rem; margin-bottom: 1.2rem; line-height: 1.1; }
-        .hero-subtitle { font-size: 1.1rem; max-width: 90%; margin: 0 auto 2rem; line-height: 1.5; }
-        .hero-cta-button { background: #2563eb; color: #fff; padding: 0.9rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: 700; margin-bottom: 1.5rem; display: inline-block; font-size: 1rem; }
-        
-        /* Mobile-specific critical CSS */
-        @media (max-width: 768px) {
-            .container { padding: 0 12px; }
-            .hero { padding: 100px 0 60px; }
-            .hero-title { font-size: 2.2rem; }
-            .hero-subtitle { font-size: 1rem; }
-            .cta-button, .hero-cta-button { width: 100%; padding: 1rem; font-size: 1rem; }
-            
-        }
-        
-        @media (max-width: 480px) {
-            .hero-title { font-size: 1.8rem; }
-            .container { padding: 0 10px; }
-            
-        }
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Lato','Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#000;background:#fff;-webkit-text-size-adjust:100%}header{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1);padding:1.5rem 0;position:fixed;width:100%;top:0;z-index:1000}.container{width:100%;max-width:1200px;margin:0 auto;padding:0 15px}.logo{display:flex;align-items:center;gap:.75rem}.logo-text{font-family:'Poppins','Arial Black',Impact,sans-serif;font-weight:700;font-size:1.5rem;color:var(--black);text-decoration:none}.cta-button{background:#000;color:#fff;padding:.85rem 1.5rem;border-radius:6px;text-decoration:none;font-weight:700;font-size:.95rem}.hero{padding:120px 0 80px;text-align:center}.hero-title{font-size:2.8rem;margin-bottom:1.2rem;line-height:1.1}.hero-subtitle{font-size:1.1rem;max-width:90%;margin:0 auto 2rem;line-height:1.5}.hero-cta-button{background:#2563eb;color:#fff;padding:.9rem 1.8rem;border-radius:8px;text-decoration:none;font-weight:700;margin-bottom:1.5rem;display:inline-block;font-size:1rem}@media (max-width:768px){.container{padding:0 12px}.hero{padding:100px 0 60px}.hero-title{font-size:2.2rem}.hero-subtitle{font-size:1rem}.cta-button,.hero-cta-button{width:100%;padding:1rem;font-size:1rem}}@media (max-width:480px){.hero-title{font-size:1.8rem}.container{padding:0 10px}}
     </style>
     
-    <!-- Load minified CSS asynchronously with IE11 fallback -->
     <link rel="stylesheet" href="styles.min.css" media="print" onload="this.media='all'">
-    <!--[if lt IE 9]>
-    <link rel="stylesheet" href="styles.css">
-    <![endif]-->
-    <!-- Fallback to regular CSS if minified version fails -->
     <noscript><link rel="stylesheet" href="styles.css"></noscript>
     
     <!-- Load fonts with display=swap for better performance -->
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
-    <!-- Font fallback for older browsers -->
     <style>
-        /* Fallback fonts for browsers that don't support Google Fonts */
-        @font-face {
-            font-family: 'Lato Fallback';
-            src: local('Arial'), local('Helvetica Neue'), local('Helvetica'), local('sans-serif');
-        }
-        @font-face {
-            font-family: 'Poppins Fallback';
-            src: local('Arial Black'), local('Impact'), local('sans-serif');
-            font-weight: 700;
-        }
+@font-face{font-family:'Lato Fallback';src:local('Arial'),local('Helvetica Neue'),local('Helvetica'),local('sans-serif')}@font-face{font-family:'Poppins Fallback';src:local('Arial Black'),local('Impact'),local('sans-serif');font-weight:700}
     </style>
     
-    <!-- Load Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <style>
         @font-face {
             font-family: 'Gilroy Bold';
@@ -108,10 +51,7 @@
 <body>
 
     
-    <!-- Skip to content link for keyboard users -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <!-- ARIA live region for dynamic announcements -->
     <div id="aria-live" class="aria-live aria-live-polite" aria-live="polite"></div>
     
     <!-- Header Section -->
@@ -119,7 +59,7 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <a href="/" class="logo-text" aria-label="Go to Remote Labs homepage">Remote Labs</a>
+                    <h1 class="logo-text">Remote Labs</h1>
                 </div>
                 <a href="https://remotelabs.tue.nl" class="cta-button" aria-label="Go to Remote Labs platform">Go to Remote Labs</a>
             </div>
@@ -159,7 +99,7 @@
             <div class="team-grid">
                 <div class="team-member">
                     <div class="team-photo-container">
-                        <img src="assets/team1.jpg" alt="Team Member 1" class="team-photo" loading="lazy" width="300" height="300">
+                        
                         <div class="team-photo-overlay">
                             <h4 style="color: white; margin: 0; font-size: 1.1rem;">John Smith</h4>
                         </div>
@@ -174,7 +114,7 @@
                 </div>
                 <div class="team-member">
                     <div class="team-photo-container">
-                        <img src="assets/team2.jpg" alt="Team Member 2" class="team-photo" loading="lazy" width="300" height="300">
+                        
                         <div class="team-photo-overlay">
                             <h4 style="color: white; margin: 0; font-size: 1.1rem;">Emily Davis</h4>
                         </div>
@@ -189,7 +129,7 @@
                 </div>
                 <div class="team-member">
                     <div class="team-photo-container">
-                        <img src="assets/team3.jpg" alt="Team Member 3" class="team-photo" loading="lazy" width="300" height="300">
+                        
                         <div class="team-photo-overlay">
                             <h4 style="color: white; margin: 0; font-size: 1.1rem;">Robert Wilson</h4>
                         </div>
@@ -370,8 +310,6 @@
 
     <!-- Load minified JavaScript with defer for better performance -->
     <script src="script.min.js" defer></script>
-    <!-- Fallback to regular JS if minified version fails -->
-    <noscript><link rel="stylesheet" href="styles.css"></noscript>
     <!-- IE11 polyfills and compatibility -->
     <script nomodule>
         // Load polyfills for older browsers
@@ -380,41 +318,8 @@
     </script>
 
     
-    <!-- DIRECT SMOOTH SCROLLING FIX - Simple inline script -->
     <script>
-        // Simple smooth scrolling that works everywhere
-        document.addEventListener('DOMContentLoaded', function() {
-            // Enable CSS smooth scrolling
-            document.documentElement.style.scrollBehavior = 'smooth';
-            
-            // Handle anchor links directly
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        targetElement.scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-            
-            // Handle back-to-top button
-            const backToTop = document.querySelector('.back-to-top');
-            if (backToTop) {
-                backToTop.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
-                });
-            }
-            
-            console.log('Direct smooth scrolling initialized');
-        });
+document.addEventListener('DOMContentLoaded',function(){'scrollBehavior'in document.documentElement.style&&(document.documentElement.style.scrollBehavior='smooth');let t=!1;document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener('click',function(e){if(t)return;t=!0,e.preventDefault();const n=this.getAttribute('href'),o=document.querySelector(n);if(o)try{o.scrollIntoView({behavior:'smooth'}),setTimeout(()=>{t=!1},1e3)}catch(e){o.scrollIntoView(!0),t=!1}else t=!1})});const e=document.querySelector('.back-to-top');e&&e.addEventListener('click',function(o){if(t)return;t=!0,o.preventDefault();try{window.scrollTo({top:0,behavior:'smooth'}),setTimeout(()=>{t=!1},1e3)}catch(e){window.scrollTo(0,0),t=!1}}),console.log('Optimized smooth scrolling initialized')});
     </script>
     
     <!-- Security headers should be set via HTTP headers, not meta tags -->
@@ -426,32 +331,7 @@
     
     <!-- Add performance monitoring and caching headers -->
     <script>
-        // Performance monitoring setup
-        window.addEventListener('load', function() {
-            // Use modern Performance API instead of deprecated timing API
-            const pageLoadTime = performance.now();
-            console.log('Page loaded in', pageLoadTime.toFixed(2), 'ms');
-            
-            // Performance budget check
-            const performanceBudget = 2000; // 2 seconds budget
-            if (pageLoadTime > performanceBudget) {
-                console.warn('Performance budget exceeded:', pageLoadTime, 'ms (budget:', performanceBudget, 'ms)');
-            }
-            
-            // Log additional performance metrics
-            if (window.performance && window.performance.getEntries) {
-                const resources = window.performance.getEntriesByType("resource");
-                console.log('Resources loaded:', resources.length);
-            
-            // Log largest contentful paint if available
-            if (window.performance && window.performance.getEntriesByType("paint")) {
-                const paintEntries = window.performance.getEntriesByType("paint");
-                paintEntries.forEach(entry => {
-                    console.log('Paint timing:', entry.name, entry.startTime);
-                });
-            }
-            }
-        });
+window.addEventListener('load',function(){const t=performance.now();console.log('Page loaded in',t.toFixed(2),'ms');const e=2e3;t>e&&console.warn('Performance budget exceeded:',t,'ms (budget:',e,'ms)');if(window.performance&&window.performance.getEntries){const e=window.performance.getEntriesByType("resource");console.log('Resources loaded:',e.length);e.forEach(e=>{e.duration>1e3&&console.warn('Slow resource:',e.name,'-',e.duration+'ms')})}if(window.performance&&window.performance.getEntriesByType("paint")){const e=window.performance.getEntriesByType("paint");e.forEach(e=>{console.log('Paint timing:',e.name,e.startTime)})}});
         
         // Service Worker registration for caching (placeholder)
         // Only register on HTTP/HTTPS protocols, not file://
@@ -472,6 +352,9 @@
     
     <!-- Add cache manifest for offline support -->
     <link rel="manifest" href="cache.manifest">
+    
+    <link rel="prefetch" href="script.min.js" as="script">
+    <link rel="prefetch" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" as="style" crossorigin>
     <!-- Do Not Track Respect -->
     <script>
         // Respect Do Not Track browser setting
