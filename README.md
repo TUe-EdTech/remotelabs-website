@@ -4,7 +4,14 @@
 
 ## 📋 Project Overview
 
-This is a static website for Remote Labs at TU/e, providing information about 24/7 access to physical lab experiments. The site is designed to be fast, accessible, and easy to maintain.
+This is a static website for Remote Labs at TU/e, providing information about 24/7 access to physical lab experiments. The site features modern UI elements including scroll-based navigation, interactive toggle switches, and optimized mobile experience.
+
+**Key Features**:
+- ✨ Modern toggle switch for workflow selection
+- 📱 Optimized mobile navigation with scroll hiding
+- 🎨 Enhanced visual design with gradients and animations
+- 🔄 Scroll-based header hiding for better UX
+- 🏫 TU/e logo integration
 
 ## 🚀 Getting Started
 
@@ -28,13 +35,14 @@ npm install
 
 ```
 remotelabs-website/
-├── index.html              # Main landing page
+├── index.html              # Main landing page (optimized)
 ├── index_backup.html       # Backup of main page
 ├── styles.css              # Full CSS stylesheet
 ├── styles.min.css          # Minified CSS (production)
 ├── script.js               # Full JavaScript
 ├── script.min.js          # Minified JavaScript (production)
-├── assets/                 # Static assets (images, fonts)
+├── assets/                 # Static assets (images, fonts, TU/e logo)
+│   └── TUe-logo-descriptor-line-scarlet-S.png  # University logo
 ├── error_pages/            # Custom error pages (400, 401, 403, 404, 500)
 ├── privacy.html            # Privacy policy page
 ├── cookie_consent.html     # Cookie consent template
@@ -42,8 +50,16 @@ remotelabs-website/
 ├── sw.js                   # Service worker for offline support
 ├── package.json            # Node.js package configuration
 ├── package-lock.json       # Dependency lock file
-└── .gitattributes          # Git configuration
+├── .gitattributes          # Git configuration
+├── README.md               # Project documentation (this file)
+└── agents.md               # Development guide
 ```
+
+**Recent Additions**:
+- TU/e logo integration in footer
+- "How It Works" section with toggle functionality
+- Mobile navigation bar
+- Scroll-based header hiding
 
 ## 🛠️ Development Workflow
 
@@ -66,23 +82,36 @@ remotelabs-website/
 
 ### Text Content
 - Edit text directly in `index.html`
-- Main sections: Hero, Features, About, Contact
+- Main sections: Hero, How It Works, Features, About, Contact
 - Update meta tags for SEO in `<head>` section
+- Toggle switch labels can be customized in HTML
 
 ### Styling
 - **Colors**: Modify CSS variables in `styles.css`
 - **Fonts**: Update Google Fonts links or add local fonts
 - **Layout**: Adjust responsive breakpoints as needed
+- **Animations**: Use cubic-bezier(0.4, 0, 0.2, 1) for consistency
+- **Gradients**: Customize in toggle switch CSS
 
 ### Images
 - Add images to `assets/` folder
 - Update references in HTML/CSS
 - Optimize images for web (use JPEG/PNG, compress)
+- TU/e logo: `assets/TUe-logo-descriptor-line-scarlet-S.png`
 
 ### JavaScript
 - Add new functionality to `script.js`
 - Use ES6+ features (supported in modern browsers)
 - Follow existing code patterns
+- **Scroll Events**: Implement throttling for performance
+- **Toggle Functionality**: Update event listeners as needed
+
+### Adding New Interactive Elements
+1. **HTML**: Create semantic structure
+2. **CSS**: Add styles with proper states (hover, active, etc.)
+3. **JavaScript**: Implement functionality with event listeners
+4. **Animation**: Add smooth transitions
+5. **Test**: Verify across devices
 
 ## 🚀 Deployment
 
@@ -125,12 +154,16 @@ remotelabs-website/
 - Test across browsers
 - Monitor performance
 - Update dependencies
+- Test animations and scroll behavior
+- Verify mobile navigation functionality
 
 ### Performance Optimization
 - Minify CSS and JavaScript
 - Optimize images
 - Enable browser caching
 - Use CDN for assets
+- **Animation Performance**: Use `will-change` and GPU acceleration
+- **Scroll Optimization**: Implement requestAnimationFrame
 
 ## 📝 Documentation
 
@@ -154,6 +187,9 @@ When transferring this project:
 3. [ ] Explain content update process
 4. [ ] Demonstrate deployment procedure
 5. [ ] Provide contact for questions
+6. [ ] Review animation and scroll functionality
+7. [ ] Test mobile navigation behavior
+8. [ ] Document toggle switch customization
 
 ## 📄 License
 
@@ -165,4 +201,12 @@ For questions about this project, contact the development team or refer to the p
 
 ---
 
-**Last updated**: 2024-02-27
+**Last updated**: 2024-07-15
+
+**Recent Updates**:
+- Added scroll-based navigation hiding for desktop and mobile
+- Implemented modern toggle switch for workflow selection
+- Optimized mobile experience with improved touch targets
+- Integrated TU/e logo in footer
+- Enhanced visual design with gradients and animations
+- Added "How It Works" section with interactive elements

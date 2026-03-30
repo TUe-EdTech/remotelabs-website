@@ -17,7 +17,14 @@
 
 ## 🎯 Project Overview
 
-This guide provides comprehensive documentation for the Remote Labs website at Eindhoven University of Technology. It covers everything from basic setup to advanced development practices.
+This guide provides comprehensive documentation for the Remote Labs website at Eindhoven University of Technology. The website has been optimized for performance, accessibility, and user experience with modern features including scroll-based navigation hiding, interactive toggle switches, and responsive design.
+
+**Key Features**:
+- Scroll-based header hiding (desktop & mobile)
+- Modern toggle switch for workflow selection
+- Optimized mobile experience
+- Performance-focused design
+- Accessible components
 
 ## 🚀 Getting Started
 
@@ -45,13 +52,14 @@ npm install
 
 ```
 remotelabs-website/
-├── index.html              # Main landing page
+├── index.html              # Main landing page (optimized)
 ├── index_backup.html       # Backup of main page
 ├── styles.css              # Full CSS stylesheet
 ├── styles.min.css          # Minified CSS (production)
 ├── script.js               # Full JavaScript
 ├── script.min.js          # Minified JavaScript (production)
-├── assets/                 # Static assets (images, fonts)
+├── assets/                 # Static assets (images, fonts, TU/e logo)
+│   └── TUe-logo-descriptor-line-scarlet-S.png  # University logo
 ├── error_pages/            # Custom error pages (400, 401, 403, 404, 500)
 ├── privacy.html            # Privacy policy page
 ├── cookie_consent.html     # Cookie consent template
@@ -60,8 +68,15 @@ remotelabs-website/
 ├── package.json            # Node.js package configuration
 ├── package-lock.json       # Dependency lock file
 ├── .gitattributes          # Git configuration
-└── README.md               # Project documentation
+├── README.md               # Project documentation
+└── agents.md               # Development guide (this file)
 ```
+
+**Recent Additions**:
+- TU/e logo integration in footer
+- "How It Works" section with toggle functionality
+- Mobile navigation bar
+- Scroll-based header hiding
 
 ## 🛠️ Development Guidelines
 
@@ -90,6 +105,8 @@ remotelabs-website/
 - **Error Handling**: Implement proper try/catch blocks
 - **DOM Ready**: Ensure DOM is loaded before manipulation
 - **Comments**: Document complex logic and non-obvious code
+- **Event Delegation**: Use for dynamic elements
+- **Scroll Events**: Optimize with throttling/debouncing
 
 ### Performance Best Practices
 - **Minification**: Always minify for production
@@ -185,6 +202,13 @@ document.addEventListener('DOMContentLoaded', () => {
 3. **Style adjustments**: Modify `styles.css`
 4. **Functionality**: Update `script.js`
 
+### Adding Interactive Components
+1. **HTML Structure**: Create semantic markup
+2. **CSS Styling**: Add responsive styles with proper states
+3. **JavaScript**: Implement functionality with event listeners
+4. **Animation**: Add smooth transitions (use cubic-bezier for consistency)
+5. **Test**: Verify across devices and browsers
+
 ### Adding New Features
 1. **Plan**: Document requirements and approach
 2. **Implement**: Follow existing patterns
@@ -197,6 +221,24 @@ document.addEventListener('DOMContentLoaded', () => {
 3. **Test**: Ensure no regressions
 4. **Document**: Note changes if they affect usage
 
+### Adding Toggle Functionality
+```javascript
+// Example: Basic toggle implementation
+const toggle = document.getElementById('toggle-id');
+const section1 = document.getElementById('section1');
+const section2 = document.getElementById('section2');
+
+toggle.addEventListener('change', function() {
+    if (this.checked) {
+        section1.classList.remove('active');
+        section2.classList.add('active');
+    } else {
+        section2.classList.remove('active');
+        section1.classList.add('active');
+    }
+});
+```
+
 ## 🧪 Testing & Quality Assurance
 
 ### Testing Checklist
@@ -207,18 +249,23 @@ document.addEventListener('DOMContentLoaded', () => {
 - [ ] Accessibility audit
 - [ ] Performance metrics (Lighthouse)
 - [ ] Cross-browser compatibility
+- [ ] Scroll functionality testing
+- [ ] Toggle switch interaction
+- [ ] Mobile navigation behavior
 
 ### Validation Tools
 - **HTML**: https://validator.w3.org/
 - **CSS**: https://jigsaw.w3.org/css-validator/
 - **Accessibility**: https://wave.webaim.org/
 - **Performance**: Chrome DevTools Lighthouse
+- **Animation Performance**: Chrome DevTools Animation Inspector
 
 ### Performance Targets
 - **Lighthouse Score**: 90+ (Performance, Accessibility, SEO)
 - **Load Time**: < 2 seconds (3G connection)
 - **Page Size**: < 1MB (including images)
 - **Requests**: < 20 HTTP requests
+- **Animation Performance**: 60 FPS on all devices
 
 ## 🚀 Deployment
 
@@ -265,18 +312,22 @@ git subtree push --prefix remotelabs-website origin gh-pages
 - **Browser Testing**: Before major releases
 - **Performance Audit**: Quarterly
 - **Backup**: Before major changes
+- **Animation Testing**: Verify smooth transitions
+- **Mobile Testing**: Check touch interactions
 
 ### Version Control
 - **Commit Messages**: Descriptive and concise
 - **Branching**: Feature branches for new development
 - **Tags**: Version tags for releases
 - **Issues**: Track bugs and features
+- **Pull Requests**: Required for major changes
 
 ### Documentation Updates
 - Update README.md for significant changes
 - Keep AGENTS.md current
 - Document major architectural decisions
 - Maintain change log
+- Update component documentation
 
 ## 🐛 Troubleshooting
 
@@ -298,12 +349,24 @@ git subtree push --prefix remotelabs-website origin gh-pages
 - **Cause**: Large images or render-blocking resources
 - **Solution**: Optimize images, defer non-critical JS
 
+#### Animation Lag
+- **Cause**: Complex animations or too many transforms
+- **Solution**: Use `will-change`, simplify animations, use GPU acceleration
+
+#### Scroll Events Firing Too Often
+- **Cause**: Unoptimized scroll event listeners
+- **Solution**: Implement throttling or debouncing
+
+#### Toggle Not Working
+- **Cause**: Missing event listeners or incorrect selectors
+- **Solution**: Check console errors, verify element existence
+
 ### Debugging Workflow
 1. **Reproduce**: Identify exact steps to reproduce
 2. **Isolate**: Narrow down the problematic code
 3. **Research**: Check documentation and similar issues
 4. **Fix**: Implement minimal solution
-5. **Test**: Verify fix works
+5. **Test**: Verify fix works across devices
 6. **Document**: Note the solution for future reference
 
 ## 📚 Additional Resources
@@ -313,12 +376,16 @@ git subtree push --prefix remotelabs-website origin gh-pages
 - **JavaScript**: JavaScript.info
 - **Accessibility**: WebAIM
 - **Performance**: Google Web Fundamentals
+- **Animations**: CSS Tricks Animation Guide
+- **Scroll Effects**: ScrollMagic Documentation
 
 ### Tools
 - **Code Editor**: VS Code with ESLint, Prettier
 - **Browser Testing**: BrowserStack
 - **Performance**: WebPageTest
 - **Design**: Figma/Adobe XD
+- **Animation Debugging**: Chrome DevTools Animation Inspector
+- **Scroll Performance**: Chrome DevTools Performance Tab
 
 ## 🤝 Handover Information
 
@@ -328,6 +395,7 @@ git subtree push --prefix remotelabs-website origin gh-pages
 3. **Analytics**: Umami dashboard access
 4. **Domain**: DNS management access
 5. **Documentation**: This guide and README
+6. **Design Assets**: TU/e logo files and brand guidelines
 
 ### Transition Checklist
 - [ ] Provide all access credentials
@@ -336,6 +404,8 @@ git subtree push --prefix remotelabs-website origin gh-pages
 - [ ] Demonstrate common tasks
 - [ ] Answer questions
 - [ ] Provide contact for follow-up
+- [ ] Review animation and scroll functionality
+- [ ] Test mobile navigation behavior
 
 ## 📬 Support
 
@@ -347,8 +417,15 @@ For questions about this project:
 
 ---
 
-**Last updated**: 2024-02-27
+**Last updated**: 2024-07-15
 
 **Maintainer**: Development Team
 
 **License**: MIT License
+
+**Recent Updates**:
+- Added scroll-based navigation hiding
+- Implemented modern toggle switch
+- Optimized mobile experience
+- Integrated TU/e logo
+- Enhanced visual design
