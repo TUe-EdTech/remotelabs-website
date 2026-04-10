@@ -223,11 +223,7 @@
         .workflow-step {
             cursor: pointer;
             transition: all 0.3s ease;
-        }
-        
-        .workflow-step:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
         
         .workflow-step:hover {
@@ -238,6 +234,59 @@
         .workflow-step.active-step {
             border: 2px solid #2563eb;
             background: #f8fafc;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+        
+        .workflow-step.active-step::after {
+            content: '▶ Playing';
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            background: #2563eb;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .workflow-step h5 {
+            font-family: 'Poppins', 'Poppins Fallback', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--black);
+            transition: color 0.3s ease;
+        }
+        
+        .workflow-step p {
+            color: var(--gray-600);
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        
+        .workflow-step.active-step h5 {
+            color: #2563eb;
+        }
+        
+        .workflow-step.active-step .step-number {
+            background: white;
+            color: #2563eb;
+            box-shadow: 0 0 0 2px #2563eb;
+        }
+        
+
+        
+        #current-video-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        
+        /* Refined active step styling - Sleek & Subtle */
+        .workflow-step.active-step {
+            border: 1px solid #2563eb;
+            background: white;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.08);
         }
         
         /* Mobile-specific optimizations */
@@ -349,14 +398,37 @@
                 gap: 2rem;
             }
             
-            /* Video container mobile */
+            /* Video container mobile - Enhanced UX */
             .video-container {
                 margin: 1.5rem auto 0;
                 padding: 0 10px;
             }
             
+            .current-video-label {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+                padding: 10px 12px;
+                font-size: 0.95rem;
+            }
+            
+            .video-indicator {
+                width: 20px;
+                height: 20px;
+                font-size: 10px;
+            }
+            
             .video-wrapper {
                 padding-bottom: 62.5%; /* 16:10 aspect ratio for mobile */
+            }
+            
+            /* Touch-friendly step interactions */
+            .workflow-step {
+                touch-action: manipulation;
+            }
+            
+            .workflow-step:active {
+                transform: scale(0.98);
             }
         }
     </style>
@@ -390,7 +462,7 @@
             <h2 class="hero-title">24/7 Access to Physical Lab Experiments, Anywhere</h2>
         <h1 class="sr-only">Remote Labs - 24/7 Access to Physical Lab Experiments</h1>
             <p class="hero-subtitle">Enabling students and professionals to conduct real lab experiments remotely</p>
-            <a href="#benefits" class="hero-cta-button" aria-label="Explore Remote Labs features">Explore Features</a>
+            <a href="#how-it-works" class="hero-cta-button" aria-label="Explore how Remote Labs works">Explore Features</a>
             <div style="padding:56.25% 0 0 0;position:relative;" class="video-embed-wrapper">
                 <iframe
                     src="https://player.vimeo.com/video/1166031884?autoplay=1&amp;muted=1&amp;loop=1&amp;background=1&amp;controls=0&amp;badge=0&amp;autopause=0&amp;pip=0&amp;player_id=0&amp;app_id=58479&amp;title=0&amp;byline=0&amp;portrait=0"
@@ -798,38 +870,23 @@ function setupVideoSwitching() {
     // First step active by default
     steps[0].classList.add('active-step');
     
-    // Check if videos are uploaded
-    const testVideo = new Image();
-    testVideo.onload = function() {
-        console.log('✅ Video files are accessible and ready');
-    };
-    testVideo.onerror = function() {
-        console.error('❌ VIDEO FILES NOT FOUND - Please upload them to your server!');
-        console.log('Required files:');
-        steps.forEach(step => {
-            const videoId = step.getAttribute('data-video');
-            console.log('  📁 assets/videos/' + videoId + '.mp4');
-        });
-        console.log('Upload these files to: /assets/videos/');
-        
-        // Show user-friendly message
-        const videoContainer = document.querySelector('.video-container');
-        if (videoContainer) {
-            const message = document.createElement('div');
-            message.style.padding = '20px';
-            message.style.background = '#fff8e1';
-            message.style.borderRadius = '8px';
-            message.style.margin = '10px 0';
-            message.style.textAlign = 'center';
-            message.innerHTML = '<strong>Video content loading...</strong><br>Please upload the video files to continue.';
-            videoContainer.prepend(message);
-        }
-    };
-    testVideo.src = 'assets/videos/book-experiment.mp4';
-    
-    console.log('Video switching initialized successfully');
+    console.log('✅ Video switching initialized successfully');
 }
+
+// Initialize video switching when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
+    // Set up video switching first
+    setupVideoSwitching();
+    
+    // Add debug info to console
+    console.log('🎥 Video switching status:');
+    console.log('- Function called: ✅');
+    console.log('- Looking for elements with [data-video] attribute');
+    console.log('- Video element ID: workflow-video');
+    console.log('- Expected video paths:');
+    console.log('  - assets/videos/book-experiment.mp4');
+    console.log('  - assets/videos/conduct-experiment.mp4');
+    console.log('  - assets/videos/review-results.mp4');
     // Smooth scrolling
     'scrollBehavior' in document.documentElement.style && (document.documentElement.style.scrollBehavior = 'smooth');
     let t = !1;
@@ -859,9 +916,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // How It Works toggle functionality
     const toggleContainer = document.querySelector('.toggle-container');
     if (toggleContainer) {
-        
-        // Setup video switching for student workflow
-        setupVideoSwitching();
+        // Video switching is already set up in DOMContentLoaded
         const toggleButtons = document.querySelectorAll('.toggle-btn');
         const workflowSections = document.querySelectorAll('.workflow-section');
         
