@@ -1,0 +1,979 @@
+   Professional one-page website for Remote Labs at Eindhoven University of Technology
+   ============================================================================ */
+
+   PRINT STYLES
+   ============================================================================ */
+
+@media print {
+=======
+   SECTION STYLES
+   ============================================================================ */
+
+.section-title {
+    text-align: center;
+    margin-bottom: 0.8rem;
+    color: var(--text);
+}
+
+.section-subtitle {
+    text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2rem;
+    color: var(--text-light);
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+=======
+   TEAM SECTION
+   ============================================================================ */
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+=======
+/* ============================================================================
+   TEAM SECTION
+   ============================================================================ */
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+/* ============================================================================
+   EDUCATIONAL PROFESSIONALS SECTION
+   ============================================================================ */
+
+.professional-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.professional-card {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+    border: 1px solid var(--gray-200);
+    text-align: center;
+    height: 100%;
+}
+
+.professional-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--highlight-color);
+}
+
+.professional-icon {
+    font-size: 2.5rem;
+    color: var(--highlight-color);
+    margin-bottom: 1.5rem;
+}
+
+.professional-card h4 {
+    margin-bottom: 1rem;
+    color: var(--black);
+}
+
+.professional-card p {
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+.contact-cta {
+    text-align: center;
+    margin-top: 3rem;
+    padding: 2rem;
+    background: var(--gray-50);
+    border-radius: var(--radius-lg);
+}
+
+.contact-cta h4 {
+    margin-bottom: 1rem;
+    color: var(--black);
+}
+
+.contact-cta p {
+    max-width: 800px;
+    margin: 0 auto 1.5rem;
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+.contact-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--primary);
+    color: var(--background);
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 700;
+    transition: all var(--transition-normal);
+    margin-bottom: 1rem;
+}
+
+.contact-button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.contact-button:active {
+    transform: translateY(0);
+}
+
+.contact-button:focus {
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
+}
+
+.contact-info {
+    color: var(--gray-600);
+    font-size: 0.9rem;
+}
+
+.contact-info a {
+    color: var(--primary);
+    font-weight: 600;
+}============================================================================
+   SECTION STYLES
+   ============================================================================ */
+
+.section-title {
+    text-align: center !important;
+    margin-bottom: 0.8rem !important;
+    color: var(--black) !important;
+}
+
+.section-subtitle {
+    text-align: center !important;
+    max-width: 800px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-bottom: 2rem !important;
+    color: var(--gray-600) !important;
+    font-size: 1.1rem !important;
+    line-height: 1.6 !important;
+}
+
+/* Override general paragraph styles for section subtitles */
+section .section-subtitle {
+    margin-bottom: 2rem !important;
+    color: var(--gray-600) !important;
+    font-size: 1.1rem !important;
+}============================================================================
+   SECTION STYLES
+   ============================================================================ */
+
+.section-title {
+    text-align: center;
+    margin-bottom: 0.8rem;
+    color: var(--black);
+}
+
+.section-subtitle {
+    text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2rem;
+    color: var(--gray-600);
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* ============================================================================
+   PRINT STYLES
+   ============================================================================ */
+
+@media print {============================================================================
+   BASE STYLES & VARIABLES
+   ============================================================================ */
+
+:root {
+    /* Simplified Color System */
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --text: #111827;
+    --text-light: #6b7280;
+    --background: #ffffff;
+    --background-alt: #f9fafb;
+    --border: #e5e7eb;
+    
+    /* Typography */
+    --font-primary: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+    --font-heading: 'Gilroy Bold', var(--font-primary);
+    --base-font-size: 16px;
+    --line-height-ratio: 1.6;
+    --heading-line-height: 1.2;
+    
+    /* Spacing */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+    --space-xxl: 4rem;
+    
+    /* Border Radius */
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
+    --radius-full: 9999px;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.2);
+    
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.2s ease;
+    --transition-slow: 0.3s ease;
+    
+    /* Z-index */
+    --z-fixed: 1000;
+    --z-modal: 10000;
+}
+
+/* Dark theme variables */
+[data-theme="dark"] {
+    --black: #ffffff;
+    --white: #000000;
+    --gray-50: #111827;
+    --gray-100: #1f2937;
+    --gray-200: #374151;
+    --gray-300: #4b5563;
+    --gray-400: #6b7280;
+    --gray-500: #9ca3af;
+    --gray-600: #d1d5db;
+    --gray-700: #e5e7eb;
+    --gray-800: #f3f4f6;
+    --gray-900: #f9fafb;
+}
+
+/* ============================================================================
+   RESET & BASE STYLES
+   ============================================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-primary);
+    line-height: var(--line-height-ratio);
+    color: var(--text);
+    background-color: var(--background);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+/* ============================================================================
+   LAYOUT & CONTAINERS
+   ============================================================================ */
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ============================================================================
+   TYPOGRAPHY
+   ============================================================================ */
+
+/* Headings */
+h1, h2, h3, h4, .gilroy-bold {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: var(--heading-line-height);
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--text);
+    letter-spacing: -0.02em;
+}
+
+h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.15;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.5rem;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--highlight-color), rgba(37, 99, 235, 0.3));
+    border-radius: 2px;
+}
+
+h2 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    line-height: 1.2;
+    margin-bottom: 1.2rem;
+}
+
+h3 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1.25;
+    margin-bottom: 1rem;
+}
+
+h4 {
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+    line-height: 1.3;
+    margin-bottom: 0.8rem;
+}
+
+/* Body text */
+p, .lato-regular {
+    font-family: var(--font-primary);
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--text-light);
+    line-height: var(--line-height-ratio);
+    font-size: 1rem;
+}
+
+/* Lead paragraph */
+.lead {
+    font-size: clamp(1.1rem, 2vw, 1.2rem);
+    line-height: 1.7;
+    color: var(--gray-800);
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+}
+
+/* ============================================================================
+   LINKS & BUTTONS
+   ============================================================================ */
+
+/* Links */
+a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: all var(--transition-normal);
+    position: relative;
+    padding-bottom: 2px;
+}
+
+a:hover {
+    color: var(--text);
+    background: linear-gradient(to right, var(--primary), var(--primary)) no-repeat;
+    background-size: 0% 2px;
+    background-position: 0 100%;
+    animation: linkUnderline var(--transition-normal) forwards;
+}
+
+@keyframes linkUnderline {
+    to {
+        background-size: 100% 2px;
+    }
+}
+
+a:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Buttons */
+.cta-button, .hero-cta-button {
+    display: inline-block;
+    padding: 0.85rem 1.5rem;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: all var(--transition-normal);
+    text-align: center;
+    cursor: pointer;
+    border: none;
+}
+
+.cta-button {
+    background: var(--text);
+    color: var(--background);
+}
+
+.hero-cta-button {
+    background: var(--primary);
+    color: var(--background);
+    padding: 0.9rem 1.8rem;
+    font-size: 1rem;
+}
+
+.cta-button:hover, .hero-cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.cta-button:active, .hero-cta-button:active {
+    transform: translateY(0);
+}
+
+/* ============================================================================
+   HEADER & NAVIGATION
+   ============================================================================ */
+
+header {
+    background-color: var(--background);
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: var(--z-fixed);
+    transition: box-shadow var(--transition-normal), padding var(--transition-normal);
+}
+
+header.scrolled {
+    padding: 1rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo-img {
+    height: 40px;
+    width: auto;
+}
+
+/* Section navigation */
+.section-nav {
+    position: fixed;
+    left: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: var(--z-fixed);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.section-nav-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: var(--radius-full);
+    background: var(--gray-300);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.section-nav-indicator.active {
+    background: var(--highlight-color);
+    transform: scale(1.2);
+}
+
+/* ============================================================================
+   HERO SECTION
+   ============================================================================ */
+
+.hero {
+    padding: 120px 0 80px;
+    text-align: center;
+    background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
+}
+
+.hero-title {
+    font-size: 2.8rem;
+    margin-bottom: 1.2rem;
+    line-height: 1.1;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    max-width: 90%;
+    margin: 0 auto 2rem;
+    line-height: 1.5;
+    color: var(--text-light);
+}
+
+.video-container {
+    margin-top: 2rem;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* ============================================================================
+   FEATURE CARDS
+   ============================================================================ */
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.feature-card {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+    border: 1px solid var(--gray-200);
+    text-align: center;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--highlight-color);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+}
+
+.feature-card h4 {
+    margin-bottom: 1rem;
+    color: var(--black);
+}
+
+.feature-card p {
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+/* ============================================================================
+   TEAM SECTION
+   ============================================================================ */
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.team-member {
+    text-align: center;
+    transition: all var(--transition-normal);
+}
+
+.team-photo-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    aspect-ratio: 1/1;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.team-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-normal);
+}
+
+.team-member:hover .team-photo {
+    transform: scale(1.05);
+}
+
+.team-photo-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    color: var(--white);
+    padding: 1rem;
+    transform: translateY(100%);
+    transition: transform var(--transition-normal);
+}
+
+.team-member:hover .team-photo-overlay {
+    transform: translateY(0);
+}
+
+.team-role {
+    color: var(--text-light);
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.team-social {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.team-social a {
+    color: var(--background-alt);
+    font-size: 1.2rem;
+    transition: all var(--transition-normal);
+}
+
+.team-social a:hover {
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
+/* ============================================================================
+   FOOTER
+   ============================================================================ */
+
+footer {
+    background: var(--text);
+    color: var(--background-alt);
+    padding: 3rem 0 2rem;
+}
+
+.footer-main {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-section h4 {
+    color: var(--background);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.footer-section p, .footer-section a {
+    color: var(--background-alt);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.footer-section a:hover {
+    color: var(--highlight-color);
+    text-decoration: underline;
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-section ul li a {
+    color: var(--background-alt);
+    transition: all var(--transition-normal);
+}
+
+.footer-section ul li a:hover {
+    color: var(--primary);
+    padding-left: 4px;
+}
+
+/* ============================================================================
+   BACK TO TOP BUTTON
+   ============================================================================ */
+
+.back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary);
+    color: var(--background);
+    border: none;
+    border-radius: var(--radius-full);
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-normal);
+    z-index: var(--z-fixed);
+}
+
+.back-to-top:hover {
+    background-color: var(--black);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.back-to-top:focus {
+    outline: 2px solid var(--black);
+    outline-offset: 2px;
+}
+
+/* ============================================================================
+   ACCESSIBILITY
+   ============================================================================ */
+
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--black);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    z-index: var(--z-fixed);
+    transition: top var(--transition-normal);
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+.aria-live {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Focus styles */
+:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 3px;
+}
+
+/* ============================================================================
+   ANIMATIONS & TRANSITIONS
+   ============================================================================ */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+/* Mobile - 0 to 767px */
+@media (max-width: 767px) {
+    .container {
+        padding: 0 12px;
+    }
+    
+    .hero {
+        padding: 100px 0 60px;
+    }
+    
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .cta-button, .hero-cta-button {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+    }
+    
+    .section-nav {
+        display: none;
+    }
+    
+    .features-grid, .team-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Tablet - 768px to 1023px */
+@media (min-width: 768px) {
+    .content-text {
+        max-width: 65ch;
+        margin: 0 auto;
+        line-height: 1.7;
+        font-size: 1.05rem;
+    }
+}
+
+/* Desktop - 1024px and up */
+@media (min-width: 1024px) {
+    .container {
+        padding: 0 30px;
+    }
+}
+
+/* ============================================================================
+   BROWSER-SPECIFIC FIXES
+   ============================================================================ */
+
+/* Safari specific fixes */
+@media not all and (min-resolution: 0.001dpcm) {
+    @supports (-webkit-appearance: none) {
+        .back-to-top {
+            -webkit-backface-visibility: hidden;
+            -webkit-transform: translateZ(0);
+        }
+        
+        html {
+            scroll-behavior: auto;
+        }
+    }
+}
+
+/* Firefox specific fixes */
+@-moz-document url-prefix() {
+    .feature-card:hover {
+        transform: translateY(-3px) !important;
+    }
+    
+    header.scrolled {
+        padding: 1rem 0 !important;
+    }
+}
+
+/* IE10+ specific fixes */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .feature-card, .team-member {
+        display: block;
+    }
+    
+    header .container {
+        display: -ms-flexbox;
+        -ms-flex-direction: row;
+    }
+    
+    .features-grid, .team-grid {
+        display: -ms-grid;
+    }
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+.text-highlight {
+    color: var(--highlight-color);
+}
+
+.bg-highlight {
+    background-color: var(--highlight-color);
+}
+
+.border-highlight {
+    border-color: var(--highlight-color);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-1 { margin-top: var(--space-sm); }
+.mt-2 { margin-top: var(--space-md); }
+.mt-3 { margin-top: var(--space-lg); }
+.mt-4 { margin-top: var(--space-xl); }
+
+.mb-1 { margin-bottom: var(--space-sm); }
+.mb-2 { margin-bottom: var(--space-md); }
+.mb-3 { margin-bottom: var(--space-lg); }
+.mb-4 { margin-bottom: var(--space-xl); }
+
+/* ============================================================================
+   PRINT STYLES
+   ============================================================================ */
+
+@media print {
+    body {
+        font-size: 12pt;
+        line-height: 1.6;
+        color: black;
+        background: white;
+    }
+    
+    a {
+        color: #0000EE;
+        text-decoration: underline;
+    }
+    
+    pre, code {
+        background: #f5f5f5;
+        color: #333;
+    }
+    
+    header, footer, .back-to-top, .section-nav {
+        display: none;
+    }
+    
+    .hero {
+        padding: 2rem 0;
+    }
+}
+
+/* ============================================================================
+   END OF CSS
+   ============================================================================ */
