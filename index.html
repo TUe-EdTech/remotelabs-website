@@ -217,7 +217,8 @@
             width: 100%;
             height: 100%;
             border-radius: 12px;
-            object-fit: cover;
+            object-fit: contain;
+            background: #000;
         }
         
         .workflow-step {
@@ -398,37 +399,79 @@
                 gap: 2rem;
             }
             
-            /* Video container mobile - Enhanced UX */
+            /* Mobile video experience - Optimized layout */
             .video-container {
-                margin: 1.5rem auto 0;
+                margin: 1rem auto 0;
                 padding: 0 10px;
             }
             
-            .current-video-label {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 6px;
-                padding: 10px 12px;
-                font-size: 0.95rem;
-            }
-            
-            .video-indicator {
-                width: 20px;
-                height: 20px;
-                font-size: 10px;
-            }
-            
+            /* Larger video on mobile */
             .video-wrapper {
-                padding-bottom: 62.5%; /* 16:10 aspect ratio for mobile */
+                padding-bottom: 65%; /* Slightly taller video */
+                border-radius: 12px;
+                overflow: hidden;
+                margin-bottom: 1.5rem;
             }
             
-            /* Touch-friendly step interactions */
+            /* More compact step cards for mobile */
+            @media (max-width: 768px) {
+                .workflow-step {
+                    padding: 1rem;
+                    margin-bottom: 1rem;
+                }
+                
+                .workflow-step h5 {
+                    font-size: 1.1rem;
+                    margin-bottom: 0.75rem;
+                }
+                
+                .workflow-step p {
+                    font-size: 0.9rem;
+                    line-height: 1.5;
+                }
+                
+                .step-number {
+                    width: 24px;
+                    height: 24px;
+                    font-size: 0.8rem;
+                }
+                
+                /* Ensure steps stack properly */
+                .workflow-steps {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    gap: 1rem;
+                }
+            }
+            
+            /* Touch-friendly interactions */
             .workflow-step {
                 touch-action: manipulation;
+                cursor: pointer;
             }
             
             .workflow-step:active {
                 transform: scale(0.98);
+                transition: transform 0.1s ease;
+            }
+        }
+        
+        /* Desktop layout optimization - side by side */
+        @media (min-width: 992px) {
+            .how-it-works {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 3rem;
+                align-items: start;
+            }
+            
+            .workflow-steps {
+                margin-top: 0;
+            }
+            
+            .video-container {
+                margin-top: 2rem;
+                padding-top: 0;
             }
         }
     </style>
