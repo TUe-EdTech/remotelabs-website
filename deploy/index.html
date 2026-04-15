@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://player.vimeo.com" crossorigin>
+
     <link rel="apple-touch-icon" href="icon-192x192.png">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="icon-512x512.png">
@@ -22,6 +22,10 @@
     <link rel="preload" href="script.min.js" as="script">
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" crossorigin="anonymous"
           integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" referrerpolicy="no-referrer">
+    <!-- Preload workflow videos for faster switching -->
+    <link rel="preload" href="assets/videos/book-experiment.mp4" as="fetch" crossorigin="anonymous">
+    <link rel="preload" href="assets/videos/conduct-experiment.mp4" as="fetch" crossorigin="anonymous">
+    <link rel="preload" href="assets/videos/review-results.mp4" as="fetch" crossorigin="anonymous">
     
     <style>
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Lato','Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#000;background:#fff;-webkit-text-size-adjust:100%}.main-header{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1);padding:1.5rem 0;position:fixed;width:100%;top:0;z-index:1000;transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);transform:translateY(0)}.main-header.hidden{transform:translateY(-100%)}.container{width:100%;max-width:1200px;margin:0 auto;padding:0 15px}.logo{display:flex;align-items:center;gap:.75rem}.logo-link{text-decoration:none;color:inherit;cursor:pointer}.logo-text{font-family:'Poppins','Arial Black',Impact,sans-serif;font-weight:700;font-size:1.5rem;color:var(--black);text-decoration:none}.cta-button{background:#000;color:#fff;padding:.85rem 1.5rem;border-radius:6px;text-decoration:none;font-weight:700;font-size:.95rem}.hero{padding:120px 0 80px;text-align:center}.hero-title{font-size:2.8rem;margin-bottom:1.2rem;line-height:1.1}.hero-subtitle{font-size:1.1rem;max-width:90%;margin:0 auto 2rem;line-height:1.5}.hero-cta-button{background:#2563eb;color:#fff;padding:.9rem 1.8rem;border-radius:8px;text-decoration:none;font-weight:700;margin-bottom:1.5rem;display:inline-block;font-size:1rem}@media (max-width:768px){.container{padding:0 12px}.hero{padding:100px 0 60px}.hero-title{font-size:2.2rem}.hero-subtitle{font-size:1rem}.cta-button,.hero-cta-button{width:100%;padding:1rem;font-size:1rem}}@media (max-width:480px){.hero-title{font-size:1.8rem}.container{padding:0 10px}}
@@ -207,18 +211,78 @@
             overflow: hidden;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            background: #000;
+            background: transparent;
         }
         
-        .workflow-video {
+        .video-wrapper.hero-video-wrapper {
+            padding-bottom: 56.25% !important; /* 16:9 aspect ratio (1920x1080) - override base */
+        }
+        
+        /* Override external CSS conflicts - WORKFLOW VIDEOS ONLY */
+        body .video-container .video-wrapper:not(.hero-video-wrapper) {
+            padding-bottom: 62.5% !important; /* Force 16:10 aspect ratio */
+        }
+        
+        body .video-container .workflow-video:not(.hero-video) {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100% !important;
+            height: 100% !important;
+            border-radius: 12px;
+            object-fit: contain !important;
+            background: #000; /* Restore black for smooth video transitions */
+        }
+        
+        /* Protect HERO video - ensure it keeps 16:9 */
+        body .video-container .video-wrapper.hero-video-wrapper {
+            padding-bottom: 56.25% !important; /* Keep 16:9 for hero */
+        }
+        
+        .video-wrapper.hero-video-wrapper .hero-video {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             border-radius: 12px;
-            object-fit: contain;
-            background: #000;
+            object-fit: cover;
+            background: transparent;
+        }
+        
+        /* Video Controls Styles */
+        .video-controls {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+        
+        .video-control-btn {
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .video-control-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: scale(1.1);
+        }
+        
+        .video-control-btn:focus {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
         }
         
         .workflow-step {
@@ -506,19 +570,25 @@
         <h1 class="sr-only">Remote Labs - 24/7 Access to Physical Lab Experiments</h1>
             <p class="hero-subtitle">Enabling students and professionals to conduct real lab experiments remotely</p>
             <a href="#how-it-works" class="hero-cta-button" aria-label="Explore how Remote Labs works">Explore Features</a>
-            <div style="padding:56.25% 0 0 0;position:relative;" class="video-embed-wrapper">
-                <iframe
-                    src="https://player.vimeo.com/video/1166031884?autoplay=1&amp;muted=1&amp;loop=1&amp;background=1&amp;controls=0&amp;badge=0&amp;autopause=0&amp;pip=0&amp;player_id=0&amp;app_id=58479&amp;title=0&amp;byline=0&amp;portrait=0"
-                    frameborder="0"
-                    allow="autoplay; clipboard-write; encrypted-media; web-share"
-                    allowfullscreen
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    style="position:absolute;top:0;left:0;width:100%;height:100%;"
-                    title="TU/e - Remote Labs"
-                    loading="lazy">
-                </iframe>
-                <!-- Overlay to visually hide / block the browser Picture-in-Picture control -->
-                <div class="video-pip-block" aria-hidden="true"></div>
+
+
+            <!-- Hero Video Container - 16:9 aspect ratio with controls -->
+            <div class="video-container">
+                <div class="video-wrapper hero-video-wrapper">
+                    <video class="hero-video" playsinline loop autoplay muted poster="assets/videos/posterimagevideo.jpeg" preload="metadata" id="hero-video-player">
+                        <source src="assets/videos/Remote%20Labs%20video%20website.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- Video Controls - Play/Pause and Mute/Unmute -->
+                    <div class="video-controls">
+                        <button class="video-control-btn" id="play-pause-btn" aria-label="Pause">
+                            <i class="fas fa-pause"></i>
+                        </button>
+                        <button class="video-control-btn" id="mute-btn" aria-label="Unmute">
+                            <i class="fas fa-volume-mute"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
 
     </section>
@@ -829,7 +899,7 @@
                     <div>
                         <p>Eindhoven University of Technology</p>
                         <p>Den Dolech 2, 5612 AZ Eindhoven</p>
-                        <p><a href="mailto:k.m.a.aarts@tue.nl?subject=Remote%20Labs%20Inquiry">k.m.a.aarts@tue.nl</a></p>
+                        <p><a href="mailto:k.m.a.aarts@tue.nl?subject=Remote%20Labs%20Inquiry" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
                         <p>+31 (0)40 247 9111</p>
                     </div>
                 </div>
@@ -859,6 +929,47 @@
     
     <script>
 // Toggle functionality for How It Works section and scroll-based header hiding
+
+// Hero Video Controls Function
+function setupHeroVideoControls() {
+    const video = document.getElementById('hero-video-player');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const muteBtn = document.getElementById('mute-btn');
+    
+    if (!video || !playPauseBtn || !muteBtn) {
+        console.error('Hero video controls setup failed - elements not found');
+        return;
+    }
+    
+    // Play/Pause functionality
+    playPauseBtn.addEventListener('click', function() {
+        if (video.paused) {
+            video.play();
+            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            playPauseBtn.setAttribute('aria-label', 'Pause');
+        } else {
+            video.pause();
+            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            playPauseBtn.setAttribute('aria-label', 'Play');
+        }
+    });
+    
+    // Mute/Unmute functionality
+    muteBtn.addEventListener('click', function() {
+        video.muted = !video.muted;
+        if (video.muted) {
+            muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            muteBtn.setAttribute('aria-label', 'Unmute');
+        } else {
+            muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            muteBtn.setAttribute('aria-label', 'Mute');
+        }
+    });
+    
+    // Initialize: Start muted for autoplay compatibility, but allow unmuting
+    video.muted = true;
+    console.log('✅ Hero video controls initialized (starts muted, user can unmute)');
+}
 
 // Simple video switching - just change the source and reload
 function setupVideoSwitching() {
@@ -930,6 +1041,9 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('  - assets/videos/book-experiment.mp4');
     console.log('  - assets/videos/conduct-experiment.mp4');
     console.log('  - assets/videos/review-results.mp4');
+    
+    // Set up hero video controls
+    setupHeroVideoControls();
     // Smooth scrolling
     'scrollBehavior' in document.documentElement.style && (document.documentElement.style.scrollBehavior = 'smooth');
     let t = !1;
@@ -1077,7 +1191,6 @@ window.addEventListener('load',function(){const t=performance.now();console.log(
             console.log("Do Not Track enabled - respecting user privacy");
         }
     </script>
-    <!-- Vimeo Player API -->
-    <script src="https://player.vimeo.com/api/player.js"></script>
+
 </body>
 </html>
