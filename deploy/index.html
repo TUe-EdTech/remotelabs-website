@@ -538,9 +538,80 @@
                 padding-top: 0;
             }
         }
+    /* No Cookies Banner Styles */
+    .no-cookies-banner {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #000;
+        color: #fff;
+        padding: 1rem;
+        z-index: 1001;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        font-size: 0.95rem;
+    }
+    
+    .banner-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .banner-message {
+        margin: 0;
+        flex-grow: 1;
+    }
+    
+    .close-banner-btn {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0 0.5rem;
+        margin-left: 1rem;
+        transition: color 0.2s;
+        flex-shrink: 0;
+    }
+    
+    .close-banner-btn:hover {
+        color: #2563eb;
+    }
+    
+    .close-banner-btn:focus {
+        outline: 2px solid #2563eb;
+        outline-offset: 2px;
+    }
+    
+    @media (max-width: 768px) {
+        .banner-content {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+        
+        .banner-message {
+            margin-bottom: 0.5rem;
+        }
+    }
     </style>
 </head>
 <body>
+
+    <!-- No Cookies Banner -->
+    <div id="no-cookies-banner" class="no-cookies-banner" role="alert" aria-live="polite">
+        <div class="container">
+            <div class="banner-content">
+                <p class="banner-message">🍪 We do not use cookies or collect any personal data. Your privacy is respected.</p>
+                <button id="close-banner-btn" class="close-banner-btn" aria-label="Close privacy notice">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -1190,6 +1261,30 @@ window.addEventListener('load',function(){const t=performance.now();console.log(
         if (navigator.doNotTrack === "1" || navigator.msDoNotTrack === "1") {
             console.log("Do Not Track enabled - respecting user privacy");
         }
+    </script>
+
+    <!-- No Cookies Banner Script -->
+    <script>
+        // Handle no cookies banner functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const closeBannerBtn = document.getElementById('close-banner-btn');
+            const noCookiesBanner = document.getElementById('no-cookies-banner');
+            
+            if (closeBannerBtn && noCookiesBanner) {
+                closeBannerBtn.addEventListener('click', function() {
+                    noCookiesBanner.style.display = 'none';
+                    // Store preference in localStorage so banner doesn't reappear
+                    localStorage.setItem('noCookiesBannerClosed', 'true');
+                });
+            }
+            
+            // Check if banner was previously closed
+            if (localStorage.getItem('noCookiesBannerClosed') === 'true') {
+                if (noCookiesBanner) {
+                    noCookiesBanner.style.display = 'none';
+                }
+            }
+        });
     </script>
 
 </body>
