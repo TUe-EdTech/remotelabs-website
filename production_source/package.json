@@ -4,6 +4,12 @@
   "description": "A clean, professional one-page website for Remote Labs - 24/7 Access to Physical Lab Experiments at Eindhoven University of Technology.",
   "main": "script.js",
   "scripts": {
+    "build:css": "echo 'Manual: Run clean-css CLI or use build.js'",
+    "build:js": "echo 'Manual: Run uglifyjs CLI or use build.js'",
+    "build:html": "cp index.html ../deploy/ && cp privacy.html ../deploy/",
+    "build": "npm run build:html",
+    "build:full": "echo 'For full build, use: node build.js'",
+    "dev": "echo 'Run this from production_source/ folder'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
