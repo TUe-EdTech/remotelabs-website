@@ -7,17 +7,20 @@
 1. [Project Overview](#-project-overview)
 2. [Getting Started](#-getting-started)
 3. [Project Structure](#-project-structure)
-4. [Development Guidelines](#-development-guidelines)
-5. [Code Standards](#-code-standards)
-6. [Common Tasks](#-common-tasks)
-7. [Testing & Quality Assurance](#-testing--quality-assurance)
-8. [Deployment](#-deployment)
-9. [Maintenance](#-maintenance)
-10. [Troubleshooting](#-troubleshooting)
+4. [Development Workflow](#-development-workflow)
+5. [Development Guidelines](#-development-guidelines)
+6. [Code Standards](#-code-standards)
+7. [Common Tasks](#-common-tasks)
+8. [Testing & Quality Assurance](#-testing--quality-assurance)
+9. [Deployment](#-deployment)
+10. [Maintenance](#-maintenance)
+11. [Security](#-security)
+
+---
 
 ## 🎯 Project Overview
 
-This guide provides comprehensive documentation for the Remote Labs website at Eindhoven University of Technology. The website has been optimized for performance, accessibility, and user experience with modern features including scroll-based navigation hiding, interactive toggle switches, and responsive design.
+This guide provides comprehensive documentation for the Remote Labs website at Eindhoven University of Technology. The website has been optimized for performance, accessibility, and user experience with modern features including scroll-based navigation hiding, interactive toggle switches, responsive design, and security headers.
 
 **Key Features**:
 - Scroll-based header hiding (desktop & mobile)
@@ -25,6 +28,11 @@ This guide provides comprehensive documentation for the Remote Labs website at E
 - Optimized mobile experience
 - Performance-focused design
 - Accessible components
+- Security headers (CSP, X-Frame-Options, HSTS, etc.)
+
+**Domain**: remotelabs.tue.nl
+
+---
 
 ## 🚀 Getting Started
 
@@ -43,40 +51,93 @@ cd remotelabs-website
 
 # Install dependencies
 npm install
-
-# Start development
-# Simply open index.html in your browser
 ```
+
+### Development Workflow
+
+**For development**: Edit files in `production_source/`
+**For deployment**: Use files from `deploy/`
+
+---
 
 ## 📁 Project Structure
 
 ```
 remotelabs-website/
-├── index.html              # Main landing page (optimized)
-├── index_backup.html       # Backup of main page
-├── styles.css              # Full CSS stylesheet
-├── styles.min.css          # Minified CSS (production)
-├── script.js               # Full JavaScript
-├── script.min.js          # Minified JavaScript (production)
-├── assets/                 # Static assets (images, fonts, TU/e logo)
-│   └── TUe-logo-descriptor-line-scarlet-S.png  # University logo
-├── error_pages/            # Custom error pages (400, 401, 403, 404, 500)
-├── privacy.html            # Privacy policy page
-├── cookie_consent.html     # Cookie consent template
-├── dnt_script.html         # Do Not Track script
-├── sw.js                   # Service worker for offline support
-├── package.json            # Node.js package configuration
-├── package-lock.json       # Dependency lock file
-├── .gitattributes          # Git configuration
-├── README.md               # Project documentation
-└── agents.md               # Development guide (this file)
+├── .git/                          # Git repository (do not deploy)
+├── .gitattributes                 # Git configuration
+├── README.md                      # Handover guide (private)
+├── deploy/                        # ✅ PRODUCTION FILES - Upload to server
+│   ├── index.html                 # Main landing page
+│   ├── privacy.html               # Privacy policy page
+│   ├── manifest.json              # Web app manifest
+│   ├── script.min.js              # Minified JavaScript (production)
+│   ├── styles.min.css             # Minified CSS (production)
+│   ├── styles_new.css             # Alternative CSS
+│   ├── sw.js                      # Service worker for offline support
+│   ├── cookie_consent.html        # Cookie consent template
+│   ├── dnt_script.html            # Do Not Track script
+│   ├── assets/                    # Static assets
+│   │   ├── Partner logos/          # Partner organization logos
+│   │   ├── TUe-logo-descriptor-line-scarlet-S.png
+│   │   └── videos/                # Video files
+│   └── error_pages/               # Custom error pages
+│       ├── 400.shtml              # Bad Request
+│       ├── 401.shtml              # Unauthorized
+│       ├── 403.shtml              # Forbidden
+│       ├── 404.shtml              # Page Not Found
+│       └── 500.shtml              # Internal Server Error
+└── production_source/            # 🛠️ DEVELOPMENT FILES
+    ├── index.html                 # Source HTML
+    ├── styles.css                 # Source CSS
+    ├── script.js                  # Source JavaScript
+    ├── package.json              # Node.js package configuration
+    ├── package-lock.json          # Dependency lock file
+    └── node_modules/              # Node modules (dependencies)
 ```
 
-**Recent Additions**:
-- TU/e logo integration in footer
-- "How It Works" section with toggle functionality
-- Mobile navigation bar
-- Scroll-based header hiding
+### Color Scheme
+- **Primary**: `#2563eb` (blue)
+- **Black**: `#000`
+- **White**: `#fff`
+- **Gray 50**: `#f9fafb`
+- **Gray 100**: `#f3f4f6`
+- **Middle Section**: `#f8faff` (light blue-gray)
+- **Dark**: `#111827`
+
+---
+
+## 🔄 Development Workflow
+
+### Making Changes
+
+1. **Edit** files in `production_source/` folder
+2. **Test** locally by opening in browser
+3. **Minify** assets:
+   ```bash
+   # Minify CSS
+   npx clean-css -o deploy/styles.min.css production_source/styles.css
+   
+   # Minify JavaScript
+   npx uglifyjs production_source/script.js -o deploy/script.min.js -c -m
+   ```
+4. **Copy** to deploy folder:
+   ```bash
+   # Copy updated files
+   cp production_source/index.html deploy/
+   cp production_source/privacy.html deploy/
+   ```
+5. **Test** deploy version locally
+6. **Deploy** to server
+
+### Quick Edits (Direct to Deploy)
+
+For simple content changes (text, images):
+- Edit directly in `deploy/` folder
+- Test in browser
+- Upload to server
+
+---
 
 ## 🛠️ Development Guidelines
 
@@ -87,345 +148,231 @@ remotelabs-website/
 - **Folders**: `lowercase_with_underscores/`
 
 ### HTML Standards
-- **Semantic HTML5**: Use `<header>`, `<main>`, `<footer>`, etc.
-- **Accessibility**: Include ARIA labels, alt text, proper heading hierarchy
-- **Meta Tags**: Maintain SEO and social media meta tags
-- **Indentation**: 2 spaces (consistent with existing code)
+- Use semantic HTML5 elements (`<header>`, `<main>`, `<footer>`, `<section>`, `<article>`)
+- Include ARIA labels for accessibility
+- Add alt text for all images
+- Maintain proper heading hierarchy (h1 → h2 → h3 → h4)
+- Use meta tags for SEO and social media
+- Indentation: 2 spaces
 
 ### CSS Architecture
-- **Methodology**: BEM (Block Element Modifier)
+- **Methodology**: BEM (Block Element Modifier) preferred
 - **Organization**: Group styles by component/functionality
 - **Variables**: Use CSS variables for colors and common values
-- **Responsive**: Mobile-first approach with appropriate breakpoints
-- **Specificity**: Keep specificity low, avoid `!important`
+- **Responsive**: Mobile-first approach
+- **Breakpoints**: 480px (mobile), 768px (tablet), 1024px (desktop)
+- **Specificity**: Keep low, avoid `!important`
 
 ### JavaScript Practices
-- **ES6+ Features**: Use modern JavaScript (arrow functions, template literals, etc.)
-- **Modularity**: Keep functions small and focused
-- **Error Handling**: Implement proper try/catch blocks
-- **DOM Ready**: Ensure DOM is loaded before manipulation
-- **Comments**: Document complex logic and non-obvious code
-- **Event Delegation**: Use for dynamic elements
-- **Scroll Events**: Optimize with throttling/debouncing
+- Use ES6+ features (arrow functions, template literals, etc.)
+- Keep functions small and focused (single responsibility)
+- Implement proper error handling with try/catch
+- Ensure DOM is ready before manipulation
+- Document complex logic with comments
+- Use event delegation for dynamic elements
+- Optimize scroll events with throttling/debouncing
 
-### Performance Best Practices
-- **Minification**: Always minify for production
-- **Image Optimization**: Compress images before adding
-- **Lazy Loading**: Implement for non-critical resources
-- **Caching**: Leverage browser caching headers
-- **CDN**: Use CDN for external libraries
-
-## 📜 Code Standards
-
-### HTML Example
-```html
-<!-- Good: Semantic, accessible, properly indented -->
-<section class="feature-card" aria-labelledby="feature-title">
-  <h2 id="feature-title" class="feature-card__title">Feature Title</h2>
-  <p class="feature-card__description">Description text goes here.</p>
-  <button class="feature-card__cta" aria-label="Learn more about feature">Learn More</button>
-</section>
-```
-
-### CSS Example
-```css
-/* Good: BEM methodology, mobile-first, commented */
-.feature-card {
-  /* Block styles */
-  background: var(--white);
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.feature-card__title {
-  /* Element styles */
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: var(--black);
-}
-
-.feature-card--highlighted {
-  /* Modifier styles */
-  border: 2px solid var(--primary-color);
-}
-
-@media (min-width: 768px) {
-  .feature-card {
-    padding: 2rem;
-  }
-}
-```
-
-### JavaScript Example
-```javascript
-// Good: Modular, well-commented, error handling
-/**
- * Initialize feature cards with animation
- * @param {string} containerSelector - CSS selector for container
- */
-function initFeatureCards(containerSelector) {
-  try {
-    const container = document.querySelector(containerSelector);
-    if (!container) return;
-    
-    const cards = container.querySelectorAll('.feature-card');
-    
-    cards.forEach((card, index) => {
-      // Add animation with delay
-      card.style.animationDelay = `${index * 100}ms`;
-      card.classList.add('animate-fade-in');
-    });
-  } catch (error) {
-    console.error('Error initializing feature cards:', error);
-  }
-}
-
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-  initFeatureCards('.features-section');
-});
-```
+---
 
 ## 🎯 Common Tasks
 
-### Adding a New Page
-1. **Create HTML file**: Follow existing structure
-2. **Add to navigation**: Update `index.html` header
-3. **Create styles**: Add to `styles.css` (grouped by component)
-4. **Add functionality**: Update `script.js` if needed
-5. **Test**: Verify across browsers and devices
+### Adding/Updating Content
 
-### Updating Content
-1. **Text changes**: Edit directly in `index.html`
-2. **Image updates**: Replace files in `assets/` and update references
-3. **Style adjustments**: Modify `styles.css`
-4. **Functionality**: Update `script.js`
+**Text changes**:
+- Edit directly in `deploy/index.html` or `production_source/index.html`
+- Update headings, paragraphs, button text
 
-### Adding Interactive Components
-1. **HTML Structure**: Create semantic markup
-2. **CSS Styling**: Add responsive styles with proper states
-3. **JavaScript**: Implement functionality with event listeners
-4. **Animation**: Add smooth transitions (use cubic-bezier for consistency)
-5. **Test**: Verify across devices and browsers
+**Image updates**:
+- Replace files in `deploy/assets/`
+- Update image references in HTML
+- Optimize images before adding (compress, proper format)
 
-### Adding New Features
-1. **Plan**: Document requirements and approach
-2. **Implement**: Follow existing patterns
-3. **Test**: Verify functionality and performance
-4. **Document**: Update README if significant changes
+**Video updates**:
+- Replace files in `deploy/assets/videos/`
+- Update video sources in HTML
+- Ensure proper video formats (MP4 for compatibility)
 
-### Modifying Existing Components
-1. **Review**: Understand current implementation
-2. **Change**: Make minimal, focused updates
-3. **Test**: Ensure no regressions
-4. **Document**: Note changes if they affect usage
+### Adding Partner Logos
+1. Add logo file to `deploy/assets/Partner logos/`
+2. Update HTML to include new logo
+3. Test on all devices
 
-### Adding Toggle Functionality
-```javascript
-// Example: Basic toggle implementation
-const toggle = document.getElementById('toggle-id');
-const section1 = document.getElementById('section1');
-const section2 = document.getElementById('section2');
+### Updating Styles
+- Edit `production_source/styles.css`
+- Minify and copy to `deploy/styles.min.css`
+- Test responsiveness on mobile, tablet, desktop
 
-toggle.addEventListener('change', function() {
-    if (this.checked) {
-        section1.classList.remove('active');
-        section2.classList.add('active');
-    } else {
-        section2.classList.remove('active');
-        section1.classList.add('active');
-    }
-});
-```
+### Updating JavaScript
+- Edit `production_source/script.js`
+- Minify and copy to `deploy/script.min.js`
+- Test all interactive elements
+
+### Adding New Page
+1. Create HTML file in `production_source/`
+2. Add corresponding styles to `production_source/styles.css`
+3. Add functionality to `production_source/script.js` (if needed)
+4. Minify and copy to `deploy/`
+5. Add to navigation (if applicable)
+6. Test across browsers and devices
+
+---
 
 ## 🧪 Testing & Quality Assurance
 
-### Testing Checklist
-- [ ] Chrome, Firefox, Safari, Edge
-- [ ] Mobile responsiveness (320px to 1200px)
+### Testing Checklist (Before Deployment)
+- [ ] Chrome (latest)
+- [ ] Firefox (latest)
+- [ ] Safari (latest)
+- [ ] Edge (latest)
+- [ ] Mobile (iOS Safari)
+- [ ] Mobile (Android Chrome)
+- [ ] Tablet (iPad)
 - [ ] Console error-free
-- [ ] HTML/CSS validation
-- [ ] Accessibility audit
-- [ ] Performance metrics (Lighthouse)
-- [ ] Cross-browser compatibility
-- [ ] Scroll functionality testing
-- [ ] Toggle switch interaction
-- [ ] Mobile navigation behavior
+- [ ] Responsive design (320px to 1920px+)
+- [ ] All links work
+- [ ] All images load
+- [ ] Videos play correctly
+- [ ] Forms submit (if any)
+- [ ] Accessibility (keyboard navigation, screen readers)
 
 ### Validation Tools
 - **HTML**: https://validator.w3.org/
 - **CSS**: https://jigsaw.w3.org/css-validator/
 - **Accessibility**: https://wave.webaim.org/
 - **Performance**: Chrome DevTools Lighthouse
-- **Animation Performance**: Chrome DevTools Animation Inspector
 
 ### Performance Targets
-- **Lighthouse Score**: 90+ (Performance, Accessibility, SEO)
-- **Load Time**: < 2 seconds (3G connection)
-- **Page Size**: < 1MB (including images)
-- **Requests**: < 20 HTTP requests
-- **Animation Performance**: 60 FPS on all devices
+- Lighthouse Score: 90+ (Performance, Accessibility, SEO)
+- Load Time: < 2 seconds (3G connection)
+- Page Size: < 1MB (including images)
+- Requests: < 20 HTTP requests
+
+---
 
 ## 🚀 Deployment
 
 ### Preparation
-1. **Minify assets**:
-   ```bash
-   npm run minify-css
-   npm run minify-js
-   ```
-2. **Test production build** locally
-3. **Update version** in package.json if significant changes
+1. Ensure all changes are tested locally
+2. Minify CSS and JavaScript
+3. Copy updated files to `deploy/` folder
+4. Test `deploy/` version locally
 
-### Deployment Options
+### Deployment Steps
+1. **Upload** all files from `deploy/` folder to server root
+2. **Verify** file permissions (readable by web server)
+3. **Test** live site on all devices
+4. **Check** all links and functionality
 
-#### GitHub Pages
-```bash
-# Push to gh-pages branch
-git subtree push --prefix remotelabs-website origin gh-pages
-```
-
-#### Netlify/Vercel
-1. Connect GitHub repository
-2. Set build command: `npm run build`
-3. Set publish directory: `/`
-4. Deploy
-
-#### Traditional Hosting
-1. Upload all files via FTP/SFTP
-2. Configure domain pointing
-3. Set up HTTPS
-4. Test live site
+### Server Configuration
+- **HTTPS**: Required (HSTS header enforced)
+- **MIME Types**: Ensure proper types for .mp4, .webmanifest, etc.
+- **Caching**: Configure for static assets
+- **Root Directory**: `/` or `/public_html/` depending on hosting
 
 ### Post-Deployment
-- Verify all links work
-- Check analytics setup
-- Monitor performance
-- Set up error monitoring
+- Verify all pages load correctly
+- Test all interactive elements
+- Check video playback
+- Monitor for errors in console
+- Test on mobile devices
+
+---
 
 ## 🔧 Maintenance
 
-### Regular Tasks
-- **Content Updates**: Monthly review
-- **Dependency Updates**: Quarterly
-- **Browser Testing**: Before major releases
-- **Performance Audit**: Quarterly
-- **Backup**: Before major changes
-- **Animation Testing**: Verify smooth transitions
-- **Mobile Testing**: Check touch interactions
+### Regular Tasks (Monthly)
+- Content review and updates
+- Check for broken links
+- Test on latest browser versions
+- Review analytics (if configured)
+
+### As Needed
+- Update partner logos
+- Update video content
+- Update team information
+- Update publications list
+- Review and update privacy policy
+- Update contact information
 
 ### Version Control
-- **Commit Messages**: Descriptive and concise
-- **Branching**: Feature branches for new development
-- **Tags**: Version tags for releases
-- **Issues**: Track bugs and features
-- **Pull Requests**: Required for major changes
+- Commit messages: Descriptive and concise
+- Branching: Use feature branches for new development
+- Tags: Version tags for major releases
+- Issues: Track bugs and feature requests
 
-### Documentation Updates
-- Update README.md for significant changes
-- Keep AGENTS.md current
-- Document major architectural decisions
-- Maintain change log
-- Update component documentation
+---
 
-## 🐛 Troubleshooting
+## 🔒 Security
 
-### Common Issues & Solutions
+### Security Headers Implemented
+All pages include security meta tags:
+- **Content-Security-Policy**: Restricts resource loading to prevent XSS
+- **X-Frame-Options**: SAMEORIGIN (prevents clickjacking)
+- **X-Content-Type-Options**: nosniff (prevents MIME sniffing)
+- **X-XSS-Protection**: 1; mode=block
+- **Strict-Transport-Security**: max-age=63072000; includeSubDomains; preload
+- **Permissions-Policy**: Restricts browser features (geolocation, microphone, camera, payment)
+- **Expect-CT**: Certificate Transparency enforcement
+- **Referrer-Policy**: strict-origin-when-cross-origin
 
-#### CSS Not Applying
-- **Cause**: Specificity conflict or load order
-- **Solution**: Check browser dev tools, adjust specificity
+### Security Best Practices
+- ✅ No cookies collected
+- ✅ No eval() or dynamic code evaluation
+- ✅ DOM manipulation instead of document.write()
+- ✅ Font Awesome uses Subresource Integrity (SRI)
+- ✅ HTTPS enforced via HSTS
+- ✅ Clickjacking protection via X-Frame-Options
+- ✅ XSS protection via CSP and X-XSS-Protection
 
-#### JavaScript Errors
-- **Cause**: DOM not ready or element not found
-- **Solution**: Use DOMContentLoaded, add null checks
+### Security Considerations
+- All external resources loaded via HTTPS
+- Service worker only registers on HTTP/HTTPS (not file://)
+- No user input processed on client side
+- No forms that could be vulnerable to CSRF
 
-#### Responsive Issues
-- **Cause**: Missing breakpoints or incorrect units
-- **Solution**: Test with device emulation, adjust media queries
-
-#### Performance Problems
-- **Cause**: Large images or render-blocking resources
-- **Solution**: Optimize images, defer non-critical JS
-
-#### Animation Lag
-- **Cause**: Complex animations or too many transforms
-- **Solution**: Use `will-change`, simplify animations, use GPU acceleration
-
-#### Scroll Events Firing Too Often
-- **Cause**: Unoptimized scroll event listeners
-- **Solution**: Implement throttling or debouncing
-
-#### Toggle Not Working
-- **Cause**: Missing event listeners or incorrect selectors
-- **Solution**: Check console errors, verify element existence
-
-### Debugging Workflow
-1. **Reproduce**: Identify exact steps to reproduce
-2. **Isolate**: Narrow down the problematic code
-3. **Research**: Check documentation and similar issues
-4. **Fix**: Implement minimal solution
-5. **Test**: Verify fix works across devices
-6. **Document**: Note the solution for future reference
+---
 
 ## 📚 Additional Resources
 
 ### Learning Materials
-- **HTML/CSS**: MDN Web Docs
-- **JavaScript**: JavaScript.info
-- **Accessibility**: WebAIM
+- **HTML/CSS**: MDN Web Docs (https://developer.mozilla.org/)
+- **JavaScript**: JavaScript.info (https://javascript.info/)
+- **Accessibility**: WebAIM (https://webaim.org/)
 - **Performance**: Google Web Fundamentals
-- **Animations**: CSS Tricks Animation Guide
-- **Scroll Effects**: ScrollMagic Documentation
 
 ### Tools
 - **Code Editor**: VS Code with ESLint, Prettier
-- **Browser Testing**: BrowserStack
-- **Performance**: WebPageTest
-- **Design**: Figma/Adobe XD
-- **Animation Debugging**: Chrome DevTools Animation Inspector
-- **Scroll Performance**: Chrome DevTools Performance Tab
+- **Browser Testing**: Chrome DevTools
+- **Performance**: WebPageTest (https://www.webpagetest.org/)
+- **Design**: Figma, Adobe XD
+- **Image Optimization**: TinyPNG, ImageOptim
+
+---
 
 ## 🤝 Handover Information
 
 ### For New Developers
-1. **Repository Access**: GitHub credentials
-2. **Hosting Access**: Deployment credentials
-3. **Analytics**: Umami dashboard access
-4. **Domain**: DNS management access
-5. **Documentation**: This guide and README
-6. **Design Assets**: TU/e logo files and brand guidelines
+- **Repository**: https://github.com/KarelAarts/remotelabs-website
+- **Hosting**: TU/e web servers
+- **Domain**: remotelabs.tue.nl
+- **Primary Contact**: Karel Aarts (k.m.a.aarts@tue.nl)
+- **Technical Support**: TU/e IT Department
 
 ### Transition Checklist
-- [ ] Provide all access credentials
-- [ ] Walk through deployment process
-- [ ] Explain content update procedure
-- [ ] Demonstrate common tasks
-- [ ] Answer questions
-- [ ] Provide contact for follow-up
-- [ ] Review animation and scroll functionality
-- [ ] Test mobile navigation behavior
-
-## 📬 Support
-
-For questions about this project:
-1. Check the README.md first
-2. Review this development guide
-3. Consult the git history for context
-4. Contact the development team
+- [ ] Provide GitHub repository access
+- [ ] Provide hosting access credentials
+- [ ] Explain deployment process
+- [ ] Review current file structure
+- [ ] Demonstrate common update procedures
+- [ ] Answer questions about the codebase
+- [ ] Provide contact information for follow-up
 
 ---
 
-**Last updated**: 2024-07-15
-
+**Last Updated**: 2024
 **Maintainer**: Development Team
+**Repository**: https://github.com/KarelAarts/remotelabs-website
 
-**License**: MIT License
+---
 
-**Recent Updates**:
-- Added scroll-based navigation hiding
-- Implemented modern toggle switch
-- Optimized mobile experience
-- Integrated TU/e logo
-- Enhanced visual design
+*This document is for internal use only. The repository is private.*
