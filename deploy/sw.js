@@ -1,5 +1,7 @@
 // Basic Service Worker for Remote Labs Website
-const CACHE_NAME = 'remotelabs-v1';
+// Version: Bump this number whenever you update assets to force cache invalidation
+const CACHE_NAME = 'remotelabs-v2';
+
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
@@ -11,43 +13,58 @@ const ASSETS_TO_CACHE = [
     'https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap'
 ];
 
-// Install event - cache assets
+// Install event - cache assets and activate immediately
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
-                console.log('Caching assets');
+                console.log('[' + CACHE_NAME + '] Caching assets');
                 return cache.addAll(ASSETS_TO_CACHE);
             })
+            .then(() => {
+                // Activate the new service worker immediately
+                console.log('[' + CACHE_NAME + '] Skipping waiting, activating now');
+                return self.skipWaiting();
+            })
             .catch((error) => {
-                console.error('Cache failed:', error);
+                console.error('[' + CACHE_NAME + '] Cache failed:', error);
             })
     );
 });
 
-// Fetch event - serve from cache or network
+// Fetch event - NETWORK FIRST with cache fallback
+// This ensures users always get the latest version from the server
 self.addEventListener('fetch', (event) => {
+    // For HTML files, always go to network first (don't cache)
+    if (event.request.url.indexOf('.html') !== -1 || event.request.url === '/') {
+        event.respondWith(
+            fetch(event.request)
+                .catch(() => {
+                    return caches.match(event.request) || caches.match('/');
+                })
+        );
+        return;
+    }
+    
+    // For other assets, try network first, fall back to cache
     event.respondWith(
-        caches.match(event.request)
-            .then((cachedResponse) => {
-                // Return cached response if available
-                if (cachedResponse) {
-                    return cachedResponse;
+        fetch(event.request)
+            .then((response) => {
+                // Cache fresh responses for offline use
+                if (response && response.status === 200 && response.type === 'basic') {
+                    const responseToCache = response.clone();
+                    caches.open(CACHE_NAME)
+                        .then((cache) => {
+                            console.log('[' + CACHE_NAME + '] Caching:', event.request.url);
+                            cache.put(event.request, responseToCache);
+                        });
                 }
-                
-                // Otherwise fetch from network
-                return fetch(event.request)
-                    .then((response) => {
-                        // Cache new resources
-                        if (response && response.status === 200 && response.type === 'basic') {
-                            const responseToCache = response.clone();
-                            caches.open(CACHE_NAME)
-                                .then((cache) => {
-                                    cache.put(event.request, responseToCache);
-                                });
-                        }
-                        return response;
-                    });
+                return response;
+            })
+            .catch(() => {
+                // Fallback to cache if network fails
+                console.log('[' + CACHE_NAME + '] Network failed, serving from cache:', event.request.url);
+                return caches.match(event.request);
             })
     );
 });
@@ -61,10 +78,16 @@ self.addEventListener('activate', (event) => {
             return Promise.all(
                 cacheNames.map((cacheName) => {
                     if (cacheWhitelist.indexOf(cacheName) === -1) {
+                        console.log('[' + CACHE_NAME + '] Deleting old cache:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
             );
+        })
+        .then(() => {
+            console.log('[' + CACHE_NAME + '] Service worker activated');
+            // Claim all clients immediately
+            return self.clients.claim();
         })
     );
 });
