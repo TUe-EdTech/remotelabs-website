@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
     <meta name="description" content="Remote Labs - 24/7 Access to Physical Lab Experiments at Eindhoven University of Technology">
+    <!-- Cache Control: Prevent browser caching of HTML -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="theme-color" content="#2563eb">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -19,7 +23,7 @@
     <link rel="icon" type="image/png" sizes="512x512" href="icon-512x512.png">
     <title>Remote Labs - 24/7 Access to Physical Lab Experiments</title>
     <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="script.min.js" as="script">
+    <link rel="preload" href="script.min.js?v=2" as="script">
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" crossorigin="anonymous"
           integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" referrerpolicy="no-referrer">
     <!-- Preload workflow videos for faster switching -->
@@ -42,7 +46,7 @@
 @media (max-width:768px){.how-it-works{padding:60px 0}.workflow-steps{grid-template-columns:1fr}.toggle-container{flex-direction:column;align-items:center}}
     </style>
     
-    <link rel="stylesheet" href="styles.min.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="styles.min.css?v=2" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="styles.css"></noscript>
     
     <!-- Load fonts with display=swap for better performance -->
@@ -919,7 +923,7 @@
     </footer>
 
     <!-- Load minified JavaScript with defer for better performance -->
-    <script src="script.min.js" defer></script>
+    <script src="script.min.js?v=2" defer></script>
     <!-- IE11 polyfills and compatibility -->
     <script nomodule>
         // Load polyfills for older browsers using DOM manipulation instead of document.write
@@ -1190,10 +1194,10 @@ window.addEventListener('load',function(){const t=performance.now();console.log(
         }
     </script>
     
-    <!-- Add cache manifest for offline support -->
-    <link rel="manifest" href="cache.manifest">
+    <!-- AppCache is deprecated; using Service Worker instead -->
     
-    <link rel="prefetch" href="script.min.js" as="script">
+    
+    <link rel="prefetch" href="script.min.js?v=2" as="script">
     <link rel="prefetch" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" as="style" crossorigin>
     <!-- Do Not Track Respect -->
     <script>
