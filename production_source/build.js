@@ -109,6 +109,49 @@ try {
   process.exit(1);
 }
 
+// Step 5: Copy icon files
+console.log('Copying icon files...');
+try {
+  const iconFiles = ['icon-192x192.png', 'icon-192x192.svg', 'icon-512x512.png', 'icon-512x512.svg'];
+  iconFiles.forEach(file => {
+    const sourcePath = path.join(__dirname, file);
+    const destPath = path.join(__dirname, '../deploy', file);
+    
+    if (fs.existsSync(sourcePath)) {
+      fs.copyFileSync(sourcePath, destPath);
+      console.log(`✓ Copied ${file}`);
+    } else {
+      console.warn(`⚠ Icon file ${file} not found, skipping`);
+    }
+  });
+  console.log('');
+} catch (error) {
+  console.error('✗ Icon copy failed:', error.message);
+}
+
+// Step 6: Copy assets folder
+console.log('Copying assets folder...');
+try {
+  const sourceAssets = path.join(__dirname, 'assets');
+  const destAssets = path.join(__dirname, '../deploy/assets');
+  
+  if (fs.existsSync(sourceAssets)) {
+    // Remove existing deploy/assets if it exists
+    if (fs.existsSync(destAssets)) {
+      fs.rmSync(destAssets, { recursive: true, force: true });
+    }
+    
+    // Copy entire assets folder recursively
+    fs.cpSync(sourceAssets, destAssets, { recursive: true });
+    console.log('✓ Copied assets folder');
+  } else {
+    console.warn('⚠ Source assets folder not found, skipping');
+  }
+  console.log('');
+} catch (error) {
+  console.error('✗ Assets copy failed:', error.message);
+}
+
 console.log('Build completed successfully! ✓');
 console.log('\nGenerated files:');
 console.log('  - deploy/styles.min.css');
@@ -116,5 +159,8 @@ console.log('  - deploy/script.min.js');
 console.log('  - deploy/index.html');
 console.log('  - deploy/privacy.html');
 console.log('  - deploy/sw.js');
+console.log('  - deploy/icon-192x192.png (or .svg)');
+console.log('  - deploy/icon-512x512.png (or .svg)');
+console.log('  - deploy/assets/');
 console.log('\n⚠️  REMEMBER: Deploy to server for changes to take effect!');
 console.log('   Test in incognito mode to verify cache invalidation.');
