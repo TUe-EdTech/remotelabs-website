@@ -219,5 +219,5 @@ npx uglifyjs script.js -o ../deploy/script.min.js -c -m
 
 ---
 
-**Last Updated**: 2024
-**Maintained by**: Eindhoven University of Technology
+**Last Updated**: 2026
+**Maintained by**: Karel Aarts | DRIVE | Eindhoven University of Technology
