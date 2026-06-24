@@ -23,8 +23,8 @@
     <link rel="icon" type="image/svg+xml" sizes="512x512" href="icon-512x512.svg">
     <title>Remote Labs - 24/7 Access to Physical Lab Experiments</title>
     <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="script.min.js?v=2" as="script">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" crossorigin="anonymous"
+    <link rel="preload" href="script.min.js?v=3" as="script">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" crossorigin="anonymous"
           integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" referrerpolicy="no-referrer">
     <!-- Preload workflow videos for faster switching -->
     <link rel="preload" href="assets/videos/book-experiment.mp4" as="fetch" crossorigin="anonymous">
@@ -46,7 +46,7 @@
 @media (max-width:768px){.how-it-works{padding:60px 0}.workflow-steps{grid-template-columns:1fr}.toggle-container{flex-direction:column;align-items:center}}
     </style>
     
-    <link rel="stylesheet" href="styles.min.css?v=2" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="styles.min.css?v=3" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="styles.css"></noscript>
     
     <!-- Load fonts with display=swap for better performance -->
@@ -56,7 +56,7 @@
 @font-face{font-family:'Lato Fallback';src:local('Arial'),local('Helvetica Neue'),local('Helvetica'),local('sans-serif')}@font-face{font-family:'Poppins Fallback';src:local('Arial Black'),local('Impact'),local('sans-serif');font-weight:700}
     </style>
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <style>
         @font-face {
             font-family: 'Gilroy Bold';
@@ -924,17 +924,18 @@
     </footer>
 
     <!-- Load minified JavaScript with defer for better performance -->
-    <script src="script.min.js?v=2" defer></script>
-    <!-- IE11 polyfills and compatibility -->
+    <script src="script.min.js?v=3" defer></script>
+    <!-- Polyfills for older browsers -->
     <script nomodule>
         // Load polyfills for older browsers using DOM manipulation instead of document.write
+        // Note: cdn.polyfill.io shut down Feb 2025, using community-run polyfill.io
         const polyfillScript = document.createElement('script');
-        polyfillScript.src = 'https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,es2015,es2016,es2017,es2018,es2019,es2020';
+        polyfillScript.src = 'https://polyfill.io/v3/polyfill.min.js?features=default,es6,es2015,es2016,es2017,es2018,es2019,es2020';
         polyfillScript.async = true;
         document.head.appendChild(polyfillScript);
         
         const cssVarsPonyfill = document.createElement('script');
-        cssVarsPonyfill.src = 'https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2/dist/css-vars-ponyfill.min.js';
+        cssVarsPonyfill.src = 'https://cdn.jsdelivr.net/npm/css-vars-ponyfill@3/dist/css-vars-ponyfill.min.js';
         cssVarsPonyfill.async = true;
         document.head.appendChild(cssVarsPonyfill);
     </script>
@@ -1179,7 +1180,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </script>
     
     <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com https://player.vimeo.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https://fonts.gstatic.com; media-src 'self'; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://player.vimeo.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com https://player.vimeo.com https://polyfill.io https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https://fonts.gstatic.com https://img.shields.io; media-src 'self'; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://player.vimeo.com; connect-src 'self' https://cloud.umami.is; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; require-sri-for script style">
     <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
@@ -1212,7 +1213,7 @@ window.addEventListener('load',function(){const t=performance.now();console.log(
     <!-- AppCache is deprecated; using Service Worker instead -->
     
     
-    <link rel="prefetch" href="script.min.js?v=2" as="script">
+    <link rel="prefetch" href="script.min.js?v=3" as="script">
     <link rel="prefetch" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" as="style" crossorigin>
     <!-- Do Not Track Respect -->
     <script>
