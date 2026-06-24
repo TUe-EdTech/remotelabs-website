@@ -5,8 +5,8 @@ const CACHE_NAME = 'remotelabs-v3';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
-    '/styles.min.css?v=3',
-    '/script.min.js?v=3',
+    '/styles.min.css',
+    '/script.min.js',
     
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
     'https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap',
