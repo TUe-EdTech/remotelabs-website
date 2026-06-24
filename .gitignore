@@ -1,10 +1,6 @@
 # Dependencies
 node_modules/
 
-# Build artifacts
-deploy/styles.min.css
-deploy/script.min.js
-
 # IDE
 .idea/
 .vscode/
