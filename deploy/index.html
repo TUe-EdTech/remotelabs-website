@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
     <meta name="description" content="Remote Labs - 24/7 Access to Physical Lab Experiments at Eindhoven University of Technology">
+    <!-- Cache Control: Prevent browser caching of HTML -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -12,13 +13,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com https://player.vimeo.com https://polyfill.io https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https://fonts.gstatic.com https://img.shields.io; media-src 'self'; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://player.vimeo.com; connect-src 'self' https://cloud.umami.is; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; require-sri-for script style">
-    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Strict-Transport-Security" content="max-age=63072000; includeSubDomains; preload">
-    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=()">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <link rel="manifest" href="manifest.json">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
@@ -29,14 +23,16 @@
     <link rel="icon" type="image/svg+xml" sizes="512x512" href="icon-512x512.svg">
     <title>Remote Labs - 24/7 Access to Physical Lab Experiments</title>
     <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="script.min.js?v=3" as="script">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" crossorigin="anonymous"
+    <link rel="preload" href="script.min.js?v=2" as="script">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" crossorigin="anonymous"
           integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" referrerpolicy="no-referrer">
+    <!-- Preload workflow videos for faster switching -->
     <link rel="preload" href="assets/videos/book-experiment.mp4" as="fetch" crossorigin="anonymous">
     <link rel="preload" href="assets/videos/conduct-experiment.mp4" as="fetch" crossorigin="anonymous">
     <link rel="preload" href="assets/videos/review-results.mp4" as="fetch" crossorigin="anonymous">
+    
     <style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Lato','Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#000;background:#fff;-webkit-text-size-adjust:100%}.main-header{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1);padding:1.5rem 0;position:fixed;width:100%;top:0;z-index:1000;transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);transform:translateY(0)}.main-header.hidden{transform:translateY(-100%)}.container{width:100%;max-width:1200px;margin:0 auto;padding:0 15px}.logo{display:flex;align-items:center;gap:.75rem}.logo-link{text-decoration:none;color:inherit;cursor:pointer}.logo-text{font-family:'Poppins','Arial Black',Impact,sans-serif;font-weight:700;font-size:1.5rem;color:var(--black);text-decoration:none}.cta-button{background:#000;color:#fff;padding:.85rem 1.5rem;border-radius:6px;text-decoration:none;font-weight:700;font-size:.95rem}.header-content{display:flex;justify-content:space-between;align-items:center}.hero{padding:120px 0 80px;text-align:center}.hero-title{font-size:2.8rem;margin-bottom:1.2rem;line-height:1.1}.hero-subtitle{font-size:1.1rem;max-width:90%;margin:0 auto 2rem;line-height:1.5}.hero-cta-button{background:#2563eb;color:#fff;padding:.9rem 1.8rem;border-radius:8px;text-decoration:none;font-weight:700;margin-bottom:1.5rem;display:inline-block;font-size:1rem}@media (max-width:768px){.container{padding:0 12px}.hero{padding:100px 0 60px}.hero-title{font-size:2.2rem}.hero-subtitle{font-size:1rem}.cta-button,.hero-cta-button{width:100%;padding:1rem;font-size:1rem}}@media (max-width:480px){.hero-title{font-size:1.8rem}.container{padding:0 10px}}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Lato','Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#000;background:#fff;-webkit-text-size-adjust:100%}.main-header{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1);padding:1.5rem 0;position:fixed;width:100%;top:0;z-index:1000;transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);transform:translateY(0)}.main-header.hidden{transform:translateY(-100%)}.container{width:100%;max-width:1200px;margin:0 auto;padding:0 15px}.logo{display:flex;align-items:center;gap:.75rem}.logo-link{text-decoration:none;color:inherit;cursor:pointer}.logo-text{font-family:'Poppins','Arial Black',Impact,sans-serif;font-weight:700;font-size:1.5rem;color:var(--black);text-decoration:none}.cta-button{background:#000;color:#fff;padding:.85rem 1.5rem;border-radius:6px;text-decoration:none;font-weight:700;font-size:.95rem}.hero{padding:120px 0 80px;text-align:center}.hero-title{font-size:2.8rem;margin-bottom:1.2rem;line-height:1.1}.hero-subtitle{font-size:1.1rem;max-width:90%;margin:0 auto 2rem;line-height:1.5}.hero-cta-button{background:#2563eb;color:#fff;padding:.9rem 1.8rem;border-radius:8px;text-decoration:none;font-weight:700;margin-bottom:1.5rem;display:inline-block;font-size:1rem}@media (max-width:768px){.container{padding:0 12px}.hero{padding:100px 0 60px}.hero-title{font-size:2.2rem}.hero-subtitle{font-size:1rem}.cta-button,.hero-cta-button{width:100%;padding:1rem;font-size:1rem}}@media (max-width:480px){.hero-title{font-size:1.8rem}.container{padding:0 10px}}
 
 /* Mobile Optimization - Phone Version */
 @media (max-width:480px){.header-content{flex-direction:row;justify-content:space-between;align-items:center;gap:1rem}.logo{justify-content:flex-start}.logo-text{font-size:1rem}.cta-button{width:auto;min-width:140px;padding:0.5rem 0.8rem;font-size:0.8rem;height:36px}.hero{padding:140px 0 60px;margin-top:70px}.hero-title{font-size:1.6rem;line-height:1.2}.hero-subtitle{font-size:0.95rem;line-height:1.5}.video-embed-wrapper{padding:62.5% 0 0 0}.workflow-steps{grid-template-columns:1fr}.workflow-step{padding:1.5rem}.step-icon{flex-direction:row;align-items:center}.step-number{margin-top:0}.footer-section{margin-bottom:2rem}}
@@ -47,14 +43,17 @@
 @media (max-width:768px){.how-it-works{padding:60px 0}.workflow-steps{grid-template-columns:1fr}}
     </style>
     
-    <link rel="stylesheet" href="styles.min.css?v=3" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="styles.min.css?v=2" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="styles.css"></noscript>
+    
+    <!-- Load fonts with display=swap for better performance -->
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
     <style>
-@font-face{font-family:'Lato Fallback';src:local('Arial'),local('Helvetica Neue'),local('Helvetica'),local('sans-serif)}@font-face{font-family:'Poppins Fallback';src:local('Arial Black'),local('Impact'),local('sans-serif');font-weight:700}.text-highlight{color:#2563eb}.tue-logo{width:150px;height:auto;margin-top:.5rem}.mt-1{margin-top:1rem}
+@font-face{font-family:'Lato Fallback';src:local('Arial'),local('Helvetica Neue'),local('Helvetica'),local('sans-serif')}@font-face{font-family:'Poppins Fallback';src:local('Arial Black'),local('Impact'),local('sans-serif');font-weight:700}
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <style>
         /* Modern Toggle Switch Styles */
         .toggle-switch-container {
@@ -487,6 +486,8 @@
 
     
     <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Header Section - Scroll-aware -->
     <header role="banner" class="main-header">
         <div class="container">
             <div class="header-content">
@@ -503,18 +504,23 @@
 
 
     <main id="main-content" role="main" tabindex="-1">
+    <!-- Hero Section -->
     <section class="hero">
         <div class="container">
             <h2 class="hero-title">24/7 Access to Physical Lab Experiments, Anywhere</h2>
         <h1 class="sr-only">Remote Labs - 24/7 Access to Physical Lab Experiments</h1>
             <p class="hero-subtitle">Enabling students and professionals to conduct real lab experiments remotely</p>
             <a href="#how-it-works" class="hero-cta-button" aria-label="Explore how Remote Labs works">Explore Features</a>
+
+
+            <!-- Hero Video Container - 16:9 aspect ratio with controls -->
             <div class="video-container">
                 <div class="video-wrapper hero-video-wrapper">
                     <video class="hero-video" playsinline loop autoplay muted poster="assets/videos/posterimagevideo.jpeg" preload="metadata" id="hero-video-player">
                         <source src="assets/videos/Remote Labs video website.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
+                    <!-- Video Controls - Play/Pause and Mute/Unmute -->
                     <div class="video-controls">
                         <button class="video-control-btn" id="play-pause-btn" aria-label="Pause">
                             <i class="fas fa-pause"></i>
@@ -527,9 +533,12 @@
             </div>
 
     </section>
+
+    <!-- How It Works Section -->
     <section class="how-it-works" id="how-it-works">
         <div class="container">
             <div class="section-header">
+                <!-- Toggle Switch -->
                 <div class="toggle-switch-container">
                     <div class="toggle-switch">
                         <input type="checkbox" id="workflow-toggle" class="toggle-input">
@@ -541,6 +550,8 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Students Section -->
             <div class="workflow-section active" id="students">
                 <div class="workflow-header">
                     <h4 class="benefits-title">Student Workflow</h4>
@@ -575,6 +586,8 @@
                         <p>Analyze your experiment data and results at your own pace, in your own time</p>
                     </div>
                 </div>
+                
+                <!-- Video Container -->
                 <div class="video-container">
                     <div class="video-wrapper">
                         <video id="workflow-video" class="workflow-video" playsinline muted loop autoplay preload="auto">
@@ -584,6 +597,8 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Organizational Benefits Section -->
             <div class="workflow-section" id="organizations">
                 <div class="workflow-header">
                     <h4 class="benefits-title">Organizational Benefits</h4>
@@ -621,13 +636,18 @@
             </div>
         </div>
     </section>
+    
+    <!-- Contact Section - Optimized for Conversion -->
     <section class="contact" id="contact">
         <div class="container">
             <div class="contact-content">
+                <!-- Value Proposition with Visual Emphasis -->
                 <div class="value-prop">
                     <h4 class="benefits-title" id="benefits">Key Benefits of Remote Labs</h4>
                     <p class="benefits-intro">Transform your research and education with our cutting-edge platform:</p>
                 </div>
+                
+                <!-- Benefits Grid - Visual and Scannable -->
                 <div class="benefits-grid">
                     <div class="benefit-card">
                         <div class="benefit-icon">
@@ -653,6 +673,8 @@
                         <p>Perform experiments without physical lab constraints</p>
                     </div>
                 </div>
+                
+                <!-- Social Proof / Trust Indicators -->
                 <div class="trust-indicators">
                     <div class="trust-section">
                         <p class="trust-text">
@@ -675,6 +697,8 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Clear Call-to-Action -->
                 <div class="cta-section">
                     <p class="cta-intro">Interested in exploring Remote Labs for your institution or organization?</p>
                     
@@ -693,6 +717,8 @@
         </div>
     </section>
     </main>
+
+    <!-- Basic Footer -->
     <footer role="contentinfo">
         <div class="footer-wrapper">
             <div class="footer-main">
@@ -714,6 +740,7 @@
                 <div class="footer-section">
                     <h4>Publications</h4>
                     <div class="publications">
+                             <!-- Publication 1: Edit title, URL, journal, and year below -->
                         <div class="publication-item">
                             <a href="https://www.tue.nl/en/news-and-events/news-overview/08-04-2026-scaling-education-through-smart-remote-labs" class="publication-title" target="_blank" rel="noopener noreferrer">Scaling education through smart remote labs</a>
                             <div class="publication-meta">
@@ -721,6 +748,8 @@
                                 <span class="publication-year">• 2026</span>
                             </div>
                         </div>
+                        
+                        <!-- Publication 2: Edit title, URL, journal, and year below -->
                         <div class="publication-item">
                             <a href="https://agdb.nl/nieuws/vrij-inpluggen-voor-elk-niveau/" class="publication-title" target="_blank" rel="noopener noreferrer">Vrij inpluggen voor elk niveau</a>
                             <div class="publication-meta">
@@ -728,6 +757,8 @@
                                 <span class="publication-year">• 2025</span>
                             </div>
                         </div>
+                        
+                        <!-- Publication 3: Edit title, URL, journal, and year below -->
                         <div class="publication-item">
                             <a href="https://doi.org/10.1007/s12528-022-09331-4" class="publication-title" target="_blank" rel="noopener noreferrer">Remote Labs in Higher Education</a>
                             <div class="publication-meta">
@@ -735,6 +766,17 @@
                                 <span class="publication-year">• 2022</span>
                             </div>
                         </div>
+                        
+                        <!-- Add more publications here by copying the pattern above -->
+                        <!-- 
+                        <div class="publication-item">
+                            <a href="URL_HERE" class="publication-title">TITLE_HERE</a>
+                            <div class="publication-meta">
+                                <span class="publication-journal">JOURNAL_HERE</span>
+                                <span class="publication-year">• YEAR_HERE</span>
+                            </div>
+                        </div>
+                        -->
                     </div>
                 </div>
                 
@@ -743,7 +785,7 @@
                     <div>
                         <p>Eindhoven University of Technology</p>
                         <p>Den Dolech 2, 5612 AZ Eindhoven</p>
-                        <p><a href="mailto:k.m.a.aarts@tue.nl?subject=Remote%20Labs%20Inquiry" class="text-highlight">k.m.a.aarts@tue.nl</a></p>
+                        <p><a href="mailto:k.m.a.aarts@tue.nl?subject=Remote%20Labs%20Inquiry" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
                     </div>
                 </div>
                 
@@ -751,26 +793,29 @@
                     <h3>Remote Labs</h3>
                     <p>24/7 Access to Physical Lab Experiments, Anywhere</p>
                     <p>&copy; 2026 Remote Labs. All rights reserved.</p>
-                    <p class="mt-1">
+                    <p style="margin-top: 1rem;">
                         Part of<br>
                         <a href="https://www.tue.nl/en/" target="_blank" rel="noopener noreferrer" aria-label="Visit Eindhoven University of Technology">
-                            <img src="assets/TUe-logo-descriptor-line-scarlet-S.png" alt="TU/e - Eindhoven University of Technology" class="tue-logo">
+                            <img src="assets/TUe-logo-descriptor-line-scarlet-S.png" alt="TU/e - Eindhoven University of Technology" style="width: 150px; height: auto; margin-top: 0.5rem;">
                         </a>
                     </p>
                 </div>
             </div>
         </div>
     </footer>
-    <script src="script.min.js?v=3" defer></script>
+
+    <!-- Load minified JavaScript with defer for better performance -->
+    <script src="script.min.js?v=2" defer></script>
+    <!-- IE11 polyfills and compatibility -->
     <script nomodule>
         // Load polyfills for older browsers using DOM manipulation instead of document.write
         const polyfillScript = document.createElement('script');
-        polyfillScript.src = 'https://polyfill.io/v3/polyfill.min.js?features=default,es6,es2015,es2016,es2017,es2018,es2019,es2020';
+        polyfillScript.src = 'https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,es2015,es2016,es2017,es2018,es2019,es2020';
         polyfillScript.async = true;
         document.head.appendChild(polyfillScript);
         
         const cssVarsPonyfill = document.createElement('script');
-        cssVarsPonyfill.src = 'https://cdn.jsdelivr.net/npm/css-vars-ponyfill@3/dist/css-vars-ponyfill.min.js';
+        cssVarsPonyfill.src = 'https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2/dist/css-vars-ponyfill.min.js';
         cssVarsPonyfill.async = true;
         document.head.appendChild(cssVarsPonyfill);
     </script>
@@ -958,9 +1003,22 @@ document.addEventListener('DOMContentLoaded', function() {
 });
     </script>
     
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com https://player.vimeo.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https://fonts.gstatic.com; media-src 'self'; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://player.vimeo.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=63072000; includeSubDomains; preload">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=()">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
+
     </script>
     
+    <link rel="prefetch" href="script.min.js?v=2" as="script">
     <link rel="prefetch" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" as="style" crossorigin>
+
+
 
 </body>
 </html>
