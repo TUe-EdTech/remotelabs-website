@@ -11,6 +11,15 @@
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <title>Privacy Policy - Remote Labs</title>
+    <script>
+      // Email obfuscation function
+      function getEmail(subject) {
+        const user = 'k.m.a.aarts';
+        const domain = 'tue.nl';
+        const email = user + '@' + domain;
+        return subject ? email + '?subject=' + encodeURIComponent(subject) : email;
+      }
+    </script>
     
     <!-- Load minified CSS -->
     <link rel="stylesheet" href="/styles.min.css?v=2">
@@ -121,14 +130,15 @@
 
             <div class="privacy-section">
                 <h3>5. Cookies and Tracking</h3>
-                <p>This website uses only essential cookies for basic functionality. We do not use:</p>
+                <p>This website uses only essential cookies for basic functionality.</p>
+                <p>We use Umami analytics to collect anonymous usage statistics to help us understand how our website is being used and to improve the user experience. Umami is a privacy-focused analytics service that:</p>
                 <ul>
-                    <li>Tracking cookies</li>
-                    <li>Analytics cookies</li>
-                    <li>Advertising cookies</li>
-                    <li>Third-party cookies</li>
+                    <li>Does not collect any personally identifiable information</li>
+                    <li>Does not use tracking cookies</li>
+                    <li>Does not track users across websites</li>
+                    <li>Respects Do Not Track browser settings</li>
                 </ul>
-                <p>You can choose to have your computer warn you each time a cookie is being sent, or you can choose to turn off all cookies via your browser settings.</p>
+                <p>Analytics cookies are only loaded after you give your explicit consent through our cookie banner. You can accept or decline analytics cookies. If you decline, no analytics data will be collected. You can also opt-out of analytics by enabling Do Not Track in your browser, or withdraw your consent at any time by clearing your cookie preferences.</p>
             </div>
 
             <div class="privacy-section">
@@ -141,7 +151,7 @@
                     <li><strong>Right to Restrict Processing:</strong> You can request that we restrict the processing of your personal data, under certain conditions.</li>
                     <li><strong>Right to Object to Processing:</strong> You can object to our processing of your personal data, under certain conditions.</li>
                 </ul>
-                <p>To exercise any of these rights, please contact us at: <a href="mailto:k.m.a.aarts@tue.nl" class="contact-link" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
+                <p>To exercise any of these rights, please contact us at: <a href="#" onclick="window.location.href='mailto:'+getEmail();return false;" class="contact-link" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
             </div>
 
             <div class="privacy-section">
@@ -163,7 +173,7 @@
             <div class="privacy-section">
                 <h3>10. Contact Us</h3>
                 <p>If you have any questions about this Privacy Policy, please contact us:</p>
-                <p><a href="mailto:k.m.a.aarts@tue.nl" class="contact-link" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
+                <p><a href="#" onclick="window.location.href='mailto:'+getEmail();return false;" class="contact-link" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
                 <p>Eindhoven University of Technology<br>
                 Den Dolech 2, 5612 AZ Eindhoven<br>
                 The Netherlands</p>
@@ -181,7 +191,7 @@
                         <li><a href="/">Home</a></li>
                         <li><a href="/#contact">Benefits</a></li>
                         <li><a href="/#contact">Contact</a></li>
-                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/privacy.html">Privacy Policy</a></li>
                         <li><a href="https://remotelabs.tue.nl">Go to Remote Labs</a></li>
                     </ul>
                 </div>
@@ -220,7 +230,7 @@
                     <div>
                         <p>Eindhoven University of Technology</p>
                         <p>Den Dolech 2, 5612 AZ Eindhoven</p>
-                        <p><a href="mailto:k.m.a.aarts@tue.nl?subject=Remote%20Labs%20Inquiry" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
+                        <p><a href="#" onclick="window.location.href='mailto:'+getEmail('Remote Labs Inquiry');return false;" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
                         <p>+31 (0)40 247 9111</p>
                     </div>
                 </div>

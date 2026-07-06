@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script defer src="https://cloud.umami.is/script.js" data-website-id="8d0377d8-c1de-4001-b844-27ec489392ce"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
     <meta name="description" content="Remote Labs - 24/7 Access to Physical Lab Experiments at Eindhoven University of Technology">
@@ -22,6 +21,15 @@
     <link rel="icon" type="image/svg+xml" sizes="192x192" href="icon-192x192.svg">
     <link rel="icon" type="image/svg+xml" sizes="512x512" href="icon-512x512.svg">
     <title>Remote Labs - 24/7 Access to Physical Lab Experiments</title>
+    <script>
+      // Email obfuscation function
+      function getEmail(subject) {
+        const user = 'k.m.a.aarts';
+        const domain = 'tue.nl';
+        const email = user + '@' + domain;
+        return subject ? email + '?subject=' + encodeURIComponent(subject) : email;
+      }
+    </script>
     <link rel="preload" href="styles.css" as="style">
     <link rel="preload" href="script.min.js?v=2" as="script">
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" crossorigin="anonymous"
@@ -703,10 +711,10 @@
                     <p class="cta-intro">Interested in exploring Remote Labs for your institution or organization?</p>
                     
                     <div class="contact-actions">
-                        <a href="mailto:k.m.a.aarts@tue.nl?subject=Remote%20Labs%20Interest" class="contact-button primary">
+                        <a href="#" onclick="window.location.href='mailto:'+getEmail('Remote Labs Inquiry');return false;" class="contact-button primary">
                             <i class="fas fa-envelope"></i> Contact Us
                         </a>
-                        <a href="mailto:k.m.a.aarts@tue.nl?subject=Demo%20request%20Remote%20Labs" class="contact-button demo-button">
+                        <a href="#" onclick="window.location.href='mailto:'+getEmail('Demo request Remote Labs');return false;" class="contact-button demo-button">
                             <i class="fas fa-calendar-alt"></i> Book a Demo
                         </a>
                     </div>
@@ -731,7 +739,7 @@
                         <li><a href="https://remotelabs.tue.nl">Go to Remote Labs</a></li>
                         <br>
                         <div class="status-badge-container">
-                            <a href="https://status.remotelabs.education" target="_blank" rel="noopener">
+                            <a href="https://status.remotelabs.education" target="_blank" rel="noopener noreferrer">
                                 <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fstatus.remotelabs.education%2Fshield-badges%2Fstatus.json&style=for-the-badge" loading="lazy" alt="Phare badge" class="status-badge">
                             </a>
                         </div>
@@ -785,7 +793,7 @@
                     <div>
                         <p>Eindhoven University of Technology</p>
                         <p>Den Dolech 2, 5612 AZ Eindhoven</p>
-                        <p><a href="mailto:k.m.a.aarts@tue.nl?subject=Remote%20Labs%20Inquiry" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
+                        <p><a href="#" onclick="window.location.href='mailto:'+getEmail('Remote Labs Inquiry');return false;" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
                     </div>
                 </div>
                 
@@ -806,21 +814,6 @@
 
     <!-- Load minified JavaScript with defer for better performance -->
     <script src="script.min.js?v=2" defer></script>
-    <!-- IE11 polyfills and compatibility -->
-    <script nomodule>
-        // Load polyfills for older browsers using DOM manipulation instead of document.write
-        const polyfillScript = document.createElement('script');
-        polyfillScript.src = 'https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,es2015,es2016,es2017,es2018,es2019,es2020';
-        polyfillScript.async = true;
-        document.head.appendChild(polyfillScript);
-        
-        const cssVarsPonyfill = document.createElement('script');
-        cssVarsPonyfill.src = 'https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2/dist/css-vars-ponyfill.min.js';
-        cssVarsPonyfill.async = true;
-        document.head.appendChild(cssVarsPonyfill);
-    </script>
-
-    
     <script>
 // Toggle functionality for How It Works section and scroll-based header hiding
 
@@ -839,11 +832,17 @@ function setupHeroVideoControls() {
     playPauseBtn.addEventListener('click', function() {
         if (video.paused) {
             video.play();
-            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            const pauseIcon = document.createElement('i');
+            pauseIcon.className = 'fas fa-pause';
+            playPauseBtn.innerHTML = '';
+            playPauseBtn.appendChild(pauseIcon);
             playPauseBtn.setAttribute('aria-label', 'Pause');
         } else {
             video.pause();
-            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            const playIcon = document.createElement('i');
+            playIcon.className = 'fas fa-play';
+            playPauseBtn.innerHTML = '';
+            playPauseBtn.appendChild(playIcon);
             playPauseBtn.setAttribute('aria-label', 'Play');
         }
     });
@@ -852,10 +851,16 @@ function setupHeroVideoControls() {
     muteBtn.addEventListener('click', function() {
         video.muted = !video.muted;
         if (video.muted) {
-            muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            const muteIcon = document.createElement('i');
+            muteIcon.className = 'fas fa-volume-mute';
+            muteBtn.innerHTML = '';
+            muteBtn.appendChild(muteIcon);
             muteBtn.setAttribute('aria-label', 'Unmute');
         } else {
-            muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            const volumeIcon = document.createElement('i');
+            volumeIcon.className = 'fas fa-volume-up';
+            muteBtn.innerHTML = '';
+            muteBtn.appendChild(volumeIcon);
             muteBtn.setAttribute('aria-label', 'Mute');
         }
     });
@@ -1004,7 +1009,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </script>
     
     <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com https://player.vimeo.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https://fonts.gstatic.com; media-src 'self'; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://player.vimeo.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://cloud.umami.is; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https://fonts.gstatic.com https://img.shields.io; media-src 'self'; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://player.vimeo.com; connect-src 'self' https://status.remotelabs.education https://cloud.umami.is; object-src 'none'; base-uri 'self'; form-action 'self'">
     <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
@@ -1018,7 +1023,216 @@ document.addEventListener('DOMContentLoaded', function() {
     <link rel="prefetch" href="script.min.js?v=2" as="script">
     <link rel="prefetch" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" as="style" crossorigin>
 
-
+    <!-- Cookie Consent Banner - Sleek & GDPR/AP Compliant -->
+    <div id="cookie-consent" class="cookie-banner" role="alertdialog" aria-labelledby="cookie-title" aria-describedby="cookie-desc">
+        <div class="cookie-content">
+            <h3 id="cookie-title">Cookies & Analytics</h3>
+            <p id="cookie-desc">We use essential cookies for functionality and Umami for anonymous analytics. Umami respects your privacy and does not collect personal data.</p>
+            <div class="cookie-actions">
+                <button id="accept-cookies" class="cookie-button accept" aria-label="Accept cookies and analytics">Allow all</button>
+                <button id="decline-cookies" class="cookie-button decline" aria-label="Decline analytics cookies">Decline</button>
+            </div>
+            <a href="/privacy.html" class="cookie-link" aria-label="Read our privacy policy">Learn more</a>
+        </div>
+    </div>
+    
+    <style>
+        /* Sleek Cookie Banner */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 1.25rem 1.5rem;
+            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.08);
+            z-index: 10000;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            display: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .cookie-banner.visible {
+            display: block;
+            animation: slideUp 0.4s ease-out;
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .cookie-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .cookie-content h3 {
+            font-family: 'Poppins', 'Arial Black', Impact, sans-serif;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            letter-spacing: -0.02em;
+        }
+        .cookie-content p {
+            color: #4b5563;
+            line-height: 1.55;
+            margin-bottom: 1.25rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 0.95rem;
+        }
+        .cookie-actions {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .cookie-button {
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .cookie-button.accept {
+            background: #2563eb;
+            color: #fff;
+            border-color: #2563eb;
+        }
+        .cookie-button.accept:hover {
+            background: #1d4ed8;
+            border-color: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+        .cookie-button.decline {
+            background: transparent;
+            color: #4b5563;
+            border-color: #d1d5db;
+        }
+        .cookie-button.decline:hover {
+            background: rgba(0, 0, 0, 0.04);
+            border-color: #9ca3af;
+            color: #374151;
+            transform: translateY(-1px);
+        }
+        .cookie-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+        .cookie-link {
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 0.875rem;
+            display: inline-block;
+            margin-top: 0.5rem;
+            transition: color 0.2s ease;
+            position: relative;
+        }
+        .cookie-link:hover {
+            color: #2563eb;
+        }
+        .cookie-link:after {
+            content: ' →';
+            transition: transform 0.2s ease;
+        }
+        .cookie-link:hover:after {
+            transform: translateX(2px);
+        }
+        @media (max-width: 768px) {
+            .cookie-banner {
+                padding: 1rem;
+            }
+            .cookie-content h3 {
+                font-size: 1rem;
+            }
+            .cookie-content p {
+                font-size: 0.875rem;
+            }
+            .cookie-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .cookie-button {
+                width: 100%;
+                max-width: 180px;
+            }
+        }
+    </style>
+    
+    <script>
+        // Cookie consent functionality - GDPR/AP Compliant
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if consent exists and is not expired (1 year = 31536000000 ms)
+            const consent = localStorage.getItem('cookieConsent');
+            const consentData = consent ? JSON.parse(consent) : null;
+            const banner = document.getElementById('cookie-consent');
+            
+            if (!banner) return;
+            
+            // Show banner if no consent or consent is expired
+            if (!consentData || !consentData.value || !consentData.timestamp || 
+                (Date.now() - consentData.timestamp) > 31536000000) {
+                banner.classList.add('visible');
+                banner.setAttribute('aria-hidden', 'false');
+            }
+            
+            // Accept - store consent with timestamp and reload to apply
+            document.getElementById('accept-cookies')?.addEventListener('click', function() {
+                localStorage.setItem('cookieConsent', JSON.stringify({
+                    value: 'true',
+                    timestamp: Date.now()
+                }));
+                banner.classList.remove('visible');
+                banner.setAttribute('aria-hidden', 'true');
+                location.reload();
+            });
+            
+            // Decline - store decline with timestamp and reload to apply
+            document.getElementById('decline-cookies')?.addEventListener('click', function() {
+                localStorage.setItem('cookieConsent', JSON.stringify({
+                    value: 'false',
+                    timestamp: Date.now()
+                }));
+                banner.classList.remove('visible');
+                banner.setAttribute('aria-hidden', 'true');
+                location.reload();
+            });
+        });
+    </script>
+    
+    <!-- Load Umami analytics only after consent -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const consent = localStorage.getItem('cookieConsent');
+            const consentData = consent ? JSON.parse(consent) : null;
+            
+            // Only load Umami if consent was explicitly given (value: 'true')
+            if (consentData && consentData.value === 'true') {
+                const script = document.createElement('script');
+                script.defer = true;
+                script.src = 'https://cloud.umami.is/script.js';
+                script.setAttribute('data-website-id', '8d0377d8-c1de-4001-b844-27ec489392ce');
+                document.head.appendChild(script);
+            }
+        });
+    </script>
 
 </body>
 </html>
