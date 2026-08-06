@@ -19,7 +19,7 @@ All **12 security issues** identified in the audit have been fixed. The website 
 
 #### 1. ✅ CSP Missing Sources - FIXED
 **File:** `index.html`  
-**Change:** Updated CSP to include only necessary sources and added `https://img.shields.io` for status badge and `https://status.remotelabs.education` for connect-src
+**Change:** Updated CSP to include only necessary sources and added `https://img.shields.io` for status badge and `https://status.remote-labs.eu` for connect-src
 
 **Before:**
 ```html
@@ -30,7 +30,7 @@ script-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com http
 ```html
 script-src 'self' https://cdnjs.cloudflare.com
 img-src 'self' data: https://fonts.gstatic.com https://img.shields.io
-connect-src 'self' https://status.remotelabs.education
+connect-src 'self' https://status.remote-labs.eu
 ```
 
 **Impact:** CSP is now consistent with actual loaded resources
@@ -170,12 +170,12 @@ localStorage.setItem('cookieConsent', JSON.stringify({
 
 **Before:**
 ```html
-<a href="https://status.remotelabs.education" target="_blank" rel="noopener">
+<a href="https://status.remote-labs.eu" target="_blank" rel="noopener">
 ```
 
 **After:**
 ```html
-<a href="https://status.remotelabs.education" target="_blank" rel="noopener noreferrer">
+<a href="https://status.remote-labs.eu" target="_blank" rel="noopener noreferrer">
 ```
 
 **Impact:** Improved security for external links

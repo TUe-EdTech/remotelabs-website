@@ -540,7 +540,7 @@ deploy/
 - `https://cloud.umami.is` - Analytics (HTTPS)
 - `https://cdn.polyfill.io` - Polyfills (HTTPS)
 - `https://cdn.jsdelivr.net` - CDN (HTTPS)
-- `https://status.remotelabs.education` - Status page (HTTPS)
+- `https://status.remote-labs.eu` - Status page (HTTPS)
 - `https://www.tue.nl` - University (HTTPS)
 - `https://www.avans.nl` - University (HTTPS)
 - `https://www.mnext.nl` - Partner (HTTPS)
@@ -650,7 +650,7 @@ None identified
         https://fonts.googleapis.com; 
     img-src 'self' data: 
         https://fonts.gstatic.com 
-        https://status.remotelabs.education; 
+        https://status.remote-labs.eu; 
     media-src 'self'; 
     font-src 'self' https://fonts.gstatic.com; 
     frame-src 'self' https://player.vimeo.com; 
