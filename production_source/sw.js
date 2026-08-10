@@ -1,16 +1,19 @@
 // Basic Service Worker for Remote Labs Website
 // Version: Bump this number whenever you update assets to force cache invalidation
-const CACHE_NAME = 'remotelabs-v3';
+const CACHE_NAME = 'remotelabs-v4';
 
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
     '/styles.min.css',
     '/script.min.js',
-    
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
-    'https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap',
-    'https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap'
+
+    '/assets/fonts/fonts.css',
+    '/assets/fonts/lato-400-latin.woff2',
+    '/assets/fonts/lato-700-latin.woff2',
+    '/assets/fonts/poppins-700-latin.woff2',
+    '/assets/fontawesome/css/all.min.css',
+    '/assets/fontawesome/webfonts/fa-solid-900.woff2'
 ];
 
 // Install event - cache assets and activate immediately
