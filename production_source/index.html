@@ -3,12 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <!--
+      Content-Security-Policy is only honoured when delivered via <meta> inside <head>.
+      'unsafe-inline' in script-src is required because the page uses inline
+      scripts and onclick handlers; to tighten this, move that JS into external files
+      and drop 'unsafe-inline'. The headers that browsers ignore as meta tags
+      (X-Frame-Options, X-Content-Type-Options, Referrer-Policy,
+      Strict-Transport-Security, Permissions-Policy) MUST be sent as real HTTP
+      response headers - see deploy/.htaccess (or the TU/e web server / proxy config).
+    -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cloud.umami.is; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https://fonts.gstatic.com https://img.shields.io; media-src 'self'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; frame-src 'self' https://player.vimeo.com; connect-src 'self' https://status.remote-labs.eu https://cloud.umami.is; object-src 'none'; base-uri 'self'; form-action 'self'">
     <meta name="description" content="Remote Labs - 24/7 Access to Physical Lab Experiments at Eindhoven University of Technology">
-    <!-- Cache Control: Prevent browser caching of HTML -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <meta name="theme-color" content="#2563eb">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://remotelabs.tue.nl/">
+
+    <!-- Open Graph / social sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Remote Labs">
+    <meta property="og:title" content="Remote Labs - 24/7 Access to Physical Lab Experiments">
+    <meta property="og:description" content="Enabling students and professionals to conduct real physical lab experiments remotely, 24/7, at Eindhoven University of Technology.">
+    <meta property="og:url" content="https://remotelabs.tue.nl/">
+    <meta property="og:image" content="https://remotelabs.tue.nl/assets/videos/posterimagevideo.jpeg">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Remote Labs - 24/7 Access to Physical Lab Experiments">
+    <meta name="twitter:description" content="Enabling students and professionals to conduct real physical lab experiments remotely, 24/7, at Eindhoven University of Technology.">
+    <meta name="twitter:image" content="https://remotelabs.tue.nl/assets/videos/posterimagevideo.jpeg">
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Remote Labs",
+      "url": "https://remotelabs.tue.nl/",
+      "logo": "https://remotelabs.tue.nl/icon-512x512.svg",
+      "description": "24/7 access to physical lab experiments, enabling students and professionals to conduct real lab experiments remotely.",
+      "parentOrganization": {
+        "@type": "CollegeOrUniversity",
+        "name": "Eindhoven University of Technology",
+        "url": "https://www.tue.nl/en/"
+      },
+      "email": "k.m.a.aarts@tue.nl",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Den Dolech 2",
+        "postalCode": "5612 AZ",
+        "addressLocality": "Eindhoven",
+        "addressCountry": "NL"
+      }
+    }
+    </script>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
@@ -21,32 +67,36 @@
     <link rel="icon" type="image/svg+xml" sizes="192x192" href="icon-192x192.svg">
     <link rel="icon" type="image/svg+xml" sizes="512x512" href="icon-512x512.svg">
     <title>Remote Labs - 24/7 Access to Physical Lab Experiments</title>
-    <link rel="preload" href="styles.css" as="style">
+    <script>
+      // Email obfuscation function
+      function getEmail(subject) {
+        const user = 'k.m.a.aarts';
+        const domain = 'tue.nl';
+        const email = user + '@' + domain;
+        return subject ? email + '?subject=' + encodeURIComponent(subject) : email;
+      }
+    </script>
+    <link rel="preload" href="styles.min.css?v=3" as="style">
     <link rel="preload" href="script.min.js?v=3" as="script">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" crossorigin="anonymous"
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" crossorigin="anonymous"
           integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" referrerpolicy="no-referrer">
-    <!-- Preload workflow videos for faster switching -->
+    <!-- Preload only the first workflow video; the others load on demand when selected -->
     <link rel="preload" href="assets/videos/book-experiment.mp4" as="fetch" crossorigin="anonymous">
-    <link rel="preload" href="assets/videos/conduct-experiment.mp4" as="fetch" crossorigin="anonymous">
-    <link rel="preload" href="assets/videos/review-results.mp4" as="fetch" crossorigin="anonymous">
     
     <style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Lato','Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#000;background:#fff;-webkit-text-size-adjust:100%}.main-header{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1);padding:1.5rem 0;position:fixed;width:100%;top:0;z-index:1000;transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);transform:translateY(0)}.main-header.hidden{transform:translateY(-100%)}.container{width:100%;max-width:1200px;margin:0 auto;padding:0 15px}.logo{display:flex;align-items:center;gap:.75rem}.logo-link{text-decoration:none;color:inherit;cursor:pointer}.logo-text{font-family:'Poppins','Arial Black',Impact,sans-serif;font-weight:700;font-size:1.5rem;color:var(--black);text-decoration:none}.cta-button{background:#000;color:#fff;padding:.85rem 1.5rem;border-radius:6px;text-decoration:none;font-weight:700;font-size:.95rem}.header-content{display:flex;justify-content:space-between;align-items:center}.hero{padding:120px 0 80px;text-align:center}.hero-title{font-size:2.8rem;margin-bottom:1.2rem;line-height:1.1}.hero-subtitle{font-size:1.1rem;max-width:90%;margin:0 auto 2rem;line-height:1.5}.hero-cta-button{background:#2563eb;color:#fff;padding:.9rem 1.8rem;border-radius:8px;text-decoration:none;font-weight:700;margin-bottom:1.5rem;display:inline-block;font-size:1rem}@media (max-width:768px){.container{padding:0 12px}.hero{padding:100px 0 60px}.hero-title{font-size:2.2rem}.hero-subtitle{font-size:1rem}.cta-button,.hero-cta-button{width:100%;padding:1rem;font-size:1rem}}@media (max-width:480px){.hero-title{font-size:1.8rem}.container{padding:0 10px}}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Lato','Helvetica Neue',Arial,sans-serif;line-height:1.6;color:#000;background:#fff;-webkit-text-size-adjust:100%}.main-header{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1);padding:1.5rem 0;position:fixed;width:100%;top:0;z-index:1000;transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);transform:translateY(0)}.main-header.hidden{transform:translateY(-100%)}.container{width:100%;max-width:1200px;margin:0 auto;padding:0 15px}.logo{display:flex;align-items:center;gap:.75rem}.logo-link{text-decoration:none;color:inherit;cursor:pointer}.logo-text{font-family:'Poppins','Arial Black',Impact,sans-serif;font-weight:700;font-size:1.5rem;color:var(--black);text-decoration:none}.cta-button{background:#000;color:#fff;padding:.85rem 1.5rem;border-radius:6px;text-decoration:none;font-weight:700;font-size:.95rem}.hero{padding:120px 0 80px;text-align:center}.hero-title{font-size:2.8rem;margin-bottom:1.2rem;line-height:1.1}.hero-subtitle{font-size:1.1rem;max-width:90%;margin:0 auto 2rem;line-height:1.5}.hero-cta-button{background:#2563eb;color:#fff;padding:.9rem 1.8rem;border-radius:8px;text-decoration:none;font-weight:700;margin-bottom:1.5rem;display:inline-block;font-size:1rem}@media (max-width:768px){.container{padding:0 12px}.hero{padding:100px 0 60px}.hero-title{font-size:2.2rem}.hero-subtitle{font-size:1rem}.cta-button,.hero-cta-button{width:100%;padding:1rem;font-size:1rem}}@media (max-width:480px){.hero-title{font-size:1.8rem}.container{padding:0 10px}}
 
 /* Mobile Optimization - Phone Version */
-@media (max-width:480px){.hero-title{font-size:1.8rem}.container{padding:0 10px}}
-
-/* Mobile Optimization - Phone Version */
-@media (max-width:480px){.header-content{flex-direction:row;justify-content:space-between;align-items:center;gap:1rem}.logo{justify-content:flex-start}.logo-text{font-size:1rem}.cta-button{width:auto;min-width:140px;padding:0.5rem 0.8rem;font-size:0.8rem;height:36px}.hero{padding:140px 0 60px;margin-top:70px}.hero-title{font-size:1.6rem;line-height:1.2}.hero-subtitle{font-size:0.95rem;line-height:1.5}.video-embed-wrapper{padding:62.5% 0 0 0}.workflow-steps{grid-template-columns:1fr}.toggle-container{flex-direction:column}.toggle-btn{width:100%;justify-content:center}.workflow-step{padding:1.5rem}.step-icon{flex-direction:row;align-items:center}.step-number{margin-top:0}.footer-section{margin-bottom:2rem}}
+@media (max-width:480px){.header-content{flex-direction:row;justify-content:space-between;align-items:center;gap:1rem}.logo{justify-content:flex-start}.logo-text{font-size:1rem}.cta-button{width:auto;min-width:140px;padding:0.5rem 0.8rem;font-size:0.8rem;height:36px}.hero{padding:140px 0 60px;margin-top:70px}.hero-title{font-size:1.6rem;line-height:1.2}.hero-subtitle{font-size:0.95rem;line-height:1.5}.video-embed-wrapper{padding:62.5% 0 0 0}.workflow-steps{grid-template-columns:1fr}.workflow-step{padding:1.5rem}.step-icon{flex-direction:row;align-items:center}.step-number{margin-top:0}.footer-section{margin-bottom:2rem}}
 
 /* How It Works Section Styles - Aligned with site design */
-.how-it-works{padding:80px 0;background:#f8faff}.section-header{text-align:center;margin-bottom:2rem}.section-title{font-family:'Poppins','Poppins Fallback',sans-serif;font-weight:700;font-size:2.2rem;color:#000;margin-bottom:1rem}.section-subtitle{font-size:1.1rem;color:#666;max-width:800px;margin:0 auto 2rem;line-height:1.6}.toggle-container{display:flex;justify-content:center;gap:1rem;margin:2rem 0;flex-wrap:wrap}.toggle-btn{background:transparent;border:2px solid #2563eb;color:#2563eb;padding:12px 24px;border-radius:25px;cursor:pointer;transition:all 0.3s ease;font-weight:600;display:flex;align-items:center;gap:8px}.toggle-btn:hover{background:rgba(37,99,235,0.1);border-color:#1d4ed8}.toggle-btn.active{background:#2563eb;color:#fff;border-color:#2563eb}.toggle-btn i{font-size:16px}.workflow-section{display:none}.workflow-section.active{display:block}.workflow-header{text-align:center;margin-bottom:3rem}.workflow-header h4{font-family:'Poppins','Poppins Fallback',sans-serif;font-weight:700;color:#2563eb;font-size:1.8rem;margin-bottom:0.5rem}.workflow-header p{color:#666;font-size:1.1rem}.workflow-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem;margin-top:2rem}.workflow-step{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.05);transition:all 0.3s ease;border:1px solid #e5e7eb}.workflow-step:hover{transform:translateY(-5px);box-shadow:0 10px 15px rgba(0,0,0,0.1)}.step-icon{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}.step-icon i{font-size:2rem;color:#2563eb}.step-number{background:#2563eb;color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold}.workflow-step h5{font-family:'Poppins','Poppins Fallback',sans-serif;font-weight:700;color:#333;font-size:1.3rem;margin-bottom:1rem}.workflow-step p{color:#666;line-height:1.6}
+.how-it-works{padding:80px 0;background:#f8faff}.section-header{text-align:center;margin-bottom:2rem}.section-title{font-family:'Poppins','Poppins Fallback',sans-serif;font-weight:700;font-size:2.2rem;color:#000;margin-bottom:1rem}.section-subtitle{font-size:1.1rem;color:#666;max-width:800px;margin:0 auto 2rem;line-height:1.6}.workflow-section{display:none}.workflow-section.active{display:block}.workflow-header{text-align:center;margin-bottom:3rem}.workflow-header h2{font-family:'Poppins','Poppins Fallback',sans-serif;font-weight:700;color:#2563eb;font-size:1.8rem;margin-bottom:0.5rem}.workflow-header p{color:#666;font-size:1.1rem}.workflow-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem;margin-top:2rem}.workflow-step{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.05);transition:all 0.3s ease;border:1px solid #e5e7eb}.workflow-step:hover{transform:translateY(-5px);box-shadow:0 10px 15px rgba(0,0,0,0.1)}.step-icon{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}.step-icon i{font-size:2rem;color:#2563eb}.step-number{background:#2563eb;color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold}.workflow-step h3{font-family:'Poppins','Poppins Fallback',sans-serif;font-weight:700;color:#333;font-size:1.3rem;margin-bottom:1rem}.workflow-step p{color:#666;line-height:1.6}
 
-@media (max-width:768px){.how-it-works{padding:60px 0}.workflow-steps{grid-template-columns:1fr}.toggle-container{flex-direction:column;align-items:center}}
+@media (max-width:768px){.how-it-works{padding:60px 0}.workflow-steps{grid-template-columns:1fr}}
     </style>
     
     <link rel="stylesheet" href="styles.min.css?v=3" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="styles.css"></noscript>
+    <noscript><link rel="stylesheet" href="styles.min.css?v=3"></noscript>
     
     <!-- Load fonts with display=swap for better performance -->
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet" crossorigin="anonymous">
@@ -55,16 +105,8 @@
 @font-face{font-family:'Lato Fallback';src:local('Arial'),local('Helvetica Neue'),local('Helvetica'),local('sans-serif')}@font-face{font-family:'Poppins Fallback';src:local('Arial Black'),local('Impact'),local('sans-serif');font-weight:700}
     </style>
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <style>
-        @font-face {
-            font-family: 'Gilroy Bold';
-            src: url('https://fonts.cdnfonts.com/css/gilroy-bold') format('woff2');
-            font-weight: 700;
-            font-style: normal;
-            font-display: swap;
-        }
-        
         /* Modern Toggle Switch Styles */
         .toggle-switch-container {
             display: flex;
@@ -318,7 +360,7 @@
             font-weight: 600;
         }
         
-        .workflow-step h5 {
+        .workflow-step h3 {
             font-family: 'Poppins', 'Poppins Fallback', sans-serif;
             font-weight: 700;
             font-size: 1.2rem;
@@ -333,7 +375,7 @@
             font-size: 1rem;
         }
         
-        .workflow-step.active-step h5 {
+        .workflow-step.active-step h3 {
             color: #2563eb;
         }
         
@@ -359,23 +401,6 @@
         
         /* Mobile-specific optimizations */
         @media (max-width: 480px) {
-            /* Mobile navigation */
-            .mobile-nav {
-                display: flex;
-                background: #fff;
-                padding: 8px 0;
-                border-bottom: 1px solid #e5e7eb;
-                position: fixed;
-                top: 75px;
-                left: 0;
-                right: 0;
-                z-index: 999;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                transform: translateY(0);
-            }
-            
             /* Partner logos mobile */
             .partner-logos {
                 gap: 1rem;
@@ -383,11 +408,6 @@
             
             .partner-logo {
                 height: 30px;
-            }
-        }
-            
-            .mobile-nav.hidden {
-                transform: translateY(-100%);
             }
             
             /* Toggle switch mobile */
@@ -407,40 +427,10 @@
                 align-items: center;
                 justify-content: center;
             }
-            
-            .mobile-nav .container {
-                display: flex;
-                gap: 1rem;
-                padding: 0 12px;
-            }
-            
-            .mobile-nav-link {
-                white-space: nowrap;
-                padding: 8px 12px;
-                color: #2563eb;
-                text-decoration: none;
-                border-radius: 6px;
-                font-weight: 600;
-                font-size: 0.9rem;
-            }
-            
-            .mobile-nav-link:hover {
-                background: rgba(37, 99, 235, 0.1);
-            }
-            
-            .mobile-nav-cta {
-                background: #2563eb;
-                color: white;
-                padding: 8px 16px;
-                border-radius: 6px;
-                text-decoration: none;
-                font-weight: 700;
-                font-size: 0.9rem;
-                white-space: nowrap;
-            }
+        }
             
             /* Optimize touch targets */
-            .cta-button, .hero-cta-button, .toggle-btn {
+            .cta-button, .hero-cta-button {
                 min-height: 48px;
                 padding: 12px 16px;
             }
@@ -487,7 +477,7 @@
                     margin-bottom: 1rem;
                 }
                 
-                .workflow-step h5 {
+                .workflow-step h3 {
                     font-size: 1.1rem;
                     margin-bottom: 0.75rem;
                 }
@@ -548,15 +538,14 @@
 
     
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <div id="aria-live" class="aria-live aria-live-polite" aria-live="polite"></div>
     
     <!-- Header Section - Scroll-aware -->
     <header role="banner" class="main-header">
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <a href="#" class="logo-link" aria-label="Go to top of page">
-                        <h1 class="logo-text">Remote Labs</h1>
+                    <a href="#main-content" class="logo-link" aria-label="Go to top of page">
+                        <span class="logo-text">Remote Labs</span>
                     </a>
                 </div>
                 <a href="https://remotelabs.tue.nl" class="cta-button header-cta" aria-label="Go to Remote Labs platform">Go to Remote Labs</a>
@@ -570,8 +559,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h2 class="hero-title">24/7 Access to Physical Lab Experiments, Anywhere</h2>
-        <h1 class="sr-only">Remote Labs - 24/7 Access to Physical Lab Experiments</h1>
+            <h1 class="hero-title">24/7 Access to Physical Lab Experiments, Anywhere</h1>
             <p class="hero-subtitle">Enabling students and professionals to conduct real lab experiments remotely</p>
             <a href="#how-it-works" class="hero-cta-button" aria-label="Explore how Remote Labs works">Explore Features</a>
 
@@ -597,61 +585,6 @@
 
     </section>
 
-    <!-- Team Section - Hidden -->
-    <section class="team hidden-section" id="team">
-        <div class="container">
-            <h3 class="section-title">Meet Our Team</h3>
-            <p class="section-subtitle">Get to know the dedicated professionals behind Remote Labs who make 24/7 access to physical experiments possible</p>
-            <div class="team-grid">
-                <div class="team-member">
-                    <div class="team-photo-container">
-                        
-                        <div class="team-photo-overlay">
-                            <h4 style="color: white; margin: 0; font-size: 1.1rem;">John Smith</h4>
-                        </div>
-                    </div>
-                    <h4>John Smith</h4>
-                    <p class="team-role">Project Lead</p>
-                    <div class="team-social">
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div class="team-photo-container">
-                        
-                        <div class="team-photo-overlay">
-                            <h4 style="color: white; margin: 0; font-size: 1.1rem;">Emily Davis</h4>
-                        </div>
-                    </div>
-                    <h4>Emily Davis</h4>
-                    <p class="team-role">Technical Director</p>
-                    <div class="team-social">
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div class="team-photo-container">
-                        
-                        <div class="team-photo-overlay">
-                            <h4 style="color: white; margin: 0; font-size: 1.1rem;">Robert Wilson</h4>
-                        </div>
-                    </div>
-                    <h4>Robert Wilson</h4>
-                    <p class="team-role">Educational Specialist</p>
-                    <div class="team-social">
-                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- How It Works Section -->
     <section class="how-it-works" id="how-it-works">
         <div class="container">
@@ -672,7 +605,7 @@
             <!-- Students Section -->
             <div class="workflow-section active" id="students">
                 <div class="workflow-header">
-                    <h4 class="benefits-title">Student Workflow</h4>
+                    <h2 class="benefits-title">Student Workflow</h2>
                     <p class="benefits-intro">Simple 3-step process to conduct experiments remotely at your own pace</p>
                 </div>
                 
@@ -682,7 +615,7 @@
                             <i class="fas fa-calendar-check"></i>
                             <span class="step-number">1</span>
                         </div>
-                        <h5>Book Experiment Timeslot</h5>
+                        <h3>Book Experiment Timeslot</h3>
                         <p>Browse available experiments and reserve your preferred time slot through our intuitive scheduling system</p>
                     </div>
                     
@@ -691,7 +624,7 @@
                             <i class="fas fa-microscope"></i>
                             <span class="step-number">2</span>
                         </div>
-                        <h5>Conduct Experiment</h5>
+                        <h3>Conduct Experiment</h3>
                         <p>Access your reserved experiment and perform the lab work remotely using our interactive interface</p>
                     </div>
                     
@@ -700,7 +633,7 @@
                             <i class="fas fa-chart-line"></i>
                             <span class="step-number">3</span>
                         </div>
-                        <h5>Review Results</h5>
+                        <h3>Review Results</h3>
                         <p>Analyze your experiment data and results at your own pace, in your own time</p>
                     </div>
                 </div>
@@ -719,7 +652,7 @@
             <!-- Organizational Benefits Section -->
             <div class="workflow-section" id="organizations">
                 <div class="workflow-header">
-                    <h4 class="benefits-title">Organizational Benefits</h4>
+                    <h2 class="benefits-title">Organizational Benefits</h2>
                     <p class="benefits-intro">Transform your laboratory operations and expand your research capabilities</p>
                 </div>
                 
@@ -729,7 +662,7 @@
                             <i class="fas fa-university"></i>
                             <span class="step-number">1</span>
                         </div>
-                        <h5>Increased Lab Access</h5>
+                        <h3>Increased Lab Access</h3>
                         <p>Provide lab access to more users, courses, and experiments without physical space constraints</p>
                     </div>
                     
@@ -738,7 +671,7 @@
                             <i class="fas fa-chart-line"></i>
                             <span class="step-number">2</span>
                         </div>
-                        <h5>Scalability</h5>
+                        <h3>Scalability</h3>
                         <p>Easily scale lab access and resources to accommodate growing numbers of users and experiments</p>
                     </div>
                     
@@ -747,7 +680,7 @@
                             <i class="fas fa-handshake"></i>
                             <span class="step-number">3</span>
                         </div>
-                        <h5>Collaboration & Partnerships</h5>
+                        <h3>Collaboration & Partnerships</h3>
                         <p>Facilitate seamless collaboration between institutions, researchers, and industry partners worldwide</p>
                     </div>
                 </div>
@@ -761,7 +694,7 @@
             <div class="contact-content">
                 <!-- Value Proposition with Visual Emphasis -->
                 <div class="value-prop">
-                    <h4 class="benefits-title" id="benefits">Key Benefits of Remote Labs</h4>
+                    <h2 class="benefits-title" id="benefits">Key Benefits of Remote Labs</h2>
                     <p class="benefits-intro">Transform your research and education with our cutting-edge platform:</p>
                 </div>
                 
@@ -771,7 +704,7 @@
                         <div class="benefit-icon">
                             <i class="fas fa-clock"></i>
                         </div>
-                        <h5>24/7 Access</h5>
+                        <h3>24/7 Access</h3>
                         <p>Conduct physical lab experiments anytime, from anywhere in the world</p>
                     </div>
                     
@@ -779,7 +712,7 @@
                         <div class="benefit-icon">
                             <i class="fas fa-calendar-alt"></i>
                         </div>
-                        <h5>Easy Booking</h5>
+                        <h3>Easy Booking</h3>
                         <p>Simple interface for scheduling and managing your experiments</p>
                     </div>
                     
@@ -787,7 +720,7 @@
                         <div class="benefit-icon">
                             <i class="fas fa-laptop"></i>
                         </div>
-                        <h5>Remote Flexibility</h5>
+                        <h3>Remote Flexibility</h3>
                         <p>Perform experiments without physical lab constraints</p>
                     </div>
                 </div>
@@ -801,16 +734,16 @@
                         </p>
                         <div class="partner-logos">
                             <a href="https://www.tue.nl/en/" target="_blank" rel="noopener noreferrer" aria-label="Visit Eindhoven University of Technology">
-                                <img src="assets/images/logos/partner-logos/TUe.png" alt="Eindhoven University of Technology" class="partner-logo" width="120" height="40">
+                                <img src="assets/Partner logos/TUe.png" alt="Eindhoven University of Technology" class="partner-logo" width="120" height="40">
                             </a>
                             <a href="https://www.avans.nl/" target="_blank" rel="noopener noreferrer" aria-label="Visit Avans University">
-                                <img src="assets/images/logos/partner-logos/avans.png" alt="Avans University" class="partner-logo" width="120" height="40">
+                                <img src="assets/Partner logos/avans.png" alt="Avans University" class="partner-logo" width="120" height="40">
                             </a>
                             <a href="https://www.tue.nl/en/research/institutes/eindhoven-institute-for-renewable-energy-systems/research" target="_blank" rel="noopener noreferrer" aria-label="Visit EIRES">
-                                <img src="assets/images/logos/partner-logos/EIRES.jpg" alt="EIRES" class="partner-logo" width="120" height="40">
+                                <img src="assets/Partner logos/EIRES.jpg" alt="EIRES" class="partner-logo" width="120" height="40">
                             </a>
                             <a href="https://www.mnext.nl/" target="_blank" rel="noopener noreferrer" aria-label="Visit MNext">
-                                <img src="assets/images/logos/partner-logos/Mnext.png" alt="MNext" class="partner-logo" width="120" height="40">
+                                <img src="assets/Partner logos/Mnext.png" alt="MNext" class="partner-logo" width="120" height="40">
                             </a>
                         </div>
                     </div>
@@ -821,10 +754,10 @@
                     <p class="cta-intro">Interested in exploring Remote Labs for your institution or organization?</p>
                     
                     <div class="contact-actions">
-                        <a href="mailto:k.m.a.aarts@tue.nl?subject=Remote%20Labs%20Interest" class="contact-button primary">
+                        <a href="#" onclick="window.location.href='mailto:'+getEmail('Remote Labs Inquiry');return false;" class="contact-button primary">
                             <i class="fas fa-envelope"></i> Contact Us
                         </a>
-                        <a href="mailto:k.m.a.aarts@tue.nl?subject=Demo%20request%20Remote%20Labs" class="contact-button demo-button">
+                        <a href="#" onclick="window.location.href='mailto:'+getEmail('Demo request Remote Labs');return false;" class="contact-button demo-button">
                             <i class="fas fa-calendar-alt"></i> Book a Demo
                         </a>
                     </div>
@@ -841,22 +774,22 @@
         <div class="footer-wrapper">
             <div class="footer-main">
                 <div class="footer-section">
-                    <h4>Quick Links</h4>
+                    <h2>Quick Links</h2>
                     <ul>
-                        <li><a href="#">Home</a></li>
+                        <li><a href="#main-content">Home</a></li>
                         <li><a href="#contact">Benefits</a></li>
                         <li><a href="#contact">Contact</a></li>
                         <li><a href="https://remotelabs.tue.nl">Go to Remote Labs</a></li>
-                        <br>
-                        <div class="status-badge-container">
-                            <a href="https://status.remote-labs.eu" target="_blank" rel="noopener">
-                                <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fstatus.remote-labs.eu%2Fshield-badges%2Fstatus.json&style=for-the-badge" loading="lazy" alt="Remote Labs system status" class="status-badge">
-                            </a>
-                        </div>
+                    </ul>
+                    <div class="status-badge-container">
+                        <a href="https://status.remote-labs.eu" target="_blank" rel="noopener noreferrer">
+                            <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fstatus.remote-labs.eu%2Fshield-badges%2Fstatus.json&style=for-the-badge" loading="lazy" alt="Remote Labs system status" class="status-badge">
+                        </a>
+                    </div>
                 </div>
                 
                 <div class="footer-section">
-                    <h4>Publications</h4>
+                    <h2>Publications</h2>
                     <div class="publications">
                              <!-- Publication 1: Edit title, URL, journal, and year below -->
                         <div class="publication-item">
@@ -899,22 +832,22 @@
                 </div>
                 
                 <div class="footer-section">
-                    <h4>Contact Us</h4>
+                    <h2>Contact Us</h2>
                     <div>
                         <p>Eindhoven University of Technology</p>
                         <p>Den Dolech 2, 5612 AZ Eindhoven</p>
-                        <p><a href="mailto:k.m.a.aarts@tue.nl?subject=Remote%20Labs%20Inquiry" style="color: #2563eb;"><i class="fas fa-envelope"></i></a></p>
+                        <p><a href="#" onclick="window.location.href='mailto:'+getEmail('Remote Labs Inquiry');return false;" style="color: #2563eb;" aria-label="Email Remote Labs"><i class="fas fa-envelope"></i></a></p>
                     </div>
                 </div>
                 
                 <div class="footer-section">
-                    <h3>Remote Labs</h3>
+                    <h2>Remote Labs</h2>
                     <p>24/7 Access to Physical Lab Experiments, Anywhere</p>
                     <p>&copy; 2026 Remote Labs. All rights reserved.</p>
                     <p style="margin-top: 1rem;">
                         Part of<br>
                         <a href="https://www.tue.nl/en/" target="_blank" rel="noopener noreferrer" aria-label="Visit Eindhoven University of Technology">
-                            <img src="assets/images/logos/TUe-logo-descriptor-line-scarlet-S.png" alt="TU/e - Eindhoven University of Technology" style="width: 150px; height: auto; margin-top: 0.5rem;">
+                            <img src="assets/TUe-logo-descriptor-line-scarlet-S.png" alt="TU/e - Eindhoven University of Technology" style="width: 150px; height: auto; margin-top: 0.5rem;">
                         </a>
                     </p>
                 </div>
@@ -924,22 +857,6 @@
 
     <!-- Load minified JavaScript with defer for better performance -->
     <script src="script.min.js?v=3" defer></script>
-    <!-- IE11 polyfills and compatibility -->
-    <script nomodule>
-        // Load polyfills for older browsers using DOM manipulation instead of document.write
-        // Note: cdn.polyfill.io shut down Feb 2025, using community-run polyfill.io
-        const polyfillScript = document.createElement('script');
-        polyfillScript.src = 'https://polyfill.io/v3/polyfill.min.js?features=default,es6,es2015,es2016,es2017,es2018,es2019,es2020';
-        polyfillScript.async = true;
-        document.head.appendChild(polyfillScript);
-        
-        const cssVarsPonyfill = document.createElement('script');
-        cssVarsPonyfill.src = 'https://cdn.jsdelivr.net/npm/css-vars-ponyfill@3/dist/css-vars-ponyfill.min.js';
-        cssVarsPonyfill.async = true;
-        document.head.appendChild(cssVarsPonyfill);
-    </script>
-
-    
     <script>
 // Toggle functionality for How It Works section and scroll-based header hiding
 
@@ -958,11 +875,17 @@ function setupHeroVideoControls() {
     playPauseBtn.addEventListener('click', function() {
         if (video.paused) {
             video.play();
-            playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            const pauseIcon = document.createElement('i');
+            pauseIcon.className = 'fas fa-pause';
+            playPauseBtn.innerHTML = '';
+            playPauseBtn.appendChild(pauseIcon);
             playPauseBtn.setAttribute('aria-label', 'Pause');
         } else {
             video.pause();
-            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            const playIcon = document.createElement('i');
+            playIcon.className = 'fas fa-play';
+            playPauseBtn.innerHTML = '';
+            playPauseBtn.appendChild(playIcon);
             playPauseBtn.setAttribute('aria-label', 'Play');
         }
     });
@@ -971,25 +894,28 @@ function setupHeroVideoControls() {
     muteBtn.addEventListener('click', function() {
         video.muted = !video.muted;
         if (video.muted) {
-            muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            const muteIcon = document.createElement('i');
+            muteIcon.className = 'fas fa-volume-mute';
+            muteBtn.innerHTML = '';
+            muteBtn.appendChild(muteIcon);
             muteBtn.setAttribute('aria-label', 'Unmute');
         } else {
-            muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            const volumeIcon = document.createElement('i');
+            volumeIcon.className = 'fas fa-volume-up';
+            muteBtn.innerHTML = '';
+            muteBtn.appendChild(volumeIcon);
             muteBtn.setAttribute('aria-label', 'Mute');
         }
     });
     
     // Initialize: Start muted for autoplay compatibility, but allow unmuting
     video.muted = true;
-    console.log('✅ Hero video controls initialized (starts muted, user can unmute)');
 }
 
 // Simple video switching - just change the source and reload
 function setupVideoSwitching() {
     const steps = document.querySelectorAll('.workflow-step[data-video]');
     const video = document.getElementById('workflow-video');
-    
-    console.log('Video switching setup - steps found:', steps.length, 'video element:', !!video);
     
     if (!steps.length || !video) {
         console.error('Video setup failed - elements not found');
@@ -1001,8 +927,7 @@ function setupVideoSwitching() {
             const videoId = this.getAttribute('data-video');
             const videoPath = 'assets/videos/' + videoId + '.mp4';
             
-            console.log('Switching to video:', videoId);
-            
+
             // Pause and reset current video
             video.pause();
             video.currentTime = 0;
@@ -1021,10 +946,8 @@ function setupVideoSwitching() {
             };
             
             video.oncanplaythrough = function() {
-                console.log('Video ready to play:', videoId);
                 // Try to autoplay
                 video.play().catch(e => {
-                    console.log('Autoplay blocked, click video to play');
                 });
             };
             
@@ -1036,8 +959,6 @@ function setupVideoSwitching() {
     
     // First step active by default
     steps[0].classList.add('active-step');
-    
-    console.log('✅ Video switching initialized successfully');
 }
 
 // Initialize video switching when DOM is ready
@@ -1054,20 +975,10 @@ document.addEventListener('DOMContentLoaded', function() {
         video.load();
         video.oncanplaythrough = function() {
             video.play().catch(e => {
-                console.log('Autoplay blocked for book-experiment video, requires user interaction');
+                // Autoplay blocked, user interaction required
             });
         };
     }
-    
-    // Add debug info to console
-    console.log('🎥 Video switching status:');
-    console.log('- Function called: ✅');
-    console.log('- Looking for elements with [data-video] attribute');
-    console.log('- Video element ID: workflow-video');
-    console.log('- Expected video paths:');
-    console.log('  - assets/videos/book-experiment.mp4');
-    console.log('  - assets/videos/conduct-experiment.mp4');
-    console.log('  - assets/videos/review-results.mp4');
     
     // Set up hero video controls
     setupHeroVideoControls();
@@ -1086,50 +997,14 @@ document.addEventListener('DOMContentLoaded', function() {
             } else t = !1
         })
     });
-    const e = document.querySelector('.back-to-top');
-    e && e.addEventListener('click', function(o) {
-        if (t) return;
-        t = !0, o.preventDefault();
-        try {
-            window.scrollTo({ top: 0, behavior: 'smooth' }), setTimeout(() => { t = !1 }, 1e3)
-        } catch (e) {
-            window.scrollTo(0, 0), t = !1
-        }
-    });
+
     
-    // How It Works toggle functionality
-    const toggleContainer = document.querySelector('.toggle-container');
-    if (toggleContainer) {
-        // Video switching is already set up in DOMContentLoaded
-        const toggleButtons = document.querySelectorAll('.toggle-btn');
-        const workflowSections = document.querySelectorAll('.workflow-section');
-        
-        toggleButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const target = this.getAttribute('data-target');
-                
-                // Update button states
-                toggleButtons.forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Update section visibility
-                workflowSections.forEach(section => {
-                    if (section.id === target) {
-                        section.classList.add('active');
-                    } else {
-                        section.classList.remove('active');
-                    }
-                });
-            });
-        });
-    }
-    
-    // Scroll hide/show functionality for both desktop and mobile
+
+    // Scroll hide/show functionality
     const mainHeader = document.querySelector('.main-header');
-    const mobileNav = document.querySelector('.mobile-nav');
     const workflowToggle = document.getElementById('workflow-toggle');
     
-    if (mainHeader || mobileNav) {
+    if (mainHeader) {
         let lastScrollPosition = window.pageYOffset;
         let isScrollingDown = false;
         
@@ -1139,15 +1014,13 @@ document.addEventListener('DOMContentLoaded', function() {
             if (currentScrollPosition > lastScrollPosition && currentScrollPosition > 100) {
                 // Scrolling down - hide elements
                 if (!isScrollingDown) {
-                    if (mainHeader) mainHeader.classList.add('hidden');
-                    if (mobileNav) mobileNav.classList.add('hidden');
+                    mainHeader.classList.add('hidden');
                     isScrollingDown = true;
                 }
             } else {
                 // Scrolling up - show elements
                 if (isScrollingDown) {
-                    if (mainHeader) mainHeader.classList.remove('hidden');
-                    if (mobileNav) mobileNav.classList.remove('hidden');
+                    mainHeader.classList.remove('hidden');
                     isScrollingDown = false;
                 }
             }
@@ -1174,53 +1047,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    console.log('Optimized smooth scrolling, toggle functionality, and scroll-based navigation initialized');
+
 });
     </script>
     
-    <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com https://player.vimeo.com https://polyfill.io https://cdn.jsdelivr.net https://cloud.umami.is; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https://fonts.gstatic.com https://img.shields.io; media-src 'self'; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://player.vimeo.com; connect-src 'self' https://status.remote-labs.eu https://cloud.umami.is; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; require-sri-for script style">
-    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Strict-Transport-Security" content="max-age=63072000; includeSubDomains; preload">
-    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=()">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <meta http-equiv="Expect-CT" content="max-age=86400, enforce">
-    
-    <!-- Add performance monitoring and caching headers -->
-    <script>
-window.addEventListener('load',function(){const t=performance.now();console.log('Page loaded in',t.toFixed(2),'ms');const e=2e3;t>e&&console.warn('Performance budget exceeded:',t,'ms (budget:',e,'ms)');if(window.performance&&window.performance.getEntries){const e=window.performance.getEntriesByType("resource");console.log('Resources loaded:',e.length);e.forEach(e=>{e.duration>1e3&&console.warn('Slow resource:',e.name,'-',e.duration+'ms')})}if(window.performance&&window.performance.getEntriesByType("paint")){const e=window.performance.getEntriesByType("paint");e.forEach(e=>{console.log('Paint timing:',e.name,e.startTime)})}});
-        
-        // Service Worker registration for caching (placeholder)
-        // Only register on HTTP/HTTPS protocols, not file://
-        if ('serviceWorker' in navigator && 
-            (window.location.protocol === 'https:' || window.location.protocol === 'http:')) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js').then(
-                    function(registration) {
-                        console.log('ServiceWorker registration successful');
-                    },
-                    function(err) {
-                        console.log('ServiceWorker registration failed: ', err);
-                    }
-                );
-            });
-        }
-    </script>
-    
-    <!-- AppCache is deprecated; using Service Worker instead -->
-    
-    
+
     <link rel="prefetch" href="script.min.js?v=3" as="script">
     <link rel="prefetch" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" as="style" crossorigin>
-    <!-- Do Not Track Respect -->
-    <script>
-        // Respect Do Not Track browser setting
-        if (navigator.doNotTrack === "1" || navigator.msDoNotTrack === "1") {
-            console.log("Do Not Track enabled - respecting user privacy");
-        }
-    </script>
 
     <!-- Load Umami analytics -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="8d0377d8-c1de-4001-b844-27ec489392ce"></script>

@@ -1,0 +1,50 @@
+# ---------------------------------------------------------------------------
+# Remote Labs - Apache configuration
+#
+# These are the security headers that DO NOT work as HTML <meta http-equiv>
+# tags and must be delivered as real HTTP response headers. If the site is
+# hosted behind Nginx / IIS / a TU/e proxy instead of Apache, replicate the
+# same headers in that server's configuration.
+# ---------------------------------------------------------------------------
+
+<IfModule mod_headers.c>
+    # Clickjacking protection
+    Header always set X-Frame-Options "SAMEORIGIN"
+
+    # Prevent MIME-type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Referrer policy
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Force HTTPS for 2 years, including subdomains (only enable once HTTPS is
+    # confirmed working everywhere; it is hard to undo).
+    Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+
+    # Restrict powerful browser features
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+
+    # Cross-origin isolation for the document
+    Header always set Cross-Origin-Opener-Policy "same-origin"
+
+    # Long cache for fingerprinted/static assets; HTML is handled by the
+    # service worker (network-first) so it stays fresh.
+    <FilesMatch "\.(css|js|svg|png|jpg|jpeg|webp|woff2?|mp4)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    <FilesMatch "\.html$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+</IfModule>
+
+# Serve pre-compressed / compress on the fly where available
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml application/json
+</IfModule>
+
+# Custom error pages (already shipped in this folder)
+ErrorDocument 400 /400.shtml
+ErrorDocument 401 /401.shtml
+ErrorDocument 403 /403.shtml
+ErrorDocument 404 /404.shtml
+ErrorDocument 500 /500.shtml

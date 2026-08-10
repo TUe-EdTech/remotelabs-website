@@ -8,7 +8,7 @@ const ASSETS_TO_CACHE = [
     '/styles.min.css',
     '/script.min.js',
     
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css',
     'https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap',
     'https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap'
 ];
