@@ -5,22 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
     <meta name="description" content="Remote Labs Privacy Policy">
     <meta name="theme-color" content="#2563eb">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; img-src 'self' data: https://fonts.gstatic.com; media-src 'self'; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
     <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <title>Privacy Policy - Remote Labs</title>
+    <script>
+      // Email obfuscation function
+      function getEmail(subject) {
+        const user = 'k.m.a.aarts';
+        const domain = 'tue.nl';
+        const email = user + '@' + domain;
+        return subject ? email + '?subject=' + encodeURIComponent(subject) : email;
+      }
+    </script>
     
     <!-- Load minified CSS -->
     <link rel="stylesheet" href="/styles.min.css?v=3">
-    <!-- Fallback to regular CSS if minified version fails -->
-    <noscript><link rel="stylesheet" href="/styles.css"></noscript>
+    <!-- Fallback if CSS fails to load -->
+    <noscript><link rel="stylesheet" href="/styles.min.css?v=3"></noscript>
     
-    <!-- Load fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- Self-hosted fonts (no external CDN dependency) -->
+    <link rel="stylesheet" href="assets/fonts/fonts.css?v=3">
+    <link rel="stylesheet" href="assets/fontawesome/css/all.min.css?v=3">
     
     <style>
         .privacy-container {
@@ -121,14 +129,15 @@
 
             <div class="privacy-section">
                 <h3>5. Cookies and Tracking</h3>
-                <p>This website uses only essential cookies for basic functionality. We do not use:</p>
+                <p>This website uses only essential cookies for basic functionality.</p>
+                <p>We use Umami analytics to collect anonymous usage statistics to help us understand how our website is being used and to improve the user experience. Umami is a privacy-focused analytics service that:</p>
                 <ul>
-                    <li>Tracking cookies</li>
-                    <li>Analytics cookies</li>
-                    <li>Advertising cookies</li>
-                    <li>Third-party cookies</li>
+                    <li>Does not collect any personally identifiable information</li>
+                    <li>Does not use tracking cookies</li>
+                    <li>Does not track users across websites</li>
+                    <li>Respects Do Not Track browser settings</li>
                 </ul>
-                <p>You can choose to have your computer warn you each time a cookie is being sent, or you can choose to turn off all cookies via your browser settings.</p>
+                <p>Analytics cookies are only loaded after you give your explicit consent through our cookie banner. You can accept or decline analytics cookies. If you decline, no analytics data will be collected. You can also opt-out of analytics by enabling Do Not Track in your browser, or withdraw your consent at any time by clearing your cookie preferences.</p>
             </div>
 
             <div class="privacy-section">
@@ -141,7 +150,7 @@
                     <li><strong>Right to Restrict Processing:</strong> You can request that we restrict the processing of your personal data, under certain conditions.</li>
                     <li><strong>Right to Object to Processing:</strong> You can object to our processing of your personal data, under certain conditions.</li>
                 </ul>
-                <p>To exercise any of these rights, please contact us at: <a href="mailto:k.m.a.aarts@tue.nl" class="contact-link" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
+                <p>To exercise any of these rights, please contact us at: <a href="#" onclick="window.location.href='mailto:'+getEmail();return false;" class="contact-link" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
             </div>
 
             <div class="privacy-section">
@@ -163,7 +172,7 @@
             <div class="privacy-section">
                 <h3>10. Contact Us</h3>
                 <p>If you have any questions about this Privacy Policy, please contact us:</p>
-                <p><a href="mailto:k.m.a.aarts@tue.nl" class="contact-link" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
+                <p><a href="#" onclick="window.location.href='mailto:'+getEmail();return false;" class="contact-link" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
                 <p>Eindhoven University of Technology<br>
                 Den Dolech 2, 5612 AZ Eindhoven<br>
                 The Netherlands</p>
@@ -181,7 +190,7 @@
                         <li><a href="/">Home</a></li>
                         <li><a href="/#contact">Benefits</a></li>
                         <li><a href="/#contact">Contact</a></li>
-                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/privacy.html">Privacy Policy</a></li>
                         <li><a href="https://remotelabs.tue.nl">Go to Remote Labs</a></li>
                     </ul>
                 </div>
@@ -220,7 +229,7 @@
                     <div>
                         <p>Eindhoven University of Technology</p>
                         <p>Den Dolech 2, 5612 AZ Eindhoven</p>
-                        <p><a href="mailto:k.m.a.aarts@tue.nl?subject=Remote%20Labs%20Inquiry" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
+                        <p><a href="#" onclick="window.location.href='mailto:'+getEmail('Remote Labs Inquiry');return false;" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
                         <p>+31 (0)40 247 9111</p>
                     </div>
                 </div>
@@ -236,7 +245,7 @@
     </footer>
 
     <!-- Load minified JavaScript -->
-    <script src="/script.min.js?v=3" defer></script>
+    <script src="/script.min.js?v=2" defer></script>
     
 </body>
 </html>
