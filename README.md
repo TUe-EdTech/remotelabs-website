@@ -22,10 +22,13 @@ remotelabs-website/
 ├── deploy/                        # ✅ PRODUCTION FILES - Upload to server
 │   ├── index.html                 # Main page
 │   ├── privacy.html               # Privacy policy
-│   ├── styles.min.css             # Minified styles (versioned with ?v=2)
-│   ├── script.min.js              # Minified JavaScript (versioned with ?v=2)
-│   ├── sw.js                      # Service Worker (version: remotelabs-v2)
+│   ├── styles.min.css             # Minified styles (versioned with ?v=3)
+│   ├── script.min.js              # Minified JavaScript (versioned with ?v=3)
+│   ├── sw.js                      # Service Worker (version: remotelabs-v3)
 │   ├── manifest.json              # Web app manifest
+│   ├── robots.txt                 # Search engine crawl rules + sitemap pointer
+│   ├── sitemap.xml                # XML sitemap
+│   ├── .htaccess                  # Real HTTP security headers (see Security)
 │   ├── assets/                    # Images, videos, logos
 │   └── error_pages/               # Custom error pages (400, 401, 403, 404, 500)
 └── production_source/            # Development files (keep for future edits)
@@ -70,14 +73,27 @@ remotelabs-website/
 
 ## Security
 
-The site has security headers implemented via meta tags:
-- Content Security Policy (CSP)
+**Content-Security-Policy** is delivered as a `<meta>` tag in the `<head>` of
+`index.html` (this is the one security header browsers honour via `<meta>`).
+
+All other security headers are **ignored by browsers when set via `<meta>`** and
+must be sent as real HTTP response headers. They live in `deploy/.htaccess`
+(Apache). If the site is hosted behind Nginx / IIS / a TU/e proxy, replicate the
+same headers there:
 - X-Frame-Options
 - X-Content-Type-Options
-- X-XSS-Protection
+- Referrer-Policy
 - Strict-Transport-Security
 - Permissions-Policy
-- Expect-CT
+
+Note: the deprecated `X-XSS-Protection` and `Expect-CT` headers were removed.
+
+## SEO
+
+- `robots.txt` and `sitemap.xml` live in `deploy/` and are copied by the build.
+- `index.html` includes Open Graph / Twitter Card tags, a canonical link, and
+  JSON-LD Organization structured data. Update the URLs/description there if the
+  domain or messaging changes.
 
 ## Caching & Deployment
 

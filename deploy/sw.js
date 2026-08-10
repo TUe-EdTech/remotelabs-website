@@ -1,6 +1,6 @@
 // Basic Service Worker for Remote Labs Website
 // Version: Bump this number whenever you update assets to force cache invalidation
-const CACHE_NAME = 'remotelabs-v2';
+const CACHE_NAME = 'remotelabs-v3';
 
 const ASSETS_TO_CACHE = [
     '/',

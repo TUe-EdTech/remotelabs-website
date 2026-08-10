@@ -91,7 +91,7 @@ try {
 // Step 4: Copy HTML files
 console.log('Copying HTML and Service Worker files...');
 try {
-  const filesToCopy = ['index.html', 'privacy.html', 'sw.js'];
+  const filesToCopy = ['index.html', 'privacy.html', 'sw.js', 'robots.txt', 'sitemap.xml', '.htaccess'];
   filesToCopy.forEach(file => {
     const sourcePath = path.join(__dirname, file);
     const destPath = path.join(__dirname, '../deploy', file);
