@@ -24,12 +24,12 @@
     <meta property="og:title" content="Remote Labs - 24/7 Access to Physical Lab Experiments">
     <meta property="og:description" content="Enabling students and professionals to conduct real physical lab experiments remotely, 24/7, at Eindhoven University of Technology.">
     <meta property="og:url" content="https://remotelabs.tue.nl/">
-    <meta property="og:image" content="https://remotelabs.tue.nl/assets/videos/posterimagevideo.jpeg">
+    <meta property="og:image" content="https://remotelabs.tue.nl/assets/videos/posterimagevideo-og.jpg">
     <meta property="og:locale" content="en_US">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Remote Labs - 24/7 Access to Physical Lab Experiments">
     <meta name="twitter:description" content="Enabling students and professionals to conduct real physical lab experiments remotely, 24/7, at Eindhoven University of Technology.">
-    <meta name="twitter:image" content="https://remotelabs.tue.nl/assets/videos/posterimagevideo.jpeg">
+    <meta name="twitter:image" content="https://remotelabs.tue.nl/assets/videos/posterimagevideo-og.jpg">
 
     <!-- Structured data -->
     <script type="application/ld+json">
@@ -73,13 +73,18 @@
         return subject ? email + '?subject=' + encodeURIComponent(subject) : email;
       }
     </script>
-    <link rel="preload" href="styles.min.css?v=3" as="style">
-    <link rel="preload" href="script.min.js?v=3" as="script">
-    <link rel="preload" href="assets/fontawesome/css/all.min.css?v=3" as="style">
-    <link rel="preload" href="assets/fonts/fonts.css?v=3" as="style">
+    <link rel="preload" href="styles.min.css?v=4" as="style">
+    <link rel="preload" href="script.min.js?v=4" as="script">
+    <link rel="preload" href="assets/fontawesome/css/all.min.css?v=4" as="style">
+    <link rel="preload" href="assets/fonts/fonts.css?v=4" as="style">
     <link rel="preload" href="assets/fontawesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/fonts/lato-400-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/fonts/poppins-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- Preload the LCP hero poster (AVIF, right-sized for render box) on the critical path -->
+    <link rel="preload" as="image" fetchpriority="high"
+          imagesrcset="assets/videos/posterimagevideo-651.avif 651w, assets/videos/posterimagevideo-1302.avif 1302w"
+          imagesizes="(max-width: 768px) 100vw, 651px"
+          href="assets/videos/posterimagevideo-651.avif">
     <!-- Preload only the first workflow video; the others load on demand when selected -->
     <link rel="preload" href="assets/videos/book-experiment.mp4" as="video" crossorigin="anonymous">
     
@@ -95,16 +100,16 @@
 @media (max-width:768px){.how-it-works{padding:60px 0}.workflow-steps{grid-template-columns:1fr}}
     </style>
     
-    <link rel="stylesheet" href="styles.min.css?v=3" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="styles.min.css?v=3"></noscript>
+    <link rel="stylesheet" href="styles.min.css?v=4" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="styles.min.css?v=4"></noscript>
     
     <!-- Self-hosted fonts (no external CDN dependency) -->
-    <link rel="stylesheet" href="assets/fonts/fonts.css?v=3">
+    <link rel="stylesheet" href="assets/fonts/fonts.css?v=4">
     <style>
 @font-face{font-family:'Lato Fallback';src:local('Arial'),local('Helvetica Neue'),local('Helvetica'),local('sans-serif')}@font-face{font-family:'Poppins Fallback';src:local('Arial Black'),local('Impact'),local('sans-serif');font-weight:700}
     </style>
     
-    <link rel="stylesheet" href="assets/fontawesome/css/all.min.css?v=3">
+    <link rel="stylesheet" href="assets/fontawesome/css/all.min.css?v=4">
     <style>
         /* Modern Toggle Switch Styles */
         .toggle-switch-container {
@@ -566,8 +571,8 @@
             <!-- Hero Video Container - 16:9 aspect ratio with controls -->
             <div class="video-container">
                 <div class="video-wrapper hero-video-wrapper">
-                    <video class="hero-video" playsinline loop autoplay muted poster="assets/videos/posterimagevideo.jpeg" preload="metadata" id="hero-video-player">
-                        <source src="assets/videos/Remote Labs video website.mp4" type="video/mp4">
+                    <video class="hero-video" playsinline loop autoplay muted fetchpriority="high" poster="assets/videos/posterimagevideo-1302.avif" preload="metadata" id="hero-video-player">
+                        <source src="assets/videos/hero-loop.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                     <!-- Video Controls - Play/Pause and Mute/Unmute -->
@@ -855,7 +860,7 @@
     </footer>
 
     <!-- Load minified JavaScript with defer for better performance -->
-    <script src="script.min.js?v=3" defer></script>
+    <script src="script.min.js?v=4" defer></script>
     <script>
 // Toggle functionality for How It Works section and scroll-based header hiding
 
@@ -1051,7 +1056,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </script>
     
 
-    <link rel="prefetch" href="script.min.js?v=3" as="script">
+    <link rel="prefetch" href="script.min.js?v=4" as="script">
 
     <!-- Load Umami analytics -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="8d0377d8-c1de-4001-b844-27ec489392ce"></script>
