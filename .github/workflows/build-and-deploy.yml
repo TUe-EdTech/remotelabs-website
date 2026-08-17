@@ -17,7 +17,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: Install dependencies
         run: |
@@ -27,11 +27,11 @@ jobs:
       - name: Run build
         run: |
           cd production_source
-          npm run build
+          npm run build:full
 
       - name: Verify build
         run: |
-          ls -la deploy/styles.min.css deploy/script.min.js deploy/index.html deploy/privacy.html deploy/sw.js
+          ls -la deploy/styles.min.css deploy/script.min.js deploy/index.html deploy/privacy.html deploy/sw.js deploy/assets/
 
       - name: Commit build artifacts
         if: github.ref == 'refs/heads/main'
