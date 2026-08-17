@@ -112,7 +112,7 @@ try {
 // Step 5: Copy icon files
 console.log('Copying icon files...');
 try {
-  const iconFiles = ['icon-192x192.png', 'icon-192x192.svg', 'icon-512x512.png', 'icon-512x512.svg'];
+  const iconFiles = ['icon-192x192.svg', 'icon-512x512.svg'];
   iconFiles.forEach(file => {
     const sourcePath = path.join(__dirname, file);
     const destPath = path.join(__dirname, '../deploy', file);
