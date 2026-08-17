@@ -24,30 +24,20 @@ jobs:
           cd production_source
           npm install
 
-      - name: Build CSS
+      - name: Run build
         run: |
           cd production_source
-          npm run build:css
-
-      - name: Build JavaScript
-        run: |
-          cd production_source
-          npm run build:js
-
-      - name: Copy HTML files
-        run: |
-          cd production_source
-          npm run build:html
+          npm run build
 
       - name: Verify build
         run: |
-          ls -la deploy/styles.min.css deploy/script.min.js deploy/index.html deploy/privacy.html
+          ls -la deploy/styles.min.css deploy/script.min.js deploy/index.html deploy/privacy.html deploy/sw.js
 
       - name: Commit build artifacts
         if: github.ref == 'refs/heads/main'
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add deploy/styles.min.css deploy/script.min.js deploy/index.html deploy/privacy.html
-          git diff --cached --quiet || git commit -m "Auto-build: Update minified assets"
+          git add deploy/
+          git diff --cached --quiet || git commit -m "Auto-build: Update minified assets [skip ci]"
           git push
