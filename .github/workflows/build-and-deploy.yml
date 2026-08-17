@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -39,5 +42,9 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add deploy/
-          git diff --cached --quiet || git commit -m "Auto-build: Update minified assets [skip ci]"
-          git push
+          if ! git diff --cached --quiet; then
+            git commit -m "Auto-build: Update minified assets [skip ci]"
+            git push
+          else
+            echo "No changes to commit"
+          fi
