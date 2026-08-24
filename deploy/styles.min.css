@@ -145,7 +145,6 @@ footer { background: var(--gray-900); color: var(--white); padding: 3rem 0 1.5re
 .workflow-header h2 { font-family: 'Poppins','Poppins Fallback',sans-serif; font-weight: 700; color: #2563eb; font-size: 1.8rem; margin-bottom: .5rem; }
 .workflow-header p { color: #666; font-size: 1.1rem; }
 .workflow-steps { display: flex; flex-wrap: wrap; gap: 2rem; margin: 2rem auto 0; justify-content: center; }
-@media (max-width: 768px) { .workflow-steps { flex-direction: column; align-items: center; gap: 1rem; } }
 .workflow-step { background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: all 0.3s ease; border: 1px solid #e5e7eb; cursor: pointer; position: relative; }
 .workflow-step:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
 .workflow-step.active-step { border: 2px solid #2563eb; background: #f8fafc; box-shadow: 0 0 0 3px rgba(37,99,235,0.2); }
