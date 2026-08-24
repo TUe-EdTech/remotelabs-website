@@ -25,6 +25,9 @@
     <meta property="og:description" content="Enabling students and professionals to conduct real physical lab experiments remotely, 24/7, at Eindhoven University of Technology.">
     <meta property="og:url" content="https://remotelabs.tue.nl/">
     <meta property="og:image" content="https://remotelabs.tue.nl/assets/videos/posterimagevideo-og.jpg">
+    <meta property="og:image:width" content="1920">
+    <meta property="og:image:height" content="1080">
+    <meta property="og:image:alt" content="Remote Labs - 24/7 Access to Physical Lab Experiments">
     <meta property="og:locale" content="en_US">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Remote Labs - 24/7 Access to Physical Lab Experiments">
@@ -63,6 +66,7 @@
     <link rel="apple-touch-icon" href="icon-192x192.svg">
     <link rel="icon" type="image/svg+xml" sizes="192x192" href="icon-192x192.svg">
     <link rel="icon" type="image/svg+xml" sizes="512x512" href="icon-512x512.svg">
+    <link rel="icon" href="favicon.ico" sizes="any">
     <title>Remote Labs - 24/7 Access to Physical Lab Experiments</title>
     <script>
       // Email obfuscation function
@@ -72,6 +76,13 @@
         const email = user + '@' + domain;
         return subject ? email + '?subject=' + encodeURIComponent(subject) : email;
       }
+      
+      // Set email links on DOM load to avoid CSP issues with onclick
+      document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('[data-email]').forEach(a => {
+          a.href = 'mailto:' + getEmail(a.dataset.email);
+        });
+      });
     </script>
     <link rel="preload" href="styles.min.css?v=4" as="style">
     <link rel="preload" href="script.min.js?v=4" as="script">
@@ -396,13 +407,6 @@
             font-weight: 500;
         }
         
-        /* Refined active step styling - Sleek & Subtle */
-        .workflow-step.active-step {
-            border: 1px solid #2563eb;
-            background: white;
-            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.08);
-        }
-        
         /* Mobile-specific optimizations */
         @media (max-width: 480px) {
             /* Partner logos mobile */
@@ -431,7 +435,6 @@
                 align-items: center;
                 justify-content: center;
             }
-        }
             
             /* Optimize touch targets */
             .cta-button, .hero-cta-button {
@@ -473,48 +476,48 @@
                 overflow: hidden;
                 margin-bottom: 1.5rem;
             }
-            
-            /* More compact step cards for mobile */
-            @media (max-width: 768px) {
-                .workflow-step {
-                    padding: 1rem;
-                    margin-bottom: 1rem;
-                }
-                
-                .workflow-step h3 {
-                    font-size: 1.1rem;
-                    margin-bottom: 0.75rem;
-                }
-                
-                .workflow-step p {
-                    font-size: 0.9rem;
-                    line-height: 1.5;
-                }
-                
-                .step-number {
-                    width: 24px;
-                    height: 24px;
-                    font-size: 0.8rem;
-                }
-                
-                /* Ensure steps stack properly */
-                .workflow-steps {
-                    display: grid;
-                    grid-template-columns: 1fr;
-                    gap: 1rem;
-                }
-            }
-            
-            /* Touch-friendly interactions */
+        }
+        
+        /* More compact step cards for mobile */
+        @media (max-width: 768px) {
             .workflow-step {
-                touch-action: manipulation;
-                cursor: pointer;
+                padding: 1rem;
+                margin-bottom: 1rem;
             }
             
-            .workflow-step:active {
-                transform: scale(0.98);
-                transition: transform 0.1s ease;
+            .workflow-step h3 {
+                font-size: 1.1rem;
+                margin-bottom: 0.75rem;
             }
+            
+            .workflow-step p {
+                font-size: 0.9rem;
+                line-height: 1.5;
+            }
+            
+            .step-number {
+                width: 24px;
+                height: 24px;
+                font-size: 0.8rem;
+            }
+            
+            /* Ensure steps stack properly */
+            .workflow-steps {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+        
+        /* Touch-friendly interactions */
+        .workflow-step {
+            touch-action: manipulation;
+            cursor: pointer;
+        }
+        
+        .workflow-step:active {
+            transform: scale(0.98);
+            transition: transform 0.1s ease;
         }
         
         /* Desktop layout optimization - side by side */
@@ -571,7 +574,7 @@
             <!-- Hero Video Container - 16:9 aspect ratio with controls -->
             <div class="video-container">
                 <div class="video-wrapper hero-video-wrapper">
-                    <video class="hero-video" playsinline loop autoplay muted fetchpriority="high" poster="assets/videos/posterimagevideo-og.jpg" preload="metadata" id="hero-video-player">
+                    <video class="hero-video" playsinline loop autoplay muted fetchpriority="high" poster="assets/videos/posterimagevideo-651.avif" preload="metadata" id="hero-video-player">
                         <source src="assets/videos/hero-loop.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -614,7 +617,7 @@
                 </div>
                 
                 <div class="workflow-steps">
-                    <div class="workflow-step" data-video="book-experiment">
+                    <div class="workflow-step" data-video="book-experiment" tabindex="0" role="button" aria-label="Book Experiment Timeslot">
                         <div class="step-icon">
                             <i class="fas fa-calendar-check"></i>
                             <span class="step-number">1</span>
@@ -623,7 +626,7 @@
                         <p>Browse available experiments and reserve your preferred time slot through our intuitive scheduling system</p>
                     </div>
                     
-                    <div class="workflow-step" data-video="conduct-experiment">
+                    <div class="workflow-step" data-video="conduct-experiment" tabindex="0" role="button" aria-label="Conduct Experiment">
                         <div class="step-icon">
                             <i class="fas fa-microscope"></i>
                             <span class="step-number">2</span>
@@ -632,7 +635,7 @@
                         <p>Access your reserved experiment and perform the lab work remotely using our interactive interface</p>
                     </div>
                     
-                    <div class="workflow-step" data-video="review-results">
+                    <div class="workflow-step" data-video="review-results" tabindex="0" role="button" aria-label="Review Results">
                         <div class="step-icon">
                             <i class="fas fa-chart-line"></i>
                             <span class="step-number">3</span>
@@ -645,7 +648,7 @@
                 <!-- Video Container -->
                 <div class="video-container">
                     <div class="video-wrapper">
-                        <video id="workflow-video" class="workflow-video" playsinline muted loop autoplay preload="auto">
+                        <video id="workflow-video" class="workflow-video" playsinline muted loop autoplay preload="metadata">
                             <source src="assets/videos/book-experiment.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
@@ -661,7 +664,7 @@
                 </div>
                 
                 <div class="workflow-steps">
-                    <div class="workflow-step">
+                    <div class="workflow-step" tabindex="0" role="button" aria-label="Increased Lab Access">
                         <div class="step-icon">
                             <i class="fas fa-university"></i>
                             <span class="step-number">1</span>
@@ -670,7 +673,7 @@
                         <p>Provide lab access to more users, courses, and experiments without physical space constraints</p>
                     </div>
                     
-                    <div class="workflow-step">
+                    <div class="workflow-step" tabindex="0" role="button" aria-label="Scalability">
                         <div class="step-icon">
                             <i class="fas fa-chart-line"></i>
                             <span class="step-number">2</span>
@@ -679,7 +682,7 @@
                         <p>Easily scale lab access and resources to accommodate growing numbers of users and experiments</p>
                     </div>
                     
-                    <div class="workflow-step">
+                    <div class="workflow-step" tabindex="0" role="button" aria-label="Collaboration & Partnerships">
                         <div class="step-icon">
                             <i class="fas fa-handshake"></i>
                             <span class="step-number">3</span>
@@ -738,16 +741,16 @@
                         </p>
                         <div class="partner-logos">
                             <a href="https://www.tue.nl/en/" target="_blank" rel="noopener noreferrer" aria-label="Visit Eindhoven University of Technology">
-                                <img src="assets/images/logos/partner-logos/TUe.png" alt="Eindhoven University of Technology" class="partner-logo" width="120" height="40">
+                                <img src="assets/images/logos/partner-logos/TUe.png" alt="Eindhoven University of Technology" class="partner-logo" width="120" height="40" loading="lazy">
                             </a>
                             <a href="https://www.avans.nl/" target="_blank" rel="noopener noreferrer" aria-label="Visit Avans University">
-                                <img src="assets/images/logos/partner-logos/avans.png" alt="Avans University" class="partner-logo" width="120" height="40">
+                                <img src="assets/images/logos/partner-logos/avans.png" alt="Avans University" class="partner-logo" width="120" height="40" loading="lazy">
                             </a>
                             <a href="https://www.tue.nl/en/research/institutes/eindhoven-institute-for-renewable-energy-systems/research" target="_blank" rel="noopener noreferrer" aria-label="Visit EIRES">
-                                <img src="assets/images/logos/partner-logos/EIRES.jpg" alt="EIRES" class="partner-logo" width="120" height="40">
+                                <img src="assets/images/logos/partner-logos/EIRES.jpg" alt="EIRES" class="partner-logo" width="120" height="40" loading="lazy">
                             </a>
                             <a href="https://www.mnext.nl/" target="_blank" rel="noopener noreferrer" aria-label="Visit MNext">
-                                <img src="assets/images/logos/partner-logos/Mnext.png" alt="MNext" class="partner-logo" width="120" height="40">
+                                <img src="assets/images/logos/partner-logos/Mnext.png" alt="MNext" class="partner-logo" width="120" height="40" loading="lazy">
                             </a>
                         </div>
                     </div>
@@ -758,10 +761,10 @@
                     <p class="cta-intro">Interested in exploring Remote Labs for your institution or organization?</p>
                     
                     <div class="contact-actions">
-                        <a href="#" onclick="window.location.href='mailto:'+getEmail('Remote Labs Inquiry');return false;" class="contact-button primary">
+                        <a href="" data-email="Remote Labs Inquiry" class="contact-button primary">
                             <i class="fas fa-envelope"></i> Contact Us
                         </a>
-                        <a href="#" onclick="window.location.href='mailto:'+getEmail('Demo request Remote Labs');return false;" class="contact-button demo-button">
+                        <a href="" data-email="Demo request Remote Labs" class="contact-button demo-button">
                             <i class="fas fa-calendar-alt"></i> Book a Demo
                         </a>
                     </div>
@@ -840,7 +843,7 @@
                     <div>
                         <p>Eindhoven University of Technology</p>
                         <p>Den Dolech 2, 5612 AZ Eindhoven</p>
-                        <p><a href="#" onclick="window.location.href='mailto:'+getEmail('Remote Labs Inquiry');return false;" style="color: #2563eb;" aria-label="Email Remote Labs"><i class="fas fa-envelope"></i></a></p>
+                        <p><a href="" data-email="Remote Labs Inquiry" style="color: #2563eb;" aria-label="Email Remote Labs"><i class="fas fa-envelope"></i></a></p>
                     </div>
                 </div>
                 
@@ -851,7 +854,7 @@
                     <p style="margin-top: 1rem;">
                         Part of<br>
                         <a href="https://www.tue.nl/en/" target="_blank" rel="noopener noreferrer" aria-label="Visit Eindhoven University of Technology">
-                            <img src="assets/images/logos/TUe-logo-descriptor-line-scarlet-S.png" alt="TU/e - Eindhoven University of Technology" style="width: 150px; height: auto; margin-top: 0.5rem;">
+                            <img src="assets/images/logos/TUe-logo-descriptor-line-scarlet-S.png" alt="TU/e - Eindhoven University of Technology" width="150" height="50" style="width: 150px; height: auto; margin-top: 0.5rem;" loading="lazy">
                         </a>
                     </p>
                 </div>
@@ -959,6 +962,7 @@ function setupVideoSwitching() {
             steps.forEach(s => s.classList.remove('active-step'));
             this.classList.add('active-step');
         });
+        
     });
     
     // First step active by default
@@ -967,6 +971,15 @@ function setupVideoSwitching() {
 
 // Initialize video switching when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
+    // Add keyboard support for all workflow steps
+    document.querySelectorAll('.workflow-step').forEach(step => {
+        step.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+    });
     // Set up video switching first
     setupVideoSwitching();
     
@@ -974,9 +987,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const video = document.getElementById('workflow-video');
     const firstStep = document.querySelector('.workflow-step[data-video="book-experiment"]');
     if (video && firstStep) {
-        const firstVideoPath = 'assets/videos/book-experiment.mp4';
-        video.src = firstVideoPath;
-        video.load();
+        // Video source already set in HTML, just attempt autoplay
         video.oncanplaythrough = function() {
             video.play().catch(e => {
                 // Autoplay blocked, user interaction required
@@ -986,52 +997,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Set up hero video controls
     setupHeroVideoControls();
-    // Smooth scrolling
-    'scrollBehavior' in document.documentElement.style && (document.documentElement.style.scrollBehavior = 'smooth');
-    let t = !1;
-    document.querySelectorAll('a[href^="#"]').forEach(e => {
-        e.addEventListener('click', function(e) {
-            if (t) return;
-            t = !0, e.preventDefault();
-            const n = this.getAttribute('href'), o = document.querySelector(n);
-            if (o) try {
-                o.scrollIntoView({ behavior: 'smooth' }), setTimeout(() => { t = !1 }, 1e3)
-            } catch (e) {
-                o.scrollIntoView(!0), t = !1
-            } else t = !1
-        })
-    });
-
     
-
-    // Scroll hide/show functionality
-    const mainHeader = document.querySelector('.main-header');
+    // Smooth scrolling is handled by CSS (scroll-behavior: smooth)
+    // Hash link scrolling is handled by script.min.js
+    
     const workflowToggle = document.getElementById('workflow-toggle');
-    
-    if (mainHeader) {
-        let lastScrollPosition = window.pageYOffset;
-        let isScrollingDown = false;
-        
-        window.addEventListener('scroll', function() {
-            const currentScrollPosition = window.pageYOffset;
-            
-            if (currentScrollPosition > lastScrollPosition && currentScrollPosition > 100) {
-                // Scrolling down - hide elements
-                if (!isScrollingDown) {
-                    mainHeader.classList.add('hidden');
-                    isScrollingDown = true;
-                }
-            } else {
-                // Scrolling up - show elements
-                if (isScrollingDown) {
-                    mainHeader.classList.remove('hidden');
-                    isScrollingDown = false;
-                }
-            }
-            
-            lastScrollPosition = currentScrollPosition;
-        });
-    }
     
     // Toggle switch functionality
     if (workflowToggle) {
@@ -1055,8 +1025,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
     </script>
     
-
-    <link rel="prefetch" href="script.min.js?v=4" as="script">
 
     <!-- Load Umami analytics -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="8d0377d8-c1de-4001-b844-27ec489392ce"></script>
