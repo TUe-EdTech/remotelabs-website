@@ -120,7 +120,7 @@
         
         .toggle-switch {
             position: relative;
-            width: 320px;
+            width: 420px;
             height: 56px;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             border-radius: 30px;
@@ -138,32 +138,28 @@
             display: none;
         }
         
-        .toggle-label {
-            display: block;
-            position: relative;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-        
         .toggle-text {
             position: absolute;
-            width: 50%;
+            width: 33.333%;
             height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: #666;
             transition: all 0.3s ease;
             z-index: 2;
-            pointer-events: none;
+            cursor: pointer;
         }
         
         .toggle-students {
             left: 0;
             color: #fff;
+        }
+        
+        .toggle-teachers {
+            left: 33.333%;
         }
         
         .toggle-organizations {
@@ -172,7 +168,7 @@
         
         .toggle-slider {
             position: absolute;
-            width: 50%;
+            width: 33.333%;
             height: 100%;
             background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             border-radius: 30px;
@@ -185,19 +181,42 @@
         
 
         
-        .toggle-input:checked + .toggle-label .toggle-slider {
-            transform: translateX(100%);
+        #toggle-students:checked ~ .toggle-slider {
+            transform: translateX(0%);
         }
-        
-        .toggle-input:checked + .toggle-label .toggle-students {
+        #toggle-students:checked ~ .toggle-students {
+            color: #fff;
+        }
+        #toggle-students:checked ~ .toggle-teachers {
+            color: #666;
+        }
+        #toggle-students:checked ~ .toggle-organizations {
             color: #666;
         }
         
-        .toggle-input:checked + .toggle-label .toggle-organizations {
+        #toggle-teachers:checked ~ .toggle-slider {
+            transform: translateX(100%);
+        }
+        #toggle-teachers:checked ~ .toggle-students {
+            color: #666;
+        }
+        #toggle-teachers:checked ~ .toggle-teachers {
             color: #fff;
         }
+        #toggle-teachers:checked ~ .toggle-organizations {
+            color: #666;
+        }
         
-        .toggle-input:not(:checked) + .toggle-label .toggle-students {
+        #toggle-organizations:checked ~ .toggle-slider {
+            transform: translateX(200%);
+        }
+        #toggle-organizations:checked ~ .toggle-students {
+            color: #666;
+        }
+        #toggle-organizations:checked ~ .toggle-teachers {
+            color: #666;
+        }
+        #toggle-organizations:checked ~ .toggle-organizations {
             color: #fff;
         }
         
@@ -596,12 +615,13 @@
                 <!-- Toggle Switch -->
                 <div class="toggle-switch-container">
                     <div class="toggle-switch">
-                        <input type="checkbox" id="workflow-toggle" class="toggle-input">
-                        <label for="workflow-toggle" class="toggle-label">
-                            <span class="toggle-text toggle-students">For Students</span>
-                            <span class="toggle-text toggle-organizations">For Organizations</span>
-                            <span class="toggle-slider"></span>
-                        </label>
+                        <input type="radio" name="workflow-toggle" id="toggle-students" class="toggle-input" checked>
+                        <input type="radio" name="workflow-toggle" id="toggle-teachers" class="toggle-input">
+                        <input type="radio" name="workflow-toggle" id="toggle-organizations" class="toggle-input">
+                        <label for="toggle-students" class="toggle-text toggle-students">For Students</label>
+                        <label for="toggle-teachers" class="toggle-text toggle-teachers">For Teachers</label>
+                        <label for="toggle-organizations" class="toggle-text toggle-organizations">For Organizations</label>
+                        <span class="toggle-slider"></span>
                     </div>
                 </div>
             </div>
@@ -649,6 +669,43 @@
                             <source src="assets/videos/book-experiment.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Teachers Benefits Section -->
+            <div class="workflow-section" id="teachers">
+                <div class="workflow-header">
+                    <h2 class="benefits-title">Teacher Benefits</h2>
+                    <p class="benefits-intro">Enhance your teaching and student engagement with powerful tools</p>
+                </div>
+                
+                <div class="workflow-steps">
+                    <div class="workflow-step">
+                        <div class="step-icon">
+                            <i class="fas fa-users"></i>
+                            <span class="step-number">1</span>
+                        </div>
+                        <h3>Easy Student Management</h3>
+                        <p>Import student groups from your LMS and get insights into usage patterns and performance</p>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="step-icon">
+                            <i class="fas fa-cogs"></i>
+                            <span class="step-number">2</span>
+                        </div>
+                        <h3>Experiment Flexibility</h3>
+                        <p>Using VMs, create computers with the exact software configuration you need for each course</p>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="step-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span class="step-number">3</span>
+                        </div>
+                        <h3>Increased Student Learning</h3>
+                        <p>Students get more time to experiment and learn, with availability outside of office hours</p>
                     </div>
                 </div>
             </div>
@@ -1006,7 +1063,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Scroll hide/show functionality
     const mainHeader = document.querySelector('.main-header');
-    const workflowToggle = document.getElementById('workflow-toggle');
     
     if (mainHeader) {
         let lastScrollPosition = window.pageYOffset;
@@ -1034,21 +1090,34 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Toggle switch functionality
-    if (workflowToggle) {
-        const studentsSection = document.getElementById('students');
-        const organizationsSection = document.getElementById('organizations');
-        
-        workflowToggle.addEventListener('change', function() {
-            if (this.checked) {
-                // Show organizations
-                studentsSection.classList.remove('active');
-                organizationsSection.classList.add('active');
-            } else {
-                // Show students
-                organizationsSection.classList.remove('active');
-                studentsSection.classList.add('active');
-            }
-        });
+    const toggleStudents = document.getElementById('toggle-students');
+    const toggleTeachers = document.getElementById('toggle-teachers');
+    const toggleOrganizations = document.getElementById('toggle-organizations');
+    
+    const studentsSection = document.getElementById('students');
+    const teachersSection = document.getElementById('teachers');
+    const organizationsSection = document.getElementById('organizations');
+    
+    function updateWorkflowSection() {
+        if (toggleStudents.checked) {
+            studentsSection.classList.add('active');
+            teachersSection.classList.remove('active');
+            organizationsSection.classList.remove('active');
+        } else if (toggleTeachers.checked) {
+            studentsSection.classList.remove('active');
+            teachersSection.classList.add('active');
+            organizationsSection.classList.remove('active');
+        } else if (toggleOrganizations.checked) {
+            studentsSection.classList.remove('active');
+            teachersSection.classList.remove('active');
+            organizationsSection.classList.add('active');
+        }
+    }
+    
+    if (toggleStudents && toggleTeachers && toggleOrganizations) {
+        toggleStudents.addEventListener('change', updateWorkflowSection);
+        toggleTeachers.addEventListener('change', updateWorkflowSection);
+        toggleOrganizations.addEventListener('change', updateWorkflowSection);
     }
     
 
