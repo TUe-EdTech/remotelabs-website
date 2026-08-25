@@ -149,8 +149,9 @@
             font-size: 0.9rem;
             color: #666;
             transition: all 0.3s ease;
-            z-index: 2;
+            z-index: 3;
             cursor: pointer;
+            pointer-events: auto;
         }
         
         .toggle-students {
@@ -163,7 +164,7 @@
         }
         
         .toggle-organizations {
-            right: 0;
+            left: 66.666%;
         }
         
         .toggle-slider {
@@ -177,6 +178,7 @@
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1;
             box-shadow: 0 2px 10px rgba(37, 99, 235, 0.3);
+            pointer-events: none;
         }
         
 
@@ -756,7 +758,7 @@
                 <!-- Value Proposition with Visual Emphasis -->
                 <div class="value-prop">
                     <h2 class="benefits-title" id="benefits">Key Benefits of Remote Labs</h2>
-                    <p class="benefits-intro">Transform your research and education with our cutting-edge platform:</p>
+                    <p class="benefits-intro">Transform your research and education with our Remote Labs platform:</p>
                 </div>
                 
                 <!-- Benefits Grid - Visual and Scannable -->
@@ -1112,6 +1114,26 @@ document.addEventListener('DOMContentLoaded', function() {
             teachersSection.classList.remove('active');
             organizationsSection.classList.add('active');
         }
+    }
+    
+    // Also add click handler to the toggle container for better click coverage
+    const toggleSwitch = document.querySelector('.toggle-switch');
+    if (toggleSwitch) {
+        toggleSwitch.addEventListener('click', function(e) {
+            // Determine which third was clicked
+            const rect = toggleSwitch.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const thirdWidth = rect.width / 3;
+            
+            if (clickX < thirdWidth) {
+                toggleStudents.checked = true;
+            } else if (clickX < thirdWidth * 2) {
+                toggleTeachers.checked = true;
+            } else {
+                toggleOrganizations.checked = true;
+            }
+            updateWorkflowSection();
+        });
     }
     
     if (toggleStudents && toggleTeachers && toggleOrganizations) {
