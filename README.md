@@ -61,7 +61,7 @@ The `experimental/` folder provides a sandbox environment for testing new design
 - Block-style benefits section (replaces button-style)
 - Left-aligned title with natural balance
 - Two-column hero layout with summary panel
-- Full-width video on scroll
+- Static video display (removed full-width on scroll)
 - Pulsing dot indicator for active workflow step
 
 **Workflow:**
@@ -299,8 +299,7 @@ npx uglifyjs script.js -o ../deploy/script.min.js -c -m
 2. **Implemented** 2-column hero layout with summary panel on the right
    - Title and subtitle in left column (middle-aligned, max-width: 500px)
    - "What is Remote Labs?" summary in right column
-3. **Added** video full-width on scroll behavior
-   - Video expands to full viewport width when user scrolls past 50% of hero height
+3. **Reverted** video to static display (removed full-width on scroll as it caused layout issues)
 4. **Replaced** "▶ Playing" button with pulsing dot indicator
    - Animated black dot that pulses (scales from 1x to 1.2x)
    - Cleaner, more minimalistic look
