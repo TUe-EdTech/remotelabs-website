@@ -31,6 +31,16 @@ remotelabs-website/
 │   ├── .htaccess                  # Real HTTP security headers (see Security)
 │   ├── assets/                    # Images, videos, logos
 │   └── error_pages/               # Custom error pages (400, 401, 403, 404, 500)
+├── experimental/                  # 🧪 EXPERIMENTAL DEVELOPMENT
+│   ├── index.html                 # Experimental HTML source
+│   ├── styles.css                 # Experimental CSS source
+│   ├── script.js                  # Experimental JavaScript source
+│   └── assets/                    # Experimental assets (symlinked to production)
+├── experimental_deploy/           # 🎯 EXPERIMENTAL BUILD OUTPUT
+│   └── ...                        # Built files (ready for preview)
+├── scripts/                      # Build and utility scripts
+│   ├── build-experimental.js      # Build script for experimental folder
+│   └── build-experimental.bat     # Windows batch version
 └── production_source/            # Development files (keep for future edits)
     ├── index.html                 # Source HTML
     ├── styles.css                 # Source CSS
@@ -40,6 +50,52 @@ remotelabs-website/
 ```
 
 ## Making Changes
+
+### 🎯 Experimental Workflow (NEW)
+
+The `experimental/` folder provides a sandbox environment for testing new designs and features before merging into production. This allows for rapid iteration and A/B testing.
+
+**Key Features:**
+- Black and white minimalistic color scheme (replaces blue)
+- More squared/less rounded button corners
+- Block-style benefits section (replaces button-style)
+- Left-aligned title with natural balance
+- Two-column hero layout with summary panel
+- Full-width video on scroll
+- Pulsing dot indicator for active workflow step
+
+**Workflow:**
+
+1. **Edit files** in the `experimental/` folder:
+   - `experimental/index.html` - HTML structure
+   - `experimental/styles.css` - CSS styles
+   - `experimental/script.js` - JavaScript behavior
+
+2. **Build for preview**:
+   ```bash
+   # Using Node.js (preferred)
+   node scripts/build-experimental.js
+   
+   # Or on Windows (double-click)
+   scripts/build-experimental.bat
+   ```
+   This creates minified files in `experimental_deploy/`
+
+3. **Preview locally**:
+   Open `experimental_deploy/index.html` in your browser to see the built version exactly as it will appear in production.
+
+4. **Test changes**: Verify all functionality works as expected in the experimental version.
+
+5. **Merge to production**: Once approved, manually copy changes from `experimental/` to `production_source/` and rebuild.
+
+6. **Commit to git**: All changes in `experimental/` and `experimental_deploy/` are tracked. The build is automatic on commit via the build script.
+
+**Automatic Build on Commit:**
+A git hook can be set up to automatically run `node scripts/build-experimental.js` when committing changes to the experimental folder. This ensures `experimental_deploy/` is always up-to-date.
+
+---
+
+### Production Workflow
 
 1. **Edit files** in the `production_source/` folder
 2. **Test locally** by opening the file in your browser
@@ -232,6 +288,38 @@ npm run build:full   # Full build via build.js
 npx clean-css -o ../deploy/styles.min.css styles.css
 npx uglifyjs script.js -o ../deploy/script.min.js -c -m
 ```
+
+---
+
+## Recent Changes (Experimental v1)
+
+### Applied User Feedback:
+
+1. **Removed** "Explore Features" button from hero section
+2. **Implemented** 2-column hero layout with summary panel on the right
+   - Title and subtitle in left column (middle-aligned, max-width: 500px)
+   - "What is Remote Labs?" summary in right column
+3. **Added** video full-width on scroll behavior
+   - Video expands to full viewport width when user scrolls past 50% of hero height
+4. **Replaced** "▶ Playing" button with pulsing dot indicator
+   - Animated black dot that pulses (scales from 1x to 1.2x)
+   - Cleaner, more minimalistic look
+5. **Revamped** Key Benefits section
+   - Changed from 3 icon-based benefit blocks to 4 numbered benefit items
+   - New layout: 2-column grid with numbered items
+   - Each benefit has a number (01-04) and descriptive text
+   - Benefits: Access Anywhere, Real Equipment, Flexible Learning, Cost Effective
+6. **Centered** bottom CTA section
+   - "Interested in exploring Remote Labs..." text now centered
+   - CTA buttons centered with max-width: 800px
+   - Secondary CTA text also centered
+
+### Visual Design Updates:
+
+- **Color Scheme**: Black and white minimalistic (no blue accent)
+- **Button Style**: Less rounded corners (3px border-radius for standard buttons, 4px for hero CTA)
+- **Typography**: Maintained Poppins for headings, Lato for body text
+- **Spacing**: Improved margins and padding for better visual hierarchy
 
 ---
 

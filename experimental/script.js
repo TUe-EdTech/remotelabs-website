@@ -54,3 +54,23 @@ window.addEventListener('load', function(){
         });
     }
 });
+
+// Video full-width on scroll
+document.addEventListener('DOMContentLoaded', function() {
+    const heroVideoContainer = document.querySelector('.video-container');
+    const heroSection = document.querySelector('.hero');
+    
+    if (heroVideoContainer && heroSection) {
+        const heroHeight = heroSection.offsetHeight;
+        
+        window.addEventListener('scroll', function() {
+            const scrollPosition = window.scrollY;
+            
+            if (scrollPosition > heroHeight * 0.5) {
+                heroVideoContainer.classList.add('full-width');
+            } else {
+                heroVideoContainer.classList.remove('full-width');
+            }
+        });
+    }
+});

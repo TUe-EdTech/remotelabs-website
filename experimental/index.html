@@ -373,16 +373,19 @@
         }
         
         .workflow-step.active-step::after {
-            content: '▶ Playing';
+            content: '';
             position: absolute;
             right: 15px;
             top: 15px;
+            width: 12px;
+            height: 12px;
             background: #000;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            border-radius: 50%;
+            animation: playing-pulse 2s infinite;
+        }
+        @keyframes playing-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
         }
         
         .workflow-step h3 {
@@ -584,11 +587,19 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1 class="hero-title">24/7 Access to Physical Lab Experiments, Anywhere</h1>
-            <p class="hero-subtitle">Enabling students and professionals to conduct real lab experiments remotely</p>
-            <a href="#how-it-works" class="hero-cta-button" aria-label="Explore how Remote Labs works">Explore Features</a>
-
-
+            <div class="hero-display">
+                <div class="hero-content-left">
+                    <h1 class="hero-title">24/7 Access to Physical Lab Experiments, Anywhere</h1>
+                    <p class="hero-subtitle">Enabling students and professionals to conduct real lab experiments remotely</p>
+                </div>
+                <div class="hero-content-right">
+                    <div class="hero-summary">
+                        <h3>What is Remote Labs?</h3>
+                        <p>A platform for conducting real physical lab experiments remotely, 24/7, from anywhere in the world.</p>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Hero Video Container - 16:9 aspect ratio with controls -->
             <div class="video-container">
                 <div class="video-wrapper hero-video-wrapper">
@@ -761,30 +772,38 @@
                     <p class="benefits-intro">Transform your research and education with our Remote Labs platform:</p>
                 </div>
                 
-                <!-- Benefits Grid - Visual and Scannable -->
-                <div class="benefits-grid">
-                    <div class="benefit-block">
-                        <div class="benefit-icon">
-                            <i class="fas fa-clock"></i>
+                <!-- Revamped Benefits Section -->
+                <div class="benefits-container">
+                    <div class="benefit-item">
+                        <div class="benefit-number">01</div>
+                        <div class="benefit-text">
+                            <h3>Access Anywhere, Anytime</h3>
+                            <p>Conduct real physical experiments 24/7 from any location with internet access. No more scheduling conflicts or lab time limitations.</p>
                         </div>
-                        <h3>24/7 Access</h3>
-                        <p>Conduct physical lab experiments anytime, from anywhere in the world</p>
                     </div>
                     
-                    <div class="benefit-block">
-                        <div class="benefit-icon">
-                            <i class="fas fa-calendar-alt"></i>
+                    <div class="benefit-item">
+                        <div class="benefit-number">02</div>
+                        <div class="benefit-text">
+                            <h3>Real Equipment, Real Results</h3>
+                            <p>Interact with actual laboratory equipment, not simulations. Get authentic data and results from physical experiments.</p>
                         </div>
-                        <h3>Easy Booking</h3>
-                        <p>Simple interface for scheduling and managing your experiments</p>
                     </div>
                     
-                    <div class="benefit-block">
-                        <div class="benefit-icon">
-                            <i class="fas fa-laptop"></i>
+                    <div class="benefit-item">
+                        <div class="benefit-number">03</div>
+                        <div class="benefit-text">
+                            <h3>Flexible Learning</h3>
+                            <p>Learn at your own pace. Repeat experiments, explore different parameters, and deepen your understanding without time pressure.</p>
                         </div>
-                        <h3>Remote Flexibility</h3>
-                        <p>Perform experiments without physical lab constraints</p>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="benefit-number">04</div>
+                        <div class="benefit-text">
+                            <h3>Cost Effective</h3>
+                            <p>Reduce travel costs and lab maintenance. Multiple students can use the same equipment remotely, maximizing resource utilization.</p>
+                        </div>
                     </div>
                 </div>
                 
