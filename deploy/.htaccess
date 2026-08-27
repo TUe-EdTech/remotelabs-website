@@ -8,9 +8,6 @@
 # ---------------------------------------------------------------------------
 
 <IfModule mod_headers.c>
-    # Prevent directory listing
-    Options -Indexes
-
     # Clickjacking protection
     Header always set X-Frame-Options "SAMEORIGIN"
 
