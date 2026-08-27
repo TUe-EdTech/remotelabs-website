@@ -13,6 +13,7 @@
  *   --dry-run       Show what would be copied without actually copying
  *   --build         Also run npm build after syncing
  *   --deploy        Also copy to deploy/ folder after building
+ *   --exp-build     Build experimental to experimental_deploy/ folder
  *   --force         Overwrite without confirmation
  *   --all          Sync all files (including deleted files)
  *   --interactive   Ask for confirmation for each file (default for new files)
@@ -20,6 +21,7 @@
  * Examples:
  *   node scripts/sync-experimental.js --dry-run
  *   node scripts/sync-experimental.js --build --deploy
+ *   node scripts/sync-experimental.js --exp-build
  *   node scripts/sync-experimental.js --force
  */
 
@@ -30,6 +32,7 @@ const { execSync } = require('child_process');
 // Configuration
 const REPO_ROOT = path.join(__dirname, '..');
 const EXPERIMENTAL_DIR = path.join(REPO_ROOT, 'experimental');
+const EXPERIMENTAL_DEPLOY_DIR = path.join(REPO_ROOT, 'experimental_deploy');
 const PRODUCTION_DIR = path.join(REPO_ROOT, 'production_source');
 const DEPLOY_DIR = path.join(REPO_ROOT, 'deploy');
 
@@ -193,6 +196,31 @@ function runBuild(dryRun = false) {
   }
 }
 
+function buildExperimentalDeploy(dryRun = false) {
+  if (dryRun) {
+    log('[DRY RUN] Would build experimental to experimental_deploy/', 'info');
+    return true;
+  }
+  
+  try {
+    log('Building experimental to experimental_deploy/...', 'info');
+    
+    // Run the build-experimental script
+    const originalDir = process.cwd();
+    process.chdir(REPO_ROOT);
+    
+    execSync('node scripts/build-experimental.js', { stdio: 'inherit' });
+    
+    process.chdir(originalDir);
+    
+    log('Experimental build complete!', 'success');
+    return true;
+  } catch (error) {
+    log(`Failed to build experimental: ${error.message}`, 'error');
+    return false;
+  }
+}
+
 function copyToDeploy(dryRun = false) {
   if (dryRun) {
     log('[DRY RUN] Would copy built files to deploy/', 'info');
@@ -286,6 +314,7 @@ async function main() {
     dryRun: args.includes('--dry-run'),
     build: args.includes('--build'),
     deploy: args.includes('--deploy'),
+    expBuild: args.includes('--exp-build'),
     force: args.includes('--force'),
     all: args.includes('--all'),
     interactive: args.includes('--interactive')
@@ -382,6 +411,14 @@ async function main() {
     }
   }
   
+  // Build experimental if requested
+  if (options.expBuild) {
+    const expBuildSuccess = await buildExperimentalDeploy(options.dryRun);
+    if (!expBuildSuccess) {
+      process.exit(1);
+    }
+  }
+
   // Deploy if requested
   if (options.deploy && options.build) {
     const deploySuccess = await copyToDeploy(options.dryRun);

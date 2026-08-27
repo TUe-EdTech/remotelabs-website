@@ -31,3 +31,6 @@ npm-debug.log*
 # Temporary files
 tmp/
 temp/
+
+# Experimental build output
+experimental_deploy/
