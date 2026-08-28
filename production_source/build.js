@@ -152,6 +152,74 @@ try {
   console.error('✗ Assets copy failed:', error.message);
 }
 
+// Step 7: Generate partner logos HTML
+console.log('Generating partner logos...');
+try {
+  const logosDir = path.join(__dirname, 'assets', 'images', 'logos', 'partner-logos');
+  const htmlPath = path.join(__dirname, '../deploy/index.html');
+  
+  if (!fs.existsSync(logosDir)) {
+    console.warn('⚠ Partner logos directory not found, skipping logo generation');
+  } else {
+    const logoFiles = fs.readdirSync(logosDir)
+      .filter(file => {
+        const ext = path.extname(file).toLowerCase();
+        return ['.png', '.jpg', '.jpeg', '.svg', '.gif', '.webp'].includes(ext);
+      })
+      .sort((a, b) => a.localeCompare(b));
+    
+    if (logoFiles.length === 0) {
+      console.warn('⚠ No logo files found in partner-logos directory, skipping');
+    } else {
+      let htmlContent = fs.readFileSync(htmlPath, 'utf8');
+      
+      // Map filename to known partner URLs
+      const urlMap = {
+        'tue': 'https://www.tue.nl/en/',
+        'avans': 'https://www.avans.nl/',
+        'eires': 'https://www.tue.nl/en/research/institutes/eindhoven-institute-for-renewable-energy-systems/research',
+        'mnext': 'https://www.mnext.nl/',
+        'summa': 'https://summa-onderwijs.nl/',
+        'zpnu': 'https://zp.edu.ua/en/',
+        'fontys': 'https://www.fontys.nl/'
+      };
+      
+      // Generate logo HTML
+      const logoHTML = logoFiles.map(file => {
+        const filename = path.parse(file).name;
+        const src = `assets/images/logos/partner-logos/${file}`;
+        const alt = filename.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        
+        // Find matching URL
+        let href = '#';
+        const lowerName = filename.toLowerCase();
+        for (const [key, url] of Object.entries(urlMap)) {
+          if (lowerName.includes(key)) {
+            href = url;
+            break;
+          }
+        }
+        
+        return `                                <a href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Visit ${alt}">
+                                    <img src="${src}" alt="${alt}" class="partner-logo" width="120" height="40">
+                                </a>`;
+      }).join('\n');
+      
+      // Replace the placeholder with generated HTML
+      htmlContent = htmlContent.replace(
+        /<div class="partner-logos" id="partnerLogos">[\s\S]*?<\/div>/,
+        `<div class="partner-logos" id="partnerLogos">\n${logoHTML}\n                            </div>`
+      );
+      
+      fs.writeFileSync(htmlPath, htmlContent);
+      console.log(`✓ Generated HTML for ${logoFiles.length} partner logos`);
+    }
+  }
+  console.log('');
+} catch (error) {
+  console.error('✗ Partner logos generation failed:', error.message);
+}
+
 console.log('Build completed successfully! ✓');
 console.log('\nGenerated files:');
 console.log('  - deploy/styles.min.css');
