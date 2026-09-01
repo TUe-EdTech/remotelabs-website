@@ -1,9 +1,9 @@
 // Basic Service Worker for Remote Labs Website
 // Version: Bump this number whenever you update assets to force cache invalidation
-const CACHE_NAME = 'remotelabs-v2.1.1';
+const CACHE_NAME = 'remotelabs-v2.1.2';
 // Updated by build.js to match the ?v= query string used in the HTML so that
 // precached entries share the same cache key as the runtime requests.
-const ASSET_VERSION = '2.1.1';
+const ASSET_VERSION = '2.1.2';
 
 const ASSETS_TO_CACHE = [
     '/',
