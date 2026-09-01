@@ -11,34 +11,41 @@ console.log('Bumping version...');
 try {
   const versionPath = path.join(__dirname, '../VERSION');
   let versionData = fs.readFileSync(versionPath, 'utf8');
-  const cacheMatch = versionData.match(/CACHE_NAME=(v\d+)/);
-  const assetMatch = versionData.match(/ASSET_VERSION=(v\d+)/);
-  
-  const currentCacheVersion = cacheMatch ? cacheMatch[1] : 'v1';
-  const currentAssetVersion = assetMatch ? assetMatch[1] : 'v1';
-  const newCacheVersion = `v${parseInt(currentCacheVersion.substring(1)) + 1}`;
-  const newAssetVersion = `v${parseInt(currentAssetVersion.substring(1)) + 1}`;
-  
+  // Semantic versioning: vMAJOR.MINOR.PATCH (e.g. v2.1.0).
+  // The build only auto-bumps the PATCH number. MAJOR and MINOR bumps are
+  // done manually in the VERSION file when directed.
+  const semverRe = /(v\d+\.\d+\.\d+)/;
+  const cacheMatch = versionData.match(new RegExp('CACHE_NAME=' + semverRe.source));
+  const assetMatch = versionData.match(new RegExp('ASSET_VERSION=' + semverRe.source));
+
+  function bumpPatch(v) {
+    const parts = v.substring(1).split('.').map(Number);
+    return `v${parts[0]}.${parts[1]}.${parts[2] + 1}`;
+  }
+
+  const currentCacheVersion = cacheMatch ? cacheMatch[1] : 'v2.1.0';
+  const currentAssetVersion = assetMatch ? assetMatch[1] : 'v2.1.0';
+  const newCacheVersion = bumpPatch(currentCacheVersion);
+  const newAssetVersion = bumpPatch(currentAssetVersion);
+
   // Update VERSION file
   fs.writeFileSync(versionPath, `CACHE_NAME=${newCacheVersion}\nASSET_VERSION=${newAssetVersion}\n`);
-  
+
   // Update Service Worker
   const swPath = path.join(__dirname, 'sw.js');
   let swContent = fs.readFileSync(swPath, 'utf8');
-  swContent = swContent.replace(/const CACHE_NAME = 'remotelabs-\d+'/g, `const CACHE_NAME = 'remotelabs-${newCacheVersion.substring(1)}'`);
+  swContent = swContent.replace(/const CACHE_NAME = 'remotelabs-v[\d.]+'/g, `const CACHE_NAME = 'remotelabs-${newCacheVersion}'`);
+  swContent = swContent.replace(/const ASSET_VERSION = '[\d.]+'/g, `const ASSET_VERSION = '${newAssetVersion.substring(1)}'`);
   fs.writeFileSync(swPath, swContent);
-  
+
   // Update HTML files
   const htmlFiles = ['index.html', 'privacy.html'];
   for (const htmlFile of htmlFiles) {
     let htmlContent = fs.readFileSync(htmlFile, 'utf8');
-    htmlContent = htmlContent.replace(/\?v=\d+/g, `?v=${newAssetVersion.substring(1)}`);
-    htmlContent = htmlContent.replace(/(\.min\.(css|js))("|')/g, `$1?v=${newAssetVersion.substring(1)}$3`);
-    // Handle absolute paths like /styles.min.css
-    htmlContent = htmlContent.replace(/(\/\w+\.min\.(css|js))("|')/g, `$1?v=${newAssetVersion.substring(1)}$3`);
+    htmlContent = htmlContent.replace(/\?v=[\d.]+/g, `?v=${newAssetVersion.substring(1)}`);
     fs.writeFileSync(htmlFile, htmlContent);
   }
-  
+
   console.log(`✓ Version bumped to ${newCacheVersion} (cache) / ${newAssetVersion} (assets)\n`);
 } catch (error) {
   console.warn('⚠ Version bump skipped (no VERSION file found):', error.message);
@@ -190,13 +197,18 @@ try {
         const src = `assets/images/logos/partner-logos/${file}`;
         const alt = filename.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         
-        // Find matching URL
+        // Find matching URL: prefer an exact filename match, fall back to a
+        // guarded substring match so unrelated logos don't get mis-linked.
         let href = '#';
         const lowerName = filename.toLowerCase();
-        for (const [key, url] of Object.entries(urlMap)) {
-          if (lowerName.includes(key)) {
-            href = url;
-            break;
+        if (urlMap[lowerName]) {
+          href = urlMap[lowerName];
+        } else {
+          for (const [key, url] of Object.entries(urlMap)) {
+            if (lowerName.includes(key)) {
+              href = url;
+              break;
+            }
           }
         }
         

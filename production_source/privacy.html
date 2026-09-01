@@ -5,31 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
     <meta name="description" content="Remote Labs Privacy Policy">
     <meta name="theme-color" content="#2563eb">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
     <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <title>Privacy Policy - Remote Labs</title>
-    <script>
-      // Email obfuscation function
-      function getEmail(subject) {
-        const user = 'k.m.a.aarts';
-        const domain = 'tue.nl';
-        const email = user + '@' + domain;
-        return subject ? email + '?subject=' + encodeURIComponent(subject) : email;
-      }
-    </script>
-    
+
     <!-- Load minified CSS -->
-    <link rel="stylesheet" href="/styles.min.css?v=4">
+    <link rel="stylesheet" href="/styles.min.css?v=2.1.1">
     <!-- Fallback if CSS fails to load -->
-    <noscript><link rel="stylesheet" href="/styles.min.css?v=4"></noscript>
+    <noscript><link rel="stylesheet" href="/styles.min.css?v=2.1.1"></noscript>
     
     <!-- Self-hosted fonts (no external CDN dependency) -->
-    <link rel="stylesheet" href="assets/fonts/fonts.css?v=4">
-    <link rel="stylesheet" href="assets/fontawesome/css/all.min.css?v=4">
-    
+    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.1">
+
     <style>
         .privacy-container {
             padding: 4rem 0;
@@ -150,7 +140,7 @@
                     <li><strong>Right to Restrict Processing:</strong> You can request that we restrict the processing of your personal data, under certain conditions.</li>
                     <li><strong>Right to Object to Processing:</strong> You can object to our processing of your personal data, under certain conditions.</li>
                 </ul>
-                <p>To exercise any of these rights, please contact us at: <a href="#" onclick="window.location.href='mailto:'+getEmail();return false;" class="contact-link" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
+                <p>To exercise any of these rights, please contact us at: <a href="mailto:k.m.a.aarts@tue.nl" class="contact-link" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
             </div>
 
             <div class="privacy-section">
@@ -172,7 +162,7 @@
             <div class="privacy-section">
                 <h3>10. Contact Us</h3>
                 <p>If you have any questions about this Privacy Policy, please contact us:</p>
-                <p><a href="#" onclick="window.location.href='mailto:'+getEmail();return false;" class="contact-link" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
+                <p><a href="mailto:k.m.a.aarts@tue.nl" class="contact-link" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
                 <p>Eindhoven University of Technology<br>
                 Den Dolech 2, 5612 AZ Eindhoven<br>
                 The Netherlands</p>
@@ -188,7 +178,7 @@
                     <h4>Quick Links</h4>
                     <ul>
                         <li><a href="/">Home</a></li>
-                        <li><a href="/#contact">Benefits</a></li>
+                        <li><a href="/#benefits">Benefits</a></li>
                         <li><a href="/#contact">Contact</a></li>
                         <li><a href="/privacy.html">Privacy Policy</a></li>
                         <li><a href="https://remotelabs.tue.nl">Go to Remote Labs</a></li>
@@ -229,7 +219,7 @@
                     <div>
                         <p>Eindhoven University of Technology</p>
                         <p>Den Dolech 2, 5612 AZ Eindhoven</p>
-                        <p><a href="#" onclick="window.location.href='mailto:'+getEmail('Remote Labs Inquiry');return false;" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
+                        <p><a href="mailto:k.m.a.aarts@tue.nl?subject=Remote%20Labs%20Inquiry" style="color: #2563eb;">k.m.a.aarts@tue.nl</a></p>
                         <p>+31 (0)40 247 9111</p>
                     </div>
                 </div>
@@ -245,7 +235,7 @@
     </footer>
 
     <!-- Load minified JavaScript -->
-    <script src="/script.min.js?v=4" defer></script>
+    <script src="/script.min.js?v=2.1.1" defer></script>
     
 </body>
 </html>

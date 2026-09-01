@@ -99,12 +99,16 @@ remotelabs-website/
 ```
 
 ### Color Scheme
-- **Primary**: `#2563eb` (blue)
+The design is monochrome: black, white, and a gray scale. There is no
+branded accent color — `--highlight-color` resolves to `#000`, so buttons,
+borders, icons, and active states are all black.
+- **Highlight** (`--highlight-color`): `#000` (black)
 - **Black**: `#000`
 - **White**: `#fff`
 - **Gray 50**: `#f9fafb`
 - **Gray 100**: `#f3f4f6`
-- **Middle Section**: `#f8faff` (light blue-gray)
+- **Gray 600**: `#4b5563` (body secondary text)
+- **Gray 900**: `#111827` (footer background)
 - **Dark**: `#111827`
 
 ---

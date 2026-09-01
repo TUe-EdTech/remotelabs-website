@@ -1,19 +1,20 @@
 // Basic Service Worker for Remote Labs Website
 // Version: Bump this number whenever you update assets to force cache invalidation
-const CACHE_NAME = 'remotelabs-v4';
+const CACHE_NAME = 'remotelabs-v2.1.1';
+// Updated by build.js to match the ?v= query string used in the HTML so that
+// precached entries share the same cache key as the runtime requests.
+const ASSET_VERSION = '2.1.1';
 
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
-    '/styles.min.css',
-    '/script.min.js',
+    '/styles.min.css?v=' + ASSET_VERSION,
+    '/script.min.js?v=' + ASSET_VERSION,
 
-    '/assets/fonts/fonts.css',
+    '/assets/fonts/fonts.css?v=' + ASSET_VERSION,
     '/assets/fonts/lato-400-latin.woff2',
     '/assets/fonts/lato-700-latin.woff2',
-    '/assets/fonts/poppins-700-latin.woff2',
-    '/assets/fontawesome/css/all.min.css',
-    '/assets/fontawesome/webfonts/fa-solid-900.woff2'
+    '/assets/fonts/poppins-700-latin.woff2'
 ];
 
 // Install event - cache assets and activate immediately
