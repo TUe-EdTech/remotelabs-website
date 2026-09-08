@@ -129,15 +129,21 @@
                 video.src = videoPath;
                 video.load();
 
-                video.onerror = function () {
-                    console.error('Failed to load video:', videoId);
-                };
+                video.onerror = function () {};
+
                 video.oncanplaythrough = function () {
                     video.play().catch(function () {});
                 };
 
                 steps.forEach(function (s) { s.classList.remove('active-step'); });
                 this.classList.add('active-step');
+            });
+
+            step.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+                    e.preventDefault();
+                    this.click();
+                }
             });
         });
 
@@ -162,7 +168,7 @@
                 } catch (err) {
                     target.scrollIntoView(true);
                 }
-                setTimeout(function () { cooldown = false; }, 1000);
+                setTimeout(function () { cooldown = false; }, 250);
             });
         });
     }
@@ -229,17 +235,6 @@
     function init() {
         setupVideoSwitching();
 
-        // Auto-load and play the first workflow video on page load.
-        var video = document.getElementById('workflow-video');
-        var firstStep = document.querySelector('.workflow-step[data-video="book-experiment"]');
-        if (video && firstStep) {
-            video.src = 'assets/videos/book-experiment.mp4';
-            video.load();
-            video.oncanplaythrough = function () {
-                video.play().catch(function () {});
-            };
-        }
-
         setupHeroVideoControls();
         setupSmoothScroll();
         setupToggleSwitch();
@@ -249,5 +244,16 @@
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
+    }
+
+    // --- Service worker registration ---
+    // Only register over http/https (not file://) and after the page has
+    // loaded so it never competes with first paint.
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+        window.addEventListener('load', function () {
+            navigator.serviceWorker.register('sw.js').catch(function (err) {
+                console.warn('SW reg failed:', err);
+            });
+        });
     }
 })();

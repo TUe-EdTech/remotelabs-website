@@ -22,15 +22,19 @@ remotelabs-website/
 ├── deploy/                        # ✅ PRODUCTION FILES - Upload to server
 │   ├── index.html                 # Main page
 │   ├── privacy.html               # Privacy policy
-│   ├── styles.min.css             # Minified styles (versioned with ?v=3)
-│   ├── script.min.js              # Minified JavaScript (versioned with ?v=3)
-│   ├── sw.js                      # Service Worker (version: remotelabs-v3)
+│   ├── styles.min.css             # Minified styles (versioned with ?v=2.1.1)
+│   ├── script.min.js              # Minified JavaScript (versioned with ?v=2.1.1)
+│   ├── sw.js                      # Service Worker (version: remotelabs-v2.1.1)
 │   ├── manifest.json              # Web app manifest
 │   ├── robots.txt                 # Search engine crawl rules + sitemap pointer
 │   ├── sitemap.xml                # XML sitemap
 │   ├── .htaccess                  # Real HTTP security headers (see Security)
 │   ├── assets/                    # Images, videos, logos
-│   └── error_pages/               # Custom error pages (400, 401, 403, 404, 500)
+│   ├── 400.shtml                  # Custom error pages (at deploy root)
+│   ├── 401.shtml
+│   ├── 403.shtml
+│   ├── 404.shtml
+│   └── 500.shtml
 ├── experimental/                  # 🧪 EXPERIMENTAL DEVELOPMENT
 │   ├── index.html                 # Experimental HTML source
 │   ├── styles.css                 # Experimental CSS source
@@ -40,7 +44,9 @@ remotelabs-website/
 │   └── ...                        # Built files (ready for preview)
 ├── scripts/                      # Build and utility scripts
 │   ├── build-experimental.js      # Build script for experimental folder
-│   └── build-experimental.bat     # Windows batch version
+│   ├── build-experimental.bat     # Windows batch version
+│   ├── partner-logos.js           # Shared partner-logo HTML generation
+│   └── sync-experimental.js       # Sync experimental → production_source
 └── production_source/            # Development files (keep for future edits)
     ├── index.html                 # Source HTML
     ├── styles.css                 # Source CSS
@@ -119,7 +125,7 @@ A git hook can be set up to automatically run `node scripts/build-experimental.j
 - **JavaScript**: `deploy/script.min.js` - Main JavaScript
 - **Service Worker**: `deploy/sw.js` - Offline caching (update version when deploying!)
 - **Images/Logos**: `deploy/assets/` - All images and videos
-- **Error Pages**: `deploy/error_pages/` - Custom error pages
+- **Error Pages**: `deploy/400.shtml`, `deploy/404.shtml`, etc. (at deploy root)
 
 ## Domain & Hosting
 
@@ -166,13 +172,13 @@ Note: the deprecated `X-XSS-Protection` and `Expect-CT` headers were removed.
 
 1. **Update Service Worker Version** in `production_source/sw.js`:
    ```javascript
-   const CACHE_NAME = 'remotelabs-v2';  // ⬅️ Bump this number!
+   const CACHE_NAME = 'remotelabs-v2.1.1';  // ⬅️ Bump this number!
    ```
 
 2. **Update Asset Version Query Strings** in HTML files:
    ```html
-   <link rel="stylesheet" href="styles.min.css?v=2">  <!-- Bump v=2 to v=3 -->
-   <script src="script.min.js?v=2" defer></script>     <!-- Bump v=2 to v=3 -->
+   <link rel="stylesheet" href="styles.min.css?v=2.1.1">  <!-- Bump the patch number -->
+   <script src="script.min.js?v=2.1.1" defer></script>     <!-- Bump the patch number -->
    ```
 
 3. **Cache-Control Meta Tags** (already added to index.html and privacy.html):
@@ -193,11 +199,13 @@ Note: the deprecated `X-XSS-Protection` and `Expect-CT` headers were removed.
 
 ### 🔧 Service Worker Behavior
 
-The updated `sw.js` uses a **Network-First** strategy:
-- **HTML files**: Always fetched from network (never cached)
-- **CSS/JS/images**: Try network first, fall back to cache if offline
+The updated `sw.js` uses a **Network-First** strategy with runtime cache-as-you-go:
+- **HTML navigations**: Always fetched from network first; falls back to cached copy only when offline
+- **CSS/JS/images**: Try network first, cache the response, fall back to cache if offline
+- **No static precache list**: Assets are cached on first fetch, so there is no manual-bump failure mode
 - **Old caches**: Automatically cleaned up on activation
 - **Immediate activation**: `skipWaiting()` and `clients.claim()` ensure no delays
+- **Registration**: `script.js` registers the service worker on page load (http/https only)
 
 This means:
 - ✅ Users always get fresh HTML
@@ -210,7 +218,7 @@ This means:
 | Symptom | Cause | Solution |
 |---------|-------|----------|
 | Visitors see old content | Service worker cache not invalidated | Bump `CACHE_NAME` version |
-| CSS/JS not updating | Browser cache | Add/bump `?v=2` query string |
+| CSS/JS not updating | Browser cache | Add/bump `?v=2.1.1` query string |
 | HTML not updating | Browser cache | `Cache-Control: no-cache` meta tag |
 | Some users still see old version | CDN cache | Contact TU/e IT to clear cache |
 
@@ -218,8 +226,8 @@ This means:
 
 After deploying:
 - [ ] Open site in **incognito/private window** (bypasses cache)
-- [ ] Check Chrome DevTools > Application > Service Workers (should show `remotelabs-v2`)
-- [ ] Check DevTools > Network tab: CSS/JS should have `?v=2` in URL
+- [ ] Check Chrome DevTools > Application > Service Workers (should show `remotelabs-v2.1.1`)
+- [ ] Check DevTools > Network tab: CSS/JS should have `?v=2.1.1` in URL
 - [ ] Hard refresh (Ctrl+F5) to ensure fresh load
 - [ ] Test on mobile device
 - [ ] Ask a colleague to verify (they won't have cached version)
@@ -251,8 +259,8 @@ Remove after all users have updated.
 - Review and update privacy policy
 
 ### Version Updates (After Changes):
-1. Update `CACHE_NAME` in `production_source/sw.js` (e.g., `remotelabs-v2` → `remotelabs-v3`)
-2. Update `v=2` to `v=3` in all CSS/JS references in HTML files
+1. Update `CACHE_NAME` in `production_source/sw.js` (e.g., `remotelabs-v2.1.1` → `remotelabs-v2.1.2`)
+2. Update `?v=2.1.1` to `?v=2.1.2` in all CSS/JS references in HTML files
 3. Rebuild and deploy
 
 ## Emergency Contacts

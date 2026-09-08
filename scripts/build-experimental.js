@@ -17,6 +17,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { generatePartnerLogosHTML: generateLogosHTML } = require('./partner-logos.js');
 
 // Configuration
 const REPO_ROOT = path.join(__dirname, '..');
@@ -128,78 +129,10 @@ function minifyJS() {
 }
 
 function generatePartnerLogosHTML() {
-  try {
-    const logosDir = path.join(EXPERIMENTAL_DIR, 'assets', 'images', 'logos', 'partner-logos');
-    const htmlPath = path.join(EXPERIMENTAL_DEPLOY_DIR, 'index.html');
-    
-    if (!fs.existsSync(logosDir)) {
-      log('Partner logos directory not found, skipping logo generation', 'warning');
-      return false;
-    }
-    
-    const logoFiles = fs.readdirSync(logosDir)
-      .filter(file => {
-        const ext = path.extname(file).toLowerCase();
-        return ['.png', '.jpg', '.jpeg', '.svg', '.gif', '.webp'].includes(ext);
-      })
-      .sort((a, b) => a.localeCompare(b));
-    
-    if (logoFiles.length === 0) {
-      log('No logo files found in partner-logos directory', 'warning');
-      return false;
-    }
-    
-    let htmlContent = fs.readFileSync(htmlPath, 'utf8');
-    
-    // Generate logo HTML
-    const logoHTML = logoFiles.map(file => {
-      const filename = path.parse(file).name;
-      const ext = path.extname(file).toLowerCase();
-      const src = `assets/images/logos/partner-logos/${file}`;
-      const alt = filename.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-      const href = getPartnerLink(filename);
-      
-      return `                                <a href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Visit ${alt}">
-                                    <img src="${src}" alt="${alt}" class="partner-logo" width="120" height="40">
-                                </a>`;
-    }).join('\n');
-    
-    // Replace the placeholder with generated HTML
-    htmlContent = htmlContent.replace(
-      /<div class="partner-logos" id="partnerLogos">[\s\S]*?<\/div>/,
-      `<div class="partner-logos" id="partnerLogos">\n${logoHTML}\n                            </div>`
-    );
-    
-    fs.writeFileSync(htmlPath, htmlContent);
-    log(`Generated HTML for ${logoFiles.length} partner logos`, 'success');
-    return true;
-  } catch (error) {
-    log(`Failed to generate partner logos: ${error.message}`, 'error');
-    return false;
-  }
-}
-
-function getPartnerLink(filename) {
-  // Map filename to known partner URLs
-  const urlMap = {
-    'tue': 'https://www.tue.nl/en/',
-    'avans': 'https://www.avans.nl/',
-    'eires': 'https://www.tue.nl/en/research/institutes/eindhoven-institute-for-renewable-energy-systems/research',
-    'mnext': 'https://www.mnext.nl/',
-    'summa': 'https://summa-onderwijs.nl/',
-    'zpnu': 'https://zp.edu.ua/en/',
-    'fontys': 'https://www.fontys.nl/'
-  };
-  
-  const lowerName = filename.toLowerCase();
-  for (const [key, url] of Object.entries(urlMap)) {
-    if (lowerName.includes(key)) {
-      return url;
-    }
-  }
-  
-  // Default to homepage if no match found
-  return '#';
+  const logosDir = path.join(EXPERIMENTAL_DIR, 'assets', 'images', 'logos', 'partner-logos');
+  const htmlPath = path.join(EXPERIMENTAL_DEPLOY_DIR, 'index.html');
+  const count = generateLogosHTML(logosDir, htmlPath, log);
+  return count >= 0;
 }
 
 function updateHTMLReferences() {

@@ -27,6 +27,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const { execSync } = require('child_process');
 
 // Configuration
@@ -70,10 +71,19 @@ function log(message, type = 'info') {
 }
 
 function isExcluded(filePath) {
-  return EXCLUDED_FILES.some(excluded => 
-    filePath.includes(excluded) || 
-    filePath.includes(path.join('node_modules'))
-  );
+  return EXCLUDED_FILES.some(excluded => {
+    if (excluded.startsWith('*.')) {
+      // Extension pattern: e.g. '*.log' matches paths ending in '.log'
+      return filePath.endsWith(excluded.substring(1));
+    }
+    // Literal name match: check if the path contains this entry
+    return filePath.includes(excluded);
+  });
+}
+
+function getFileHash(filePath) {
+  const content = fs.readFileSync(filePath);
+  return crypto.createHash('sha1').update(content).digest('hex');
 }
 
 function getAllFiles(dir, baseDir = dir, fileList = []) {
@@ -117,7 +127,6 @@ function getFilesToSync(experimentalFiles, productionFiles) {
     const experimentalPath = path.join(EXPERIMENTAL_DIR, file);
     const productionPath = path.join(PRODUCTION_DIR, file);
     
-    const experimentalStat = fs.statSync(experimentalPath);
     const productionExists = productionFiles.includes(file);
     
     if (!productionExists) {
@@ -129,12 +138,10 @@ function getFilesToSync(experimentalFiles, productionFiles) {
         productionPath
       });
     } else {
-      // Check if modified
-      const productionStat = fs.statSync(productionPath);
-      const experimentalMtime = experimentalStat.mtime.getTime();
-      const productionMtime = productionStat.mtime.getTime();
-      
-      if (experimentalMtime > productionMtime) {
+      // Check if modified by comparing content hashes (more reliable than
+      // mtime, which can be reset by copy operations or differ across
+      // filesystems).
+      if (getFileHash(experimentalPath) !== getFileHash(productionPath)) {
         toSync.push({
           file,
           status: 'modified',

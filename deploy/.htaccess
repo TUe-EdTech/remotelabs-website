@@ -29,17 +29,32 @@
 
     # Long cache for fingerprinted/static assets; HTML is handled by the
     # service worker (network-first) so it stays fresh.
-    <FilesMatch "\.(css|js|svg|png|jpg|jpeg|webp|woff2?|mp4)$">
+    # Note: .mp4 is excluded because videos are not versioned with ?v= in
+    # the HTML; a replaced video would stay stale for a year.
+    <FilesMatch "\.(css|js|svg|png|jpg|jpeg|webp|woff2?)$">
         Header set Cache-Control "public, max-age=31536000, immutable"
     </FilesMatch>
     <FilesMatch "\.html$">
         Header set Cache-Control "no-cache, must-revalidate"
     </FilesMatch>
+    # The service worker must always be re-fetched so the browser picks up
+    # the latest worker script on every visit.
+    <FilesMatch "sw\.js$">
+        Header set Cache-Control "no-cache"
+    </FilesMatch>
+
+    # Content-Security-Policy for error pages (.shtml). These are static
+    # pages with only inline styles and no external resources, so the
+    # policy is locked down accordingly. The meta http-equiv CSP in each
+    # error page is a fallback; this header takes precedence.
+    <FilesMatch "\.shtml$">
+        Header set Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'"
+    </FilesMatch>
 </IfModule>
 
 # Serve pre-compressed / compress on the fly where available
 <IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml application/json
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript image/svg+xml application/json
 </IfModule>
 
 # Custom error pages (already shipped in this folder)
