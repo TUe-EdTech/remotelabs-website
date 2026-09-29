@@ -12,7 +12,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -27,6 +27,11 @@ jobs:
           cd production_source
           npm install
 
+      - name: Run source consistency tests
+        run: |
+          cd production_source
+          npm test
+
       - name: Run build
         run: |
           cd production_source
@@ -35,6 +40,14 @@ jobs:
       - name: Verify build
         run: |
           ls -la deploy/styles.min.css deploy/script.min.js deploy/index.html deploy/privacy.html deploy/sw.js deploy/assets/
+
+      - name: Check link and asset integrity
+        run: node scripts/check-links.js deploy
+
+      - name: Run Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.14
+          lhci autorun --config=lighthouserc.json
 
       - name: Commit build artifacts
         if: github.ref == 'refs/heads/main'

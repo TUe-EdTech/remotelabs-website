@@ -99,6 +99,14 @@ The `experimental/` folder provides a sandbox environment for testing new design
 **Automatic Build on Commit:**
 A git hook can be set up to automatically run `node scripts/build-experimental.js` when committing changes to the experimental folder. This ensures `experimental_deploy/` is always up-to-date.
 
+### Automated Quality Gates (CI)
+
+Every push and pull request to `main` runs these checks in GitHub Actions (`.github/workflows/build-and-deploy.yml`) against the freshly built `deploy/` output:
+
+1. **Source consistency tests** — `npm test` in `production_source/` (JS syntax, CSP without `unsafe-inline`, version consistency).
+2. **Link and asset integrity** — `node scripts/check-links.js deploy` verifies that every local link, image, video, font, icon, manifest entry and sitemap URL resolves to a real file, and that every in-page anchor (including SVG `<use>` icon refs) has a matching id. Run it manually with `node scripts/check-links.js experimental_deploy` to check an experimental preview.
+3. **Lighthouse budgets** — `lighthouserc.json` fails the build if any category drops below its minimum score (performance >= 0.85, accessibility / best-practices / SEO >= 0.9).
+
 ---
 
 ### Production Workflow
