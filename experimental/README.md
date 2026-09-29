@@ -13,12 +13,10 @@ remotelabs-website/
 │   ├── styles.css                 # Main stylesheet (edit here)
 │   ├── script.js                  # JavaScript file (edit here)
 │   ├── manifest.json              # Web app manifest (edit here)
-│   ├── assets/                    # Images, fonts, videos, logos
-│   │   ├── images/
-│   │   │   ├── logos/
-│   │   │   └── videos/
-│   │   ├── fontawesome/
-│   │   └── fonts/
+│   ├── assets/                    # Only experimental-only assets (fontawesome)
+│   │   └── fontawesome/            # Shared fonts/images/videos are NOT stored
+│   │                              # here; the build copies them from
+│   │                              # production_source/assets/
 │   └── README.md                  # This file
 │
 ├── experimental_deploy/           # 🎯 BUILD OUTPUT (auto-generated)
@@ -187,7 +185,8 @@ node scripts/build-experimental.js
 - Minifies CSS to `styles.min.css`
 - Minifies JavaScript to `script.min.js`
 - Updates HTML references to use minified files with version query strings
-- Copies assets directory
+- Copies shared assets (fonts/images/videos) from `production_source/assets/`
+- Merges in `experimental/assets/fontawesome/`
 - Copies icons from root
 
 **Note:** Requires `clean-css` and `uglify-js` npm packages to be installed. If not available, it falls back to copying original files.

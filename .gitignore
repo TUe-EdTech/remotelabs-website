@@ -34,3 +34,9 @@ temp/
 
 # Experimental build output
 experimental_deploy/
+
+# Experimental assets: shared fonts/images/videos are copied from production_source/
+# at build time (see scripts/build-experimental.js); only fontawesome is tracked.
+experimental/assets/fonts/
+experimental/assets/images/
+experimental/assets/videos/

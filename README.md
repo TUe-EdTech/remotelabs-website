@@ -39,7 +39,7 @@ remotelabs-website/
 │   ├── index.html                 # Experimental HTML source
 │   ├── styles.css                 # Experimental CSS source
 │   ├── script.js                  # Experimental JavaScript source
-│   └── assets/                    # Experimental assets (symlinked to production)
+│   └── assets/fontawesome/        # Experimental-only assets (shared assets come from production_source/ at build time)
 ├── experimental_deploy/           # 🎯 EXPERIMENTAL BUILD OUTPUT
 │   └── ...                        # Built files (ready for preview)
 ├── scripts/                      # Build and utility scripts

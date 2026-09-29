@@ -23,6 +23,7 @@ const { generatePartnerLogosHTML: generateLogosHTML } = require('./partner-logos
 const REPO_ROOT = path.join(__dirname, '..');
 const EXPERIMENTAL_DIR = path.join(REPO_ROOT, 'experimental');
 const EXPERIMENTAL_DEPLOY_DIR = path.join(REPO_ROOT, 'experimental_deploy');
+const PRODUCTION_DIR = path.join(REPO_ROOT, 'production_source');
 
 // Files to copy directly
 const FILES_TO_COPY = [
@@ -129,7 +130,7 @@ function minifyJS() {
 }
 
 function generatePartnerLogosHTML() {
-  const logosDir = path.join(EXPERIMENTAL_DIR, 'assets', 'images', 'logos', 'partner-logos');
+  const logosDir = path.join(PRODUCTION_DIR, 'assets', 'images', 'logos', 'partner-logos');
   const htmlPath = path.join(EXPERIMENTAL_DEPLOY_DIR, 'index.html');
   const count = generateLogosHTML(logosDir, htmlPath, log);
   return count >= 0;
@@ -194,10 +195,13 @@ function main() {
     }
   }
   
-  // Copy assets directory
-  const assetsSrc = path.join(EXPERIMENTAL_DIR, 'assets');
-  if (fs.existsSync(assetsSrc)) {
-    copyDirectory(assetsSrc, path.join(EXPERIMENTAL_DEPLOY_DIR, 'assets'));
+  // Copy assets directory. Shared assets (fonts, images, videos) live only
+  // in production_source/; experimental/ keeps just the extra fontawesome
+  // folder. Copy the production assets first, then merge in fontawesome.
+  copyDirectory(path.join(PRODUCTION_DIR, 'assets'), path.join(EXPERIMENTAL_DEPLOY_DIR, 'assets'));
+  const fontawesomeSrc = path.join(EXPERIMENTAL_DIR, 'assets', 'fontawesome');
+  if (fs.existsSync(fontawesomeSrc)) {
+    copyDirectory(fontawesomeSrc, path.join(EXPERIMENTAL_DEPLOY_DIR, 'assets', 'fontawesome'));
   }
   
   // Copy icons
