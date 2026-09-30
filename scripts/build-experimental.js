@@ -97,7 +97,7 @@ function minifyCSS() {
     const dest = path.join(EXPERIMENTAL_DEPLOY_DIR, 'styles.min.css');
     
     log('Minifying CSS...', 'info');
-    execSync(`npx clean-css -o "${dest}" "${src}"`, { stdio: 'inherit' });
+    execSync(`npx cleancss -o "${dest}" "${src}"`, { stdio: 'inherit' });
     log('CSS minified successfully', 'success');
     return true;
   } catch (error) {

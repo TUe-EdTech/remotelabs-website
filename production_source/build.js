@@ -55,23 +55,21 @@ try {
 // Step 2: Build CSS
 console.log('Building CSS...');
 try {
-  execSync('npx clean-css -o ../deploy/styles.min.css styles.css', {
-    cwd: __dirname,
-    stdio: 'inherit'
-  });
+  // The clean-css package's executable is named `cleancss`, so
+  // `npx clean-css` cannot resolve it (this silently shipped a stale
+  // styles.min.css for weeks). Use the library API instead, and treat
+  // minification failure as fatal so a stale artifact can never ship.
+  const CleanCSS = require('clean-css');
+  const cssSource = fs.readFileSync(path.join(__dirname, 'styles.css'), 'utf8');
+  const minified = new CleanCSS().minify(cssSource);
+  if (minified.errors && minified.errors.length > 0) {
+    throw new Error(minified.errors.join('; '));
+  }
+  fs.writeFileSync(path.join(__dirname, '../deploy/styles.min.css'), minified.styles);
   console.log('✓ CSS minified successfully\n');
 } catch (error) {
   console.error('✗ CSS build failed:', error.message);
-  console.log('  Falling back to copying existing minified CSS...');
-  try {
-    if (fs.existsSync(path.join(__dirname, '../deploy/styles.min.css'))) {
-      console.log('  ✓ Using existing minified CSS');
-    } else {
-      console.error('  ✗ No existing minified CSS found');
-    }
-  } catch (fallbackError) {
-    console.error('  ✗ Fallback failed:', fallbackError.message);
-  }
+  process.exit(1);
 }
 
 // Step 3: Build JavaScript
@@ -84,16 +82,7 @@ try {
   console.log('✓ JavaScript minified successfully\n');
 } catch (error) {
   console.error('✗ JavaScript build failed:', error.message);
-  console.log('  Falling back to copying existing minified JS...');
-  try {
-    if (fs.existsSync(path.join(__dirname, '../deploy/script.min.js'))) {
-      console.log('  ✓ Using existing minified JavaScript');
-    } else {
-      console.error('  ✗ No existing minified JavaScript found');
-    }
-  } catch (fallbackError) {
-    console.error('  ✗ Fallback failed:', fallbackError.message);
-  }
+  process.exit(1);
 }
 
 // Step 4: Copy HTML files
