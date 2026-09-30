@@ -244,24 +244,33 @@ CACHE_NAME=v2.1.1
 ASSET_VERSION=v2.1.1
 ```
 
-#### 2. Version Bump (handled by build.js)
+#### 2. Version Bump (manual; build.js only syncs)
 
-`production_source/build.js` performs the version bump automatically as its
-first step. It reads the `VERSION` file (semver `vMAJOR.MINOR.PATCH`), bumps
-the PATCH number, and writes the new version back to `VERSION`, `sw.js`,
-`index.html`, and `privacy.html`. MAJOR/MINOR bumps are done manually in the
-`VERSION` file.
+**`VERSION` is the single source of truth.** The build never changes it.
 
-The standalone `scripts/bump-version.js` is a thin wrapper that delegates to
-the same logic — refer to the current source rather than the outdated inline
-listing previously shown here.
+To release (or whenever assets change and clients must get fresh copies):
 
-#### 3. Full Build with Auto-Versioning
+1. Edit the root `VERSION` file and bump `CACHE_NAME` / `ASSET_VERSION`
+   (normally the PATCH number; MAJOR/MINOR deliberately).
+2. Run `cd production_source && npm run build:full`. The build **syncs**
+   (does not bump): it writes the VERSION value into `sw.js`,
+   `index.html`, and `privacy.html`, and rebuilds `deploy/` from the same
+   value — so source and deploy artifacts can never disagree.
+3. Commit everything (source + `deploy/`).
+
+Background: the build used to auto-bump PATCH on every run. Because CI
+commits only `deploy/`, each CI run pushed the deployed version one
+patch ahead of the committed source (deploy/ reached v2.1.5 while source
+said v2.1.4). `npm test` now fails if `deploy/` and source versions
+drift, with a message telling you to rebuild and commit.
+
+#### 3. Full Build
 
 `production_source/build.js` is the canonical build script. It:
-1. Bumps the semver PATCH version (VERSION file + sw.js + HTML files)
-2. Minifies CSS via `npx clean-css`
-3. Minifies JS via `npx uglifyjs`
+1. Syncs version strings from the `VERSION` file (sw.js + HTML files)
+2. Minifies CSS via the clean-css library API (minify failure is fatal — a
+   failed minification must never silently ship a stale artifact)
+3. Minifies JS via `npx uglifyjs` (failure is fatal)
 4. Copies HTML, sw.js, robots.txt, sitemap.xml, .htaccess to `deploy/`
 5. Copies icon files and assets folder to `deploy/`
 6. Generates partner-logo HTML (via `scripts/partner-logos.js`)
@@ -270,24 +279,19 @@ Run with: `cd production_source && npm run build:full`
 
 ### Manual Version Update Steps
 
-If not using automation, **ALWAYS** do this before deployment:
+If not using the build (not recommended):
 
-1. **Update Service Worker version** in `production_source/sw.js`:
+1. **Update the root `VERSION` file** (both lines) — the source of truth
+2. **Update Service Worker version** in `production_source/sw.js`:
    ```javascript
-   const CACHE_NAME = 'remotelabs-v2.1.1';  // ⬅️ Bump the patch number
+   const CACHE_NAME = 'remotelabs-v2.1.1';  // must match VERSION
    ```
-
-2. **Update asset query strings** in HTML files:
-   ```html
-   <!-- Bump the patch number -->
-   <link rel="stylesheet" href="styles.min.css?v=2.1.1">
-   <script src="script.min.js?v=2.1.1" defer></script>
-   ```
-
-3. **Update both files**: `index.html` and `privacy.html` in both `deploy/` and `production_source/`
-   (or just run `npm run build:full` which does this automatically)
-
-4. **Verify**: Test in incognito mode before deploying
+3. **Update asset query strings** in `production_source/index.html` and
+   `production_source/privacy.html` (all `?v=` references)
+4. **Rebuild and commit `deploy/`** — or just run `npm run build:full`
+   which does all of the above automatically
+5. **Verify**: `npm test` passes (it checks source and deploy/ against
+   VERSION), then test in incognito mode before deploying
 
 ### Version History
 

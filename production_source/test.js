@@ -89,6 +89,54 @@ if (fs.existsSync(versionPath)) {
     if (cacheMatch && swCache && assetMatch && swAsset) {
         console.log('  ok   VERSION/sw.js cache (' + swCache[1] + ') and asset (' + swAsset[1] + ') versions match');
     }
+
+    // index.html asset references must match VERSION (catches "bumped
+    // VERSION but did not run the build" before deploy/ is involved).
+    if (assetMatch) {
+        const expected = '?v=' + assetMatch[1].substring(1);
+        const refs = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').match(/\?v=[\d.]+/g) || [];
+        const bad = refs.filter(r => r !== expected);
+        if (refs.length === 0) {
+            fail('index.html', 'no ?v= asset references found');
+        } else if (bad.length) {
+            fail('index.html', 'asset references ' + bad[0] + ' != VERSION (' + expected + ') - run npm run build:full to sync');
+        } else {
+            console.log('  ok   index.html asset references match VERSION (' + refs.length + ' refs)');
+        }
+    }
+
+    // deploy/ artifacts must carry the same version as the source.
+    // CI regenerates deploy/ from source on every run, so committed
+    // drift means someone pushed source changes (or a VERSION bump)
+    // without rebuilding and committing deploy/.
+    if (assetMatch) {
+        const deployIndex = path.join(ROOT, '../deploy/index.html');
+        if (fs.existsSync(deployIndex)) {
+            const expected = '?v=' + assetMatch[1].substring(1);
+            const refs = fs.readFileSync(deployIndex, 'utf8').match(/\?v=[\d.]+/g) || [];
+            const bad = refs.filter(r => r !== expected);
+            if (refs.length === 0) {
+                fail('../deploy/index.html', 'no ?v= asset references found');
+            } else if (bad.length) {
+                fail('../deploy/index.html', 'asset references ' + bad[0] + ' != VERSION (' + expected + ') - run npm run build:full and commit deploy/');
+            } else {
+                console.log('  ok   deploy/index.html asset references match VERSION (' + refs.length + ' refs)');
+            }
+        }
+    }
+    if (cacheMatch) {
+        const deploySw = path.join(ROOT, '../deploy/sw.js');
+        if (fs.existsSync(deploySw)) {
+            const swdCache = fs.readFileSync(deploySw, 'utf8').match(/const CACHE_NAME = 'remotelabs-v(\d+\.\d+\.\d+)'/);
+            if (!swdCache) {
+                fail('../deploy/sw.js', 'CACHE_NAME not found');
+            } else if (swdCache[1] !== cacheMatch[1].substring(1)) {
+                fail('../deploy/sw.js', 'CACHE_NAME (' + swdCache[1] + ') != VERSION (' + cacheMatch[1] + ') - run npm run build:full and commit deploy/');
+            } else {
+                console.log('  ok   deploy/sw.js CACHE_NAME matches VERSION');
+            }
+        }
+    }
 } else {
     console.log('  --   VERSION file not found, skipping version checks');
 }

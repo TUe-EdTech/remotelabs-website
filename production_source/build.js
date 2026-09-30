@@ -7,49 +7,46 @@ const { generatePartnerLogosHTML } = require('../scripts/partner-logos.js');
 
 console.log('Starting build process...\n');
 
-// Step 1: Bump version
-console.log('Bumping version...');
+// Step 1: Sync version strings from the VERSION file
+// VERSION is the single source of truth. To release, bump it manually
+// (PATCH in a normal edit, MAJOR/MINOR deliberately), then run the build:
+// it syncs sw.js/index.html/privacy.html here and rebuilds deploy/ from
+// the same value, so source and deploy artifacts can never disagree.
+// The build does NOT bump versions: CI commits only deploy/, so an
+// auto-bump here drifted the deployed version ahead of source (deploy/
+// ended up at v2.1.5 while the committed source said v2.1.4).
+console.log('Syncing versions from VERSION...');
 try {
   const versionPath = path.join(__dirname, '../VERSION');
   let versionData = fs.readFileSync(versionPath, 'utf8');
-  // Semantic versioning: vMAJOR.MINOR.PATCH (e.g. v2.1.0).
-  // The build only auto-bumps the PATCH number. MAJOR and MINOR bumps are
-  // done manually in the VERSION file when directed.
   const semverRe = /(v\d+\.\d+\.\d+)/;
   const cacheMatch = versionData.match(new RegExp('CACHE_NAME=' + semverRe.source));
   const assetMatch = versionData.match(new RegExp('ASSET_VERSION=' + semverRe.source));
-
-  function bumpPatch(v) {
-    const parts = v.substring(1).split('.').map(Number);
-    return `v${parts[0]}.${parts[1]}.${parts[2] + 1}`;
+  if (!cacheMatch || !assetMatch) {
+    throw new Error('CACHE_NAME/ASSET_VERSION (vMAJOR.MINOR.PATCH) not found in VERSION file');
   }
-
-  const currentCacheVersion = cacheMatch ? cacheMatch[1] : 'v2.1.0';
-  const currentAssetVersion = assetMatch ? assetMatch[1] : 'v2.1.0';
-  const newCacheVersion = bumpPatch(currentCacheVersion);
-  const newAssetVersion = bumpPatch(currentAssetVersion);
-
-  // Update VERSION file
-  fs.writeFileSync(versionPath, `CACHE_NAME=${newCacheVersion}\nASSET_VERSION=${newAssetVersion}\n`);
+  const cacheVersion = cacheMatch[1];
+  const assetVersion = assetMatch[1];
 
   // Update Service Worker
   const swPath = path.join(__dirname, 'sw.js');
   let swContent = fs.readFileSync(swPath, 'utf8');
-  swContent = swContent.replace(/const CACHE_NAME = 'remotelabs-v[\d.]+'/g, `const CACHE_NAME = 'remotelabs-${newCacheVersion}'`);
-  swContent = swContent.replace(/const ASSET_VERSION = '[\d.]+'/g, `const ASSET_VERSION = '${newAssetVersion.substring(1)}'`);
+  swContent = swContent.replace(/const CACHE_NAME = 'remotelabs-v[\d.]+'/g, `const CACHE_NAME = 'remotelabs-${cacheVersion}'`);
+  swContent = swContent.replace(/const ASSET_VERSION = '[\d.]+'/g, `const ASSET_VERSION = '${assetVersion.substring(1)}'`);
   fs.writeFileSync(swPath, swContent);
 
   // Update HTML files
   const htmlFiles = ['index.html', 'privacy.html'];
   for (const htmlFile of htmlFiles) {
     let htmlContent = fs.readFileSync(htmlFile, 'utf8');
-    htmlContent = htmlContent.replace(/\?v=[\d.]+/g, `?v=${newAssetVersion.substring(1)}`);
+    htmlContent = htmlContent.replace(/\?v=[\d.]+/g, `?v=${assetVersion.substring(1)}`);
     fs.writeFileSync(htmlFile, htmlContent);
   }
 
-  console.log(`✓ Version bumped to ${newCacheVersion} (cache) / ${newAssetVersion} (assets)\n`);
+  console.log(`✓ Versions synced to ${cacheVersion} (cache) / ${assetVersion} (assets)\n`);
 } catch (error) {
-  console.warn('⚠ Version bump skipped (no VERSION file found):', error.message);
+  console.error('✗ Version sync failed:', error.message);
+  process.exit(1);
 }
 
 // Step 2: Build CSS
