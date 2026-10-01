@@ -92,17 +92,32 @@
 
         if (!video || !playPauseBtn || !muteBtn) return;
 
-        playPauseBtn.addEventListener('click', function () {
+        // The play/pause control mirrors the element's real state via
+        // 'play'/'pause' events, never a one-time check: with
+        // preload="metadata" + autoplay the video is still paused at
+        // DOMContentLoaded, so a one-time check stamps "Play" and then
+        // misses the moment autoplay starts a beat later.
+        function syncPlayPause() {
             if (video.paused) {
-                video.play();
-                playPauseBtn.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#icon-pause"/></svg>';
-                playPauseBtn.setAttribute('aria-label', 'Pause');
-            } else {
-                video.pause();
                 playPauseBtn.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#icon-play"/></svg>';
                 playPauseBtn.setAttribute('aria-label', 'Play');
+            } else {
+                playPauseBtn.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#icon-pause"/></svg>';
+                playPauseBtn.setAttribute('aria-label', 'Pause');
+            }
+        }
+
+        playPauseBtn.addEventListener('click', function () {
+            if (video.paused) {
+                video.play().catch(function () {});
+            } else {
+                video.pause();
             }
         });
+
+        video.addEventListener('play', syncPlayPause);
+        video.addEventListener('pause', syncPlayPause);
+        syncPlayPause();
 
         muteBtn.addEventListener('click', function () {
             video.muted = !video.muted;
@@ -112,25 +127,10 @@
             } else {
                 muteBtn.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#icon-volume-up"/></svg>';
                 muteBtn.setAttribute('aria-label', 'Mute');
-                // Unmuting a paused video also starts playback, so the
-                // button always produces sound when asked to (e.g. after
-                // the data-saver/reduced-motion gating paused the hero).
-                if (video.paused) {
-                    video.play().catch(function () {});
-                }
             }
         });
 
         video.muted = true;
-
-        // Reflect the actual playback state: autoplay can be blocked by
-        // the browser (or skipped on constrained connections, see
-        // setupHeroVideoDataSaver), and the button ships with the
-        // "Pause" icon for the autoplaying case.
-        if (video.paused) {
-            playPauseBtn.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#icon-play"/></svg>';
-            playPauseBtn.setAttribute('aria-label', 'Play');
-        }
     }
 
     // --- Data-saver / reduced-motion hero video gating ---
