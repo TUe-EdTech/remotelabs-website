@@ -2,8 +2,8 @@
 // Uses a runtime cache-as-you-go strategy: no static precache list is
 // maintained, so there is no manual-bump failure mode. Assets are cached on
 // first fetch and served from cache when the network is unavailable.
-const CACHE_NAME = 'remotelabs-v2.1.6';
-const ASSET_VERSION = '2.1.6';
+const CACHE_NAME = 'remotelabs-v2.1.7';
+const ASSET_VERSION = '2.1.7';
 
 // Install event - activate immediately (no precaching needed)
 self.addEventListener('install', () => {

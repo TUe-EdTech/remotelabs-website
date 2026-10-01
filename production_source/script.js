@@ -108,6 +108,59 @@
         });
 
         video.muted = true;
+
+        // Reflect the actual playback state: autoplay can be blocked by
+        // the browser (or skipped on constrained connections, see
+        // setupHeroVideoDataSaver), and the button ships with the
+        // "Pause" icon for the autoplaying case.
+        if (video.paused) {
+            playPauseBtn.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#icon-play"/></svg>';
+            playPauseBtn.setAttribute('aria-label', 'Play');
+        }
+    }
+
+    // --- Data-saver hero video gating ---
+    // The hero loop is ~9 MB. On Save-Data or 2G connections skip the
+    // download entirely: the 18 KB AVIF poster stays visible and the
+    // video only loads if the user presses Play.
+    function setupHeroVideoDataSaver() {
+        var video = document.getElementById('hero-video-player');
+        if (!video) return;
+
+        var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        var effectiveType = conn ? (conn.effectiveType || '') : '';
+        var constrained = !!(conn && (conn.saveData ||
+            effectiveType === '2g' || effectiveType === 'slow-2g'));
+        if (!constrained) return;
+
+        video.removeAttribute('autoplay');
+        video.preload = 'none';
+        video.pause();
+    }
+
+    // --- Lazy workflow video ---
+    // #workflow-video ships with preload="none" and no autoplay, so
+    // nothing downloads until the section approaches the viewport; then
+    // it loads and plays exactly as it did with eager autoplay.
+    function setupWorkflowVideoLazyPlay() {
+        var video = document.getElementById('workflow-video');
+        if (!video) return;
+
+        if (!('IntersectionObserver' in window)) {
+            // No observer support: restore the old eager behaviour.
+            video.play().catch(function () {});
+            return;
+        }
+
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    observer.disconnect();
+                    video.play().catch(function () {});
+                }
+            });
+        }, { rootMargin: '600px 0px' });
+        observer.observe(video);
     }
 
     // --- Workflow video switching ---
@@ -235,9 +288,11 @@
     function init() {
         setupVideoSwitching();
 
+        setupHeroVideoDataSaver();
         setupHeroVideoControls();
         setupSmoothScroll();
         setupToggleSwitch();
+        setupWorkflowVideoLazyPlay();
     }
 
     if (document.readyState === 'loading') {
