@@ -24,6 +24,14 @@
         document.body.classList.add('touch-device');
     }
 
+    // OS-level "reduce motion" preference (WCAG 2.3.3). CSS handles
+    // animations/transitions (see styles.css); videos are handled at the
+    // call sites below.
+    function prefersReducedMotion() {
+        return !!(window.matchMedia &&
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    }
+
     // --- Back-to-top button ---
     var backToTop = document.createElement('button');
     backToTop.className = 'back-to-top';
@@ -104,6 +112,12 @@
             } else {
                 muteBtn.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#icon-volume-up"/></svg>';
                 muteBtn.setAttribute('aria-label', 'Mute');
+                // Unmuting a paused video also starts playback, so the
+                // button always produces sound when asked to (e.g. after
+                // the data-saver/reduced-motion gating paused the hero).
+                if (video.paused) {
+                    video.play().catch(function () {});
+                }
             }
         });
 
@@ -119,13 +133,21 @@
         }
     }
 
-    // --- Data-saver hero video gating ---
+    // --- Data-saver / reduced-motion hero video gating ---
     // The hero loop is ~9 MB. On Save-Data or 2G connections skip the
     // download entirely: the 18 KB AVIF poster stays visible and the
-    // video only loads if the user presses Play.
+    // video only loads if the user presses Play. Users who prefer
+    // reduced motion get the same still-poster treatment.
     function setupHeroVideoDataSaver() {
         var video = document.getElementById('hero-video-player');
         if (!video) return;
+
+        if (prefersReducedMotion()) {
+            video.removeAttribute('autoplay');
+            video.preload = 'none';
+            video.pause();
+            return;
+        }
 
         var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
         var effectiveType = conn ? (conn.effectiveType || '') : '';
@@ -217,7 +239,9 @@
                 e.preventDefault();
                 cooldown = true;
                 try {
-                    target.scrollIntoView({ behavior: 'smooth' });
+                    target.scrollIntoView({
+                        behavior: prefersReducedMotion() ? 'auto' : 'smooth'
+                    });
                 } catch (err) {
                     target.scrollIntoView(true);
                 }
