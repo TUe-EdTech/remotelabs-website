@@ -2,6 +2,11 @@
 
 **Comprehensive documentation for developers working on the Remote Labs website project.**
 
+> **Note for agents**: read the root `TODO.md` before planning any work —
+> it tracks completed and pending improvements with commit references and
+> lists current priorities. Keep it up to date as work completes. The root
+> `AGENTS.md` summarizes the essential workflow rules.
+
 ## 📋 Table of Contents
 
 1. [Project Overview](#-project-overview)
