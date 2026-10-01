@@ -10,13 +10,86 @@
 
 ## Pending (in priority order)
 
-1. **Hero video re-encode** - the biggest remaining perf lever (performance measured 0.75 in CI; budget currently 0.7). No ffmpeg on the dev machine. When available:
+1. **Hero video re-encode** - the biggest remaining perf lever (performance measured 0.75 in CI; budget currently 0.7). Step-by-step:
+
+   **Step 1 - Install ffmpeg (Windows, one time)**
+
+   In PowerShell or CMD:
+
+   ```
+   winget install --id Gyan.FFmpeg -e
+   ```
+
+   (Alternative: download the "release full" build from https://www.gyan.dev/ffmpeg/builds/,
+   unzip to `C:\ffmpeg`, and add `C:\ffmpeg\bin` to the PATH.)
+   Close and reopen the terminal, then verify:
+
+   ```
+   ffmpeg -version
+   ```
+
+   (WSL alternative: `sudo apt install ffmpeg`.)
+
+   **Step 2 - Inspect the current video**
+
+   ```
+   cd production_source/assets/videos
+   ffprobe -v error -select_streams v:0 -show_entries stream=width,height,duration,bit_rate -of default=noprint_wrappers=1 hero-loop.mp4
+   ```
+
+   Note the dimensions. The hero is displayed at ~651-1302 px wide, so a
+   1920px-wide source can also be scaled down for extra savings.
+
+   **Step 3 - Re-encode**
 
    ```
    ffmpeg -i hero-loop.mp4 -c:v libx264 -crf 26 -preset slow -pix_fmt yuv420p -movflags +faststart -an hero-loop.new.mp4
    ```
 
-   Target ~1-2 MB (from 8.9 MB). Review visually, replace, bump VERSION, build, commit. Afterwards ratchet the `lighthouserc.json` performance budget from 0.7 toward 0.9 (AGENTS.md target is 90+).
+   Flags: `-crf 26` sets quality (higher = smaller/worse, lower =
+   bigger/better; try 23-28); `-preset slow` = better compression for the
+   same quality; `-pix_fmt yuv420p` = maximum device compatibility;
+   `+faststart` = the video starts playing before it finishes downloading;
+   `-an` = drop audio (the hero is muted anyway).
+
+   If Step 2 showed a width above ~1300, add a scale filter for roughly
+   half the size at the same visual quality:
+
+   ```
+   ffmpeg -i hero-loop.mp4 -vf "scale=1280:-2" -c:v libx264 -crf 26 -preset slow -pix_fmt yuv420p -movflags +faststart -an hero-loop.new.mp4
+   ```
+
+   **Step 4 - Compare and review**
+
+   ```
+   ls -lh hero-loop.mp4 hero-loop.new.mp4
+   ```
+
+   Target roughly 1-2 MB (from 8.9 MB). Play `hero-loop.new.mp4` and watch
+   a full loop next to the original. If it looks too compressed, re-encode
+   with `-crf 24` (or 22); still acceptable size is a win.
+
+   **Step 5 - Replace and release**
+
+   ```
+   # from the repo root
+   move the new file over production_source\assets\videos\hero-loop.mp4
+   # bump the version in the VERSION file: 2.1.7 -> 2.1.8
+   cd production_source
+   npm run build:full
+   npm test
+   cd ..
+   node scripts/check-links.js deploy
+   ```
+
+   Then commit source + `deploy/` together and push. CI rebuilds and runs
+   all gates; check the Lighthouse step log for the new performance score.
+
+   **Step 6 - Ratchet the budget**
+
+   Once CI shows performance comfortably above 0.7 (expect 0.85+ after the
+   re-encode), raise the `lighthouserc.json` performance floor toward 0.9
+   (the AGENTS.md target is 90+) so regressions get caught early.
 
 2. **Accessibility 96 -> 100** (from the CI Lighthouse report):
    - Insufficient contrast on the four `.benefit-number` elements (01-04, benefits section; currently `color: var(--gray-400)`).
