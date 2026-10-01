@@ -417,7 +417,7 @@ scp -r deploy/* user@server:/path/to/website/
 ## 📞 Support & Contacts
 
 - **Primary:** Karel Aarts (k.m.a.aarts@tue.nl)
-- **Repository:** https://github.com/KarelAarts/remotelabs-website
+- **Repository:** https://github.com/TUe-EdTech/remotelabs-website
 - **Documentation:** See main README.md for overall project info
 
 ---

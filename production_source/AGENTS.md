@@ -53,7 +53,7 @@ This guide provides comprehensive documentation for the Remote Labs website at E
 
 ```bash
 # Clone the repository
-git clone https://github.com/KarelAarts/remotelabs-website.git
+git clone https://github.com/TUe-EdTech/remotelabs-website.git
 cd remotelabs-website
 
 # Install dependencies
@@ -332,7 +332,7 @@ The GitHub Actions workflow (`.github/workflows/build-and-deploy.yml`) runs thes
 - [ ] Responsive design (320px to 1920px+)
 - [ ] All links work
 - [ ] All images load
-- [ ] Videos play correctly
+- [ ] Videos play correctly (hero autoplays on normal connections; the workflow video loads/plays when scrolled near — see `setupWorkflowVideoLazyPlay` in script.js; on Save-Data/2G the hero video shows the poster until Play)
 - [ ] Forms submit (if any)
 - [ ] Accessibility (keyboard navigation, screen readers)
 - [ ] **Incognito mode test** (verifies no caching issues)
@@ -492,8 +492,16 @@ Note: the deprecated `X-XSS-Protection` and `Expect-CT` headers are not used.
 
 ## 🤝 Handover Information
 
+### Documentation Maintenance
+
+Review and update `README.md` (root handover guide), this file, the root
+`AGENTS.md` and `TODO.md` in the same commit as any major change — and
+periodically otherwise. If a command, version ritual, file list or
+behaviour description here no longer matches reality, the doc is stale and
+must be fixed. See the root `AGENTS.md` for the full rule.
+
 ### For New Developers
-- **Repository**: https://github.com/KarelAarts/remotelabs-website
+- **Repository**: https://github.com/TUe-EdTech/remotelabs-website
 - **Hosting**: TU/e web servers
 - **Domain**: remotelabs.tue.nl
 - **Primary Contact**: Karel Aarts (k.m.a.aarts@tue.nl)
@@ -556,7 +564,7 @@ navigator.serviceWorker.getRegistrations().then(r => r.forEach(f => f.unregister
 
 **Last Updated**: 2026
 **Maintainer**: Development Team
-**Repository**: https://github.com/KarelAarts/remotelabs-website
+**Repository**: https://github.com/TUe-EdTech/remotelabs-website
 
 ---
 

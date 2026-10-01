@@ -12,6 +12,21 @@ Keep `TODO.md` accurate as you work:
 - When you discover a new issue or follow-up, add it to Pending.
 - Do not delete historical entries; they are the handover record.
 
+## Keep documentation current
+
+These documents must be reviewed and updated in the same change whenever
+you make a major change (new feature, workflow or build change, repo
+structure change), and periodically otherwise:
+
+- `README.md` — handover guide (folder structure, workflows, caching, build commands)
+- `production_source/AGENTS.md` — detailed development guide
+- `TODO.md` — improvement tracker
+- This file
+
+Stale documentation is a defect: if a command, version ritual, file list,
+or behaviour description in the docs no longer matches reality, update the
+docs in the same commit as the change.
+
 Essential context for any change:
 
 - `production_source/AGENTS.md` is the detailed development guide

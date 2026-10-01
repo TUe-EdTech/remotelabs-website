@@ -4,6 +4,11 @@
 
 This is the official website for Remote Labs at Eindhoven University of Technology. It's a static website that provides information about our 24/7 access to physical lab experiments.
 
+> **Start here**: `TODO.md` tracks completed and pending improvements with
+> commit references; `AGENTS.md` summarizes the workflow rules for agents
+> and contributors; `production_source/AGENTS.md` is the detailed
+> development guide.
+
 ## Quick Start
 
 The website is a simple static site. No build process or server required.
@@ -18,40 +23,45 @@ Copy all files from the `deploy/` folder to your web server's root directory.
 
 ```
 remotelabs-website/
-├── .git/                          # Version control (do not deploy)
-├── deploy/                        # ✅ PRODUCTION FILES - Upload to server
+├── AGENTS.md                     # Agent/contributor guide (read before planning work)
+├── TODO.md                       # Improvement tracker: done/pending work
+├── VERSION                       # Single source of truth for asset/cache versions
+├── .gitattributes                # LF normalization (prevents phantom diffs)
+├── .github/workflows/             # CI: build, tests, link check, Lighthouse
+├── deploy/                        # ✅ PRODUCTION FILES - Upload to server (CI-built)
 │   ├── index.html                 # Main page
 │   ├── privacy.html               # Privacy policy
-│   ├── styles.min.css             # Minified styles (versioned with ?v=2.1.1)
-│   ├── script.min.js              # Minified JavaScript (versioned with ?v=2.1.1)
-│   ├── sw.js                      # Service Worker (version: remotelabs-v2.1.1)
+│   ├── styles.min.css             # Minified styles (versioned ?v= from VERSION)
+│   ├── script.min.js              # Minified JavaScript
+│   ├── sw.js                      # Service Worker (cache name from VERSION)
 │   ├── manifest.json              # Web app manifest
 │   ├── robots.txt                 # Search engine crawl rules + sitemap pointer
 │   ├── sitemap.xml                # XML sitemap
 │   ├── .htaccess                  # Real HTTP security headers (see Security)
-│   ├── assets/                    # Images, videos, logos
-│   ├── 400.shtml                  # Custom error pages (at deploy root)
-│   ├── 401.shtml
-│   ├── 403.shtml
-│   ├── 404.shtml
-│   └── 500.shtml
+│   ├── assets/                    # Images, videos, logos, fonts
+│   ├── 400-500 .shtml             # Custom error pages (at deploy root)
+│   └── cookie_consent.html / dnt_script.html  # TU/e integration fragments
 ├── experimental/                  # 🧪 EXPERIMENTAL DEVELOPMENT
 │   ├── index.html                 # Experimental HTML source
 │   ├── styles.css                 # Experimental CSS source
 │   ├── script.js                  # Experimental JavaScript source
 │   └── assets/fontawesome/        # Experimental-only assets (shared assets come from production_source/ at build time)
-├── experimental_deploy/           # 🎯 EXPERIMENTAL BUILD OUTPUT
-│   └── ...                        # Built files (ready for preview)
+├── experimental_deploy/           # 🎯 EXPERIMENTAL BUILD OUTPUT (gitignored)
 ├── scripts/                      # Build and utility scripts
 │   ├── build-experimental.js      # Build script for experimental folder
 │   ├── build-experimental.bat     # Windows batch version
+│   ├── check-links.js             # Link/asset/anchor integrity check
 │   ├── partner-logos.js           # Shared partner-logo HTML generation
 │   └── sync-experimental.js       # Sync experimental → production_source
-└── production_source/            # Development files (keep for future edits)
+├── lighthouserc.json             # CI Lighthouse budgets
+└── production_source/            # Development source of truth
+    ├── AGENTS.md                  # Detailed development guide
     ├── index.html                 # Source HTML
     ├── styles.css                 # Source CSS
     ├── script.js                  # Source JavaScript
     ├── sw.js                      # Source Service Worker
+    ├── build.js                   # Canonical build (syncs VERSION, minifies, fills deploy/)
+    ├── test.js                    # Source + version consistency tests (npm test)
     └── package.json               # Build configuration
 ```
 
@@ -112,28 +122,32 @@ Every push and pull request to `main` runs these checks in GitHub Actions (`.git
 ### Production Workflow
 
 1. **Edit files** in the `production_source/` folder
-2. **Test locally** by opening the file in your browser
-3. **Build assets** (minify CSS/JS):
+2. **Bump the version** in the root `VERSION` file (PATCH) whenever assets changed and visitors must get fresh copies — this is the only place versions are ever set
+3. **Build** (syncs version strings from `VERSION` into `sw.js`/HTML, minifies CSS/JS, regenerates `deploy/`):
    ```bash
    cd production_source
-   npm install  # First time only
-   npm run build
-   # Or manually:
-   npx clean-css -o ../deploy/styles.min.css styles.css
-   npx uglifyjs script.js -o ../deploy/script.min.js -c -m
-   cp index.html privacy.html sw.js ../deploy/
+   npm install    # First time only
+   npm run build:full
    ```
-4. **Copy** built files to `deploy/` folder
-5. **Test** the deploy version before uploading to server
+4. **Verify locally**: `npm test`, then `node scripts/check-links.js deploy`
+5. **Commit source and `deploy/` together**. CI rebuilds, re-runs all gates and auto-commits the `deploy/` output on main.
+
+Never hand-edit `?v=` strings or `CACHE_NAME` — bump `VERSION` and rebuild; `npm test` fails if source or `deploy/` drift from `VERSION`.
 
 ## Important Files
 
-- **Main Page**: `deploy/index.html` - Edit this for content changes
-- **Styles**: `deploy/styles.min.css` - Main stylesheet
-- **JavaScript**: `deploy/script.min.js` - Main JavaScript
-- **Service Worker**: `deploy/sw.js` - Offline caching (update version when deploying!)
-- **Images/Logos**: `deploy/assets/` - All images and videos
+- **Main Page**: `production_source/index.html` - Edit this for content changes (never edit `deploy/` directly)
+- **Styles**: `production_source/styles.css` - All styles, including the former inline toggle/workflow block
+- **JavaScript**: `production_source/script.js` - Site behaviour
+- **Service Worker**: `production_source/sw.js` - Offline caching (version synced from `VERSION`)
+- **Images/Logos**: `production_source/assets/` - All images and videos
 - **Error Pages**: `deploy/400.shtml`, `deploy/404.shtml`, etc. (at deploy root)
+
+## Video Loading Behaviour
+
+- The hero video autoplays on normal connections; on Save-Data / 2G it is skipped (the AVIF poster stays) and only loads when the user presses Play.
+- The below-the-fold workflow video ships with `preload="none"` and starts loading/playing via IntersectionObserver as its section approaches the viewport.
+- Clicking a workflow step still switches its video instantly as before.
 
 ## Domain & Hosting
 
@@ -178,32 +192,18 @@ Note: the deprecated `X-XSS-Protection` and `Expect-CT` headers were removed.
 
 #### Before Each Deployment:
 
-1. **Update Service Worker Version** in `production_source/sw.js`:
-   ```javascript
-   const CACHE_NAME = 'remotelabs-v2.1.1';  // ⬅️ Bump this number!
-   ```
+1. **Bump the root `VERSION` file** (PATCH number) — the single source of truth for both the service-worker cache name and the asset query strings.
+2. **Run the build**: `cd production_source && npm run build:full`. It syncs the new version into `sw.js`, `index.html`, `privacy.html` and regenerates `deploy/` — you never edit version strings by hand.
+3. Commit source and `deploy/` together.
 
-2. **Update Asset Version Query Strings** in HTML files:
-   ```html
-   <link rel="stylesheet" href="styles.min.css?v=2.1.1">  <!-- Bump the patch number -->
-   <script src="script.min.js?v=2.1.1" defer></script>     <!-- Bump the patch number -->
-   ```
-
-3. **Cache-Control Meta Tags** (already added to index.html and privacy.html):
-   ```html
-   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-   <meta http-equiv="Pragma" content="no-cache">
-   <meta http-equiv="Expires" content="0">
-   ```
+`npm test` (locally and in CI) fails if `VERSION`, the source files, or `deploy/` disagree — version drift cannot reach production.
 
 #### Deployment Steps:
 
 1. Make your changes in `production_source/`
-2. Build and minify assets
-3. **Update version numbers** (CACHE_NAME in sw.js, v= parameter in HTML)
-4. Copy files to `deploy/`
-5. Upload to server
-6. **Verify**: Open in incognito mode or clear cache before testing
+2. Bump `VERSION` and run `npm run build:full`
+3. Upload the contents of `deploy/` to the server
+4. **Verify**: Open in incognito mode or clear cache before testing
 
 ### 🔧 Service Worker Behavior
 
@@ -234,25 +234,19 @@ This means:
 
 After deploying:
 - [ ] Open site in **incognito/private window** (bypasses cache)
-- [ ] Check Chrome DevTools > Application > Service Workers (should show `remotelabs-v2.1.1`)
-- [ ] Check DevTools > Network tab: CSS/JS should have `?v=2.1.1` in URL
+- [ ] Check Chrome DevTools > Application > Service Workers (should show the cache name from `VERSION`, e.g. `remotelabs-v2.1.7`)
+- [ ] Check DevTools > Network tab: CSS/JS URLs carry the current `?v=` from `VERSION`
 - [ ] Hard refresh (Ctrl+F5) to ensure fresh load
 - [ ] Test on mobile device
 - [ ] Ask a colleague to verify (they won't have cached version)
 
-### 💡 Pro Tip: Force Update Script
+### 💡 Pro Tip: Emergency Cache Busting
 
-For emergency cache busting, add this temporarily to your HTML:
-```html
-<script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-            .then(reg => reg.update())
-            .then(() => location.reload(true));
-    }
-</script>
-```
-Remove after all users have updated.
+Do **not** paste inline `<script>` snippets into the page — the CSP and
+`npm test` forbid inline scripts (XSS hardening). The service worker is
+network-first by design, so a `VERSION` bump plus deployment updates
+everyone automatically. For a single stuck browser: DevTools >
+Application > Service Workers > Unregister, then hard refresh.
 
 ## Maintenance Tasks
 
@@ -267,9 +261,9 @@ Remove after all users have updated.
 - Review and update privacy policy
 
 ### Version Updates (After Changes):
-1. Update `CACHE_NAME` in `production_source/sw.js` (e.g., `remotelabs-v2.1.1` → `remotelabs-v2.1.2`)
-2. Update `?v=2.1.1` to `?v=2.1.2` in all CSS/JS references in HTML files
-3. Rebuild and deploy
+1. Bump the root `VERSION` file (e.g. `v2.1.7` → `v2.1.8`)
+2. Run `cd production_source && npm run build:full` (syncs sw.js/HTML and rebuilds `deploy/`)
+3. Commit source + `deploy/` together
 
 ## Emergency Contacts
 
@@ -291,18 +285,17 @@ Remove after all users have updated.
 cd production_source
 npm install
 
-# Build all assets
-npm run build
+# Full build (canonical): syncs VERSION, minifies, regenerates deploy/
+npm run build:full
 
-# Or build individually
-npm run build:css    # Minify CSS
+# Individual steps (build.js already chains these)
+npm run build:css    # Minify CSS (npx cleancss — the binary is named cleancss)
 npm run build:js     # Minify JavaScript
 npm run build:html   # Copy HTML files
-npm run build:full   # Full build via build.js
 
-# Manual minification
-npx clean-css -o ../deploy/styles.min.css styles.css
-npx uglifyjs script.js -o ../deploy/script.min.js -c -m
+# Quality gates (also run in CI)
+npm test                             # Source + version consistency tests
+node ../scripts/check-links.js ../deploy   # Link/asset/anchor integrity
 ```
 
 ---
