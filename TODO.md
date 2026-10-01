@@ -8,14 +8,11 @@
 4. **Version drift** (commit `693f87c`) - `VERSION` is the single source of truth; `build.js` syncs (never bumps); `test.js` fails if source or `deploy/` disagree with `VERSION`. Root `.gitattributes` added (LF normalization; no more phantom diffs).
 5. **First-load video bytes** (commit `ff05dcd`) - dropped the `book-experiment.mp4` head preload; workflow video lazy-loads via IntersectionObserver; hero video skipped on Save-Data/2G; umami preconnects; play/pause button reflects real state.
 6. **Hero video re-encode - evaluated and declined** (2026-09-30) - the 8.9 MB `hero-loop.mp4` is already efficiently encoded (1280x720, ~500 kbps, 145 s). CRF re-encodes gave no meaningful win (8.45 MB at crf 26, 7.02 MB at crf 28). The only real lever is shortening the 145 s loop (60 s -> 4.1 MB, 30 s -> 2.5 MB), which was declined to keep the full footage. **The original video stays; do not re-propose re-encoding it** unless the length policy changes. The CI performance budget stays at 0.7 accordingly (measured ~0.75).
+7. **Accessibility: contrast + reduced motion** (commit `0337cdc`) - `.benefit-number` switched to `--gray-500` (4.83:1, passes WCAG AA); `prefers-reduced-motion` disables animations/transitions/smooth scrolling, shows the hero poster instead of autoplaying, skips unattended workflow playback, and uses instant anchor scrolling; unmuting the hero video now also starts playback if paused (note: the current `hero-loop.mp4` has **no audio track** - the sound button will be audible once a version with audio is supplied).
 
-## Pending (in priority order)
+## Pending
 
-1. **Accessibility 96 -> 100** (from the CI Lighthouse report):
-   - Insufficient contrast on the four `.benefit-number` elements (01-04, benefits section; currently `color: var(--gray-400)`).
-   - Hero `<video>` has no `<track kind="captions">` (or explicit decorative treatment).
-
-2. **`prefers-reduced-motion` support** - zero occurrences today despite autoplaying videos, smooth scrolling, a pulsing-dot animation and hover transforms (WCAG 2.3.3). The reduced-motion path would show the hero poster instead of autoplaying.
+1. **Video captions** - the hero `<video>` needs a `<track kind="captions">` for the last Lighthouse a11y point (96 -> 100). Waiting on the `.vtt` file from Karel; then add `<track kind="captions" srclang="en" src="assets/videos/hero-captions.vtt">` inside the hero video element, bump `VERSION`, build, commit. Until then the a11y budget (0.9) still passes; only the perfect score is held back.
 
 ## Reminders
 
