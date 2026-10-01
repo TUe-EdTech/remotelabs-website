@@ -8,9 +8,14 @@ changes.
 
 Keep `TODO.md` accurate as you work:
 
-- When an item is finished, move it to the Done section with the commit hash.
-- When you discover a new issue or follow-up, add it to Pending.
-- Do not delete historical entries; they are the handover record.
+- `TODO.md` lists open items only; close an item by removing it in the
+  same commit that finishes it. The commit history is the record of
+  completed work - do not duplicate it in the file.
+- When you discover a new issue or follow-up, add it to `TODO.md`.
+- Record decisions that should not be re-litigated (e.g. "keep the
+  original hero video, do not re-propose re-encoding") in the commit
+  message and, where long-lived, in `README.md` or
+  `production_source/AGENTS.md`.
 
 ## Keep documentation current
 
