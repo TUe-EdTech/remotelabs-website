@@ -151,7 +151,12 @@ Never hand-edit `?v=` strings or `CACHE_NAME` — bump `VERSION` and rebuild; `n
 
 ## Domain & Hosting
 
-- **Domain**: remotelabs.tue.nl
+- **Site domain**: remote-labs.eu (canonical; the server also answers on
+  www.remote-labs.eu without redirecting — all self-references, the
+  sitemap and robots.txt use the apex)
+- **Platform domain**: remotelabs.tue.nl (the Remote Labs platform
+  application itself; the "Go to Remote Labs" CTAs point here — do not
+  "fix" them to the site domain)
 - **Current Hosting**: TU/e web servers
 - **SSL**: HTTPS enabled (required)
 

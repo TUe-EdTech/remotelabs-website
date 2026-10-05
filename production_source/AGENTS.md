@@ -37,7 +37,7 @@ This guide provides comprehensive documentation for the Remote Labs website at E
 - Security headers (CSP, X-Frame-Options, HSTS, etc.)
 - Service worker for offline support (registered by script.js on page load over http/https)
 
-**Domain**: remotelabs.tue.nl
+**Domain**: remote-labs.eu (site; the Remote Labs platform app lives at remotelabs.tue.nl)
 
 ---
 
@@ -503,7 +503,7 @@ must be fixed. See the root `AGENTS.md` for the full rule.
 ### For New Developers
 - **Repository**: https://github.com/TUe-EdTech/remotelabs-website
 - **Hosting**: TU/e web servers
-- **Domain**: remotelabs.tue.nl
+- **Domain**: remote-labs.eu (site; the Remote Labs platform app lives at remotelabs.tue.nl)
 - **Primary Contact**: Karel Aarts (k.m.a.aarts@tue.nl)
 - **Technical Support**: TU/e IT Department
 
@@ -544,8 +544,8 @@ node scripts/bump-version.js
 cp production_source/index.html production_source/privacy.html production_source/sw.js deploy/
 
 # Verify deployment
-curl -I https://remotelabs.tue.nl/sw.js  # Check service worker header
-curl -I https://remotelabs.tue.nl/      # Check HTML cache headers
+curl -I https://remote-labs.eu/sw.js  # Check service worker header
+curl -I https://remote-labs.eu/      # Check HTML cache headers
 
 # === TROUBLESHOOTING ===
 

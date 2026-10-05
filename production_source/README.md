@@ -57,7 +57,7 @@ remotelabs-website/
 
 ## Domain & Hosting
 
-- **Domain**: remotelabs.tue.nl
+- **Domain**: remote-labs.eu
 - **Current Hosting**: TU/e web servers
 - **SSL**: HTTPS enabled (required)
 
