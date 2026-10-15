@@ -218,11 +218,20 @@ For simple content changes (text, images):
 
 ### Adding New Page
 1. Create HTML file in `production_source/`
-2. Add corresponding styles to `production_source/styles.css`
+2. Add corresponding styles to `production_source/styles.css` (or an inline
+   `<style>` block for self-contained pages - CSP allows inline styles, but
+   never inline scripts)
 3. Add functionality to `production_source/script.js` (if needed)
-4. Minify and copy to `deploy/`
+4. Register the page in three places: the `htmlFiles` and `filesToCopy`
+   lists in `build.js`, and `PAGES` in `test.js` (keeps `?v=` sync, the
+   deploy copy and the CSP/inline-script checks working for the new page)
 5. Add to navigation (if applicable)
 6. Test across browsers and devices
+
+Campaign/noindex pages (see the campaign landing pages section in the root
+`README.md`): keep them out of `sitemap.xml`, and do not add them to
+`lighthouserc.json` - Lighthouse's SEO category fails `noindex` pages by
+design.
 
 ---
 

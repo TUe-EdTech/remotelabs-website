@@ -11,7 +11,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const ROOT = __dirname;
-const PAGES = ['index.html', 'privacy.html'];
+const PAGES = ['index.html', 'privacy.html', 'landing-a.html', 'landing-b.html'];
 
 let failures = 0;
 

@@ -36,7 +36,7 @@ try {
   fs.writeFileSync(swPath, swContent);
 
   // Update HTML files
-  const htmlFiles = ['index.html', 'privacy.html'];
+  const htmlFiles = ['index.html', 'privacy.html', 'landing-a.html', 'landing-b.html'];
   for (const htmlFile of htmlFiles) {
     let htmlContent = fs.readFileSync(htmlFile, 'utf8');
     htmlContent = htmlContent.replace(/\?v=[\d.]+/g, `?v=${assetVersion.substring(1)}`);
@@ -85,7 +85,7 @@ try {
 // Step 4: Copy HTML files
 console.log('Copying HTML and Service Worker files...');
 try {
-  const filesToCopy = ['index.html', 'privacy.html', 'sw.js', 'robots.txt', 'sitemap.xml', '.htaccess'];
+  const filesToCopy = ['index.html', 'privacy.html', 'landing-a.html', 'landing-b.html', 'sw.js', 'robots.txt', 'sitemap.xml', '.htaccess'];
   filesToCopy.forEach(file => {
     const sourcePath = path.join(__dirname, file);
     const destPath = path.join(__dirname, '../deploy', file);
@@ -163,6 +163,7 @@ console.log('  - deploy/styles.min.css');
 console.log('  - deploy/script.min.js');
 console.log('  - deploy/index.html');
 console.log('  - deploy/privacy.html');
+console.log('  - deploy/landing-a.html / landing-b.html (campaign A/B pages)');
 console.log('  - deploy/sw.js');
 console.log('  - deploy/icon-192x192.png (or .svg)');
 console.log('  - deploy/icon-512x512.png (or .svg)');
