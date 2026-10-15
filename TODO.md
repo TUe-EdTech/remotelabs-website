@@ -15,8 +15,10 @@ it from this file in the same commit that finishes it.
 2. **Campaign landing pages ship with placeholder form links** - the A/B
    landing pages (`production_source/landing-a.html`, `landing-b.html`)
    link to `https://forms.example.com/...` placeholders marked with TODO
-   comments. Replace both CTAs per variant with the real external form
-   URLs (and adjust the `utm_campaign` value), verify them in a real
+   comments. Variant A (pre-launch "coming soon" message) links to a
+   feedback form; variant B (real-equipment signup angle) links to a
+   sign-up form. Replace both CTAs per variant with the real external
+   form URLs (and adjust the `utm_campaign` value), verify them in a real
    browser (`check-links.js` skips external URLs), bump `VERSION`,
    rebuild and commit before the campaign launches. After the campaign,
    decide whether to remove the pages or keep them for reuse.
