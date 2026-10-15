@@ -31,8 +31,8 @@ remotelabs-website/
 ├── deploy/                        # ✅ PRODUCTION FILES - Upload to server (CI-built)
 │   ├── index.html                 # Main page
 │   ├── privacy.html               # Privacy policy
-│   ├── landing-a.html             # A/B campaign page (variant A, noindex)
-│   ├── landing-b.html             # A/B campaign page (variant B, noindex)
+│   ├── landing-a.html             # Campaign page (Remote Labs ad, feedback form, noindex)
+│   ├── landing-b.html             # Campaign page (online learning ad, notice only, noindex)
 │   ├── styles.min.css             # Minified styles (versioned ?v= from VERSION)
 │   ├── script.min.js              # Minified JavaScript
 │   ├── sw.js                      # Service Worker (cache name from VERSION)
@@ -60,8 +60,8 @@ remotelabs-website/
     ├── AGENTS.md                  # Detailed development guide
     ├── index.html                 # Source HTML
     ├── privacy.html               # Privacy policy source
-    ├── landing-a.html              # A/B campaign page source (variant A)
-    ├── landing-b.html              # A/B campaign page source (variant B)
+    ├── landing-a.html              # Campaign page source (Remote Labs ad)
+    ├── landing-b.html              # Campaign page source (online learning ad)
     ├── styles.css                 # Source CSS
     ├── script.js                  # Source JavaScript
     ├── sw.js                      # Source Service Worker
@@ -139,23 +139,27 @@ Every push and pull request to `main` runs these checks in GitHub Actions (`.git
 
 Never hand-edit `?v=` strings or `CACHE_NAME` — bump `VERSION` and rebuild; `npm test` fails if source or `deploy/` drift from `VERSION`.
 
-### Campaign Landing Pages (A/B testing)
+### Campaign Landing Pages
 
-`landing-a.html` and `landing-b.html` are lean campaign pages for marketing
-A/B tests. They share one layout and differ only in copy; each links to its
-own external sign-up form.
+`landing-a.html` and `landing-b.html` are lean campaign pages, one per ad:
 
-- **Traffic split happens upstream** (email/marketing platform sends each
-  recipient to one URL) - there is no client-side experiment script, so the
-  strict CSP stays untouched.
+- **`landing-a.html`** (ad: Remote Labs) - pre-launch "coming soon" message
+  with a **Share your feedback** button linking to an external feedback
+  form (placeholder URL until the campaign form exists).
+- **`landing-b.html`** (ad: online learning / MOOCs, without Remote Labs) -
+  informational notice that the course isn't available yet. No CTA and no
+  form link, by design.
+
+- **No client-side experiment script** - the ads link directly to their
+  landing page, so the strict CSP stays untouched.
 - **SEO**: both pages are `noindex, follow` with a canonical link to
   `https://remote-labs.eu/`, and they are deliberately NOT in `sitemap.xml`.
 - **Lighthouse CI**: they are deliberately NOT in `lighthouserc.json` -
   Lighthouse's SEO category fails `noindex` pages by design. Spot-check
   them manually (they are static and lightweight).
-- **Attribution**: each CTA carries `utm_content=variant-a|b`; with separate
-  forms, form submissions per variant are the conversion metric (Umami
-  pageviews are the secondary signal).
+- **Attribution**: the variant A CTA carries `utm_content=variant-a`;
+  feedback form submissions are the conversion metric for that ad (Umami
+  pageviews are the secondary signal; variant B has no conversion link).
 - **Adding/changing pages**: every page must be listed in three places -
   `htmlFiles` and `filesToCopy` in `production_source/build.js`, and `PAGES`
   in `production_source/test.js`.

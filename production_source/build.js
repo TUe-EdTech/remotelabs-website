@@ -163,7 +163,7 @@ console.log('  - deploy/styles.min.css');
 console.log('  - deploy/script.min.js');
 console.log('  - deploy/index.html');
 console.log('  - deploy/privacy.html');
-console.log('  - deploy/landing-a.html / landing-b.html (campaign A/B pages)');
+console.log('  - deploy/landing-a.html / landing-b.html (campaign pages)');
 console.log('  - deploy/sw.js');
 console.log('  - deploy/icon-192x192.png (or .svg)');
 console.log('  - deploy/icon-512x512.png (or .svg)');
