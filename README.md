@@ -165,9 +165,13 @@ Never hand-edit `?v=` strings or `CACHE_NAME` — bump `VERSION` and rebuild; `n
 - **Lighthouse CI**: they are deliberately NOT in `lighthouserc.json` -
   Lighthouse's SEO category fails `noindex` pages by design. Spot-check
   them manually (they are static and lightweight).
-- **Attribution**: the variant A CTA carries `utm_content=variant-a`;
-  feedback form submissions are the conversion metric for that ad (Umami
-  pageviews are the secondary signal; variant B has no conversion link).
+- **Attribution/conversion**: traffic on both pages is tracked
+  automatically in the existing Umami property (both pages load the same
+  script and website-id as `index.html` - pageviews appear per path).
+  The variant A CTA links directly to the Microsoft feedback form
+  (`https://forms.cloud.microsoft/e/HcHkv5rYBA`); since only
+  `landing-a.html` links to it, form submissions are unambiguous.
+  Variant B has no conversion link.
 - **Adding/changing pages**: every page must be listed in three places -
   `htmlFiles` and `filesToCopy` in `production_source/build.js`, and `PAGES`
   in `production_source/test.js`.
