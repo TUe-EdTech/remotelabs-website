@@ -150,6 +150,14 @@ Never hand-edit `?v=` strings or `CACHE_NAME` — bump `VERSION` and rebuild; `n
   informational notice that the course isn't available yet. No CTA and no
   form link, by design.
 
+- **Shared chrome**: both pages use the exact header/footer markup from
+  `index.html` (including the inline SVG sprite and status badge) and
+  load `styles.min.css` with a normal stylesheet link. Two functional
+  deviations: the footer Quick Links to Benefits/Contact point to
+  `https://remote-labs.eu/#benefits|#contact` (those sections don't
+  exist on the landing pages), and the header doesn't hide on scroll
+  (`script.js` is not loaded on campaign pages). The CSP adds
+  `https://img.shields.io` to `img-src` for the footer status badge.
 - **No client-side experiment script** - the ads link directly to their
   landing page, so the strict CSP stays untouched.
 - **SEO**: both pages are `noindex, follow` with a canonical link to
