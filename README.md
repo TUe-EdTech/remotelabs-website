@@ -158,12 +158,13 @@ Never hand-edit `?v=` strings or `CACHE_NAME` — bump `VERSION` and rebuild; `n
   `styles.min.css` loaded with a normal stylesheet link. The hero uses
   the site's `.hero` styles plus a small `.lp-hero` override that
   centers the campaign message in a single column (title, paragraphs,
-  CTA all centered). Four deliberate deviations from the index chrome:
-  the "Remote Labs" links (header logo, header CTA, footer Quick Link)
-  point to `https://remote-labs.eu/` instead of the platform
-  (`remotelabs.tue.nl`) or an in-page anchor - campaign visitors should
-  land on the site, not the platform app; the footer Quick Links to
-  Benefits/Contact point to
+  CTA all centered). Deliberate deviations from the index chrome: the
+  header has no "Go to Remote Labs" CTA button (removed per campaign
+  decision - the logo is the only header link and points to
+  `https://remote-labs.eu/`); the footer "Go to Remote Labs" Quick Link
+  points to `https://remote-labs.eu/` instead of the platform
+  (`remotelabs.tue.nl`) - campaign visitors should land on the site, not
+  the platform app; the footer Quick Links to Benefits/Contact point to
   `https://remote-labs.eu/#benefits|#contact` (those sections don't
   exist on the landing pages); the header doesn't hide on scroll
   (`script.js` is not loaded on campaign pages); and the hero has no
