@@ -158,13 +158,20 @@ Never hand-edit `?v=` strings or `CACHE_NAME` — bump `VERSION` and rebuild; `n
   `styles.min.css` loaded with a normal stylesheet link. The hero uses
   the site's `.hero` styles plus a small `.lp-hero` override that
   centers the campaign message in a single column (title, paragraphs,
-  CTA all centered). Three functional deviations: the footer Quick
-  Links to Benefits/Contact point to
+  CTA all centered). Four deliberate deviations from the index chrome:
+  the "Remote Labs" links (header logo, header CTA, footer Quick Link)
+  point to `https://remote-labs.eu/` instead of the platform
+  (`remotelabs.tue.nl`) or an in-page anchor - campaign visitors should
+  land on the site, not the platform app; the footer Quick Links to
+  Benefits/Contact point to
   `https://remote-labs.eu/#benefits|#contact` (those sections don't
-  exist on the landing pages), the header doesn't hide on scroll
-  (`script.js` is not loaded on campaign pages), and the hero has no
+  exist on the landing pages); the header doesn't hide on scroll
+  (`script.js` is not loaded on campaign pages); and the hero has no
   video (campaign pages stay lightweight). The CSP adds
   `https://img.shields.io` to `img-src` for the footer status badge.
+  Note: the index page's own platform CTAs still point to
+  `remotelabs.tue.nl` on purpose (see Domain & Hosting) - this applies
+  to the campaign pages only.
 - **No client-side experiment script** - the ads link directly to their
   landing page, so the strict CSP stays untouched.
 - **SEO**: both pages are `noindex, follow` with a canonical link to
