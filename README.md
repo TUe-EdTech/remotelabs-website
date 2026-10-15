@@ -31,8 +31,8 @@ remotelabs-website/
 ├── deploy/                        # ✅ PRODUCTION FILES - Upload to server (CI-built)
 │   ├── index.html                 # Main page
 │   ├── privacy.html               # Privacy policy
-│   ├── landing-a.html             # Campaign page (Remote Labs ad, feedback form, noindex)
-│   ├── landing-b.html             # Campaign page (online learning ad, notice only, noindex)
+│   ├── feedback.html             # Campaign page (Remote Labs ad, feedback form, noindex)
+│   ├── online-learning.html             # Campaign page (online learning ad, notice only, noindex)
 │   ├── styles.min.css             # Minified styles (versioned ?v= from VERSION)
 │   ├── script.min.js              # Minified JavaScript
 │   ├── sw.js                      # Service Worker (cache name from VERSION)
@@ -60,8 +60,8 @@ remotelabs-website/
     ├── AGENTS.md                  # Detailed development guide
     ├── index.html                 # Source HTML
     ├── privacy.html               # Privacy policy source
-    ├── landing-a.html              # Campaign page source (Remote Labs ad)
-    ├── landing-b.html              # Campaign page source (online learning ad)
+    ├── feedback.html              # Campaign page source (Remote Labs ad)
+    ├── online-learning.html              # Campaign page source (online learning ad)
     ├── styles.css                 # Source CSS
     ├── script.js                  # Source JavaScript
     ├── sw.js                      # Source Service Worker
@@ -141,12 +141,12 @@ Never hand-edit `?v=` strings or `CACHE_NAME` — bump `VERSION` and rebuild; `n
 
 ### Campaign Landing Pages
 
-`landing-a.html` and `landing-b.html` are lean campaign pages, one per ad:
+`feedback.html` and `online-learning.html` are lean campaign pages, one per ad:
 
-- **`landing-a.html`** (ad: Remote Labs) - pre-launch "coming soon" message
+- **`feedback.html`** (ad: Remote Labs) - pre-launch "coming soon" message
   with a **Share your feedback** button linking to an external feedback
   form (placeholder URL until the campaign form exists).
-- **`landing-b.html`** (ad: online learning / MOOCs, without Remote Labs) -
+- **`online-learning.html`** (ad: online learning / MOOCs, without Remote Labs) -
   informational notice that the course isn't available yet. No CTA and no
   form link, by design.
 
@@ -175,9 +175,9 @@ Never hand-edit `?v=` strings or `CACHE_NAME` — bump `VERSION` and rebuild; `n
 - **Attribution/conversion**: traffic on both pages is tracked
   automatically in the existing Umami property (both pages load the same
   script and website-id as `index.html` - pageviews appear per path).
-  The variant A CTA links directly to the Microsoft feedback form
+  The feedback.html CTA links directly to the Microsoft feedback form
   (`https://forms.cloud.microsoft/e/HcHkv5rYBA`); since only
-  `landing-a.html` links to it, form submissions are unambiguous.
+  `feedback.html` links to it, form submissions are unambiguous.
   Variant B has no conversion link.
 - **Adding/changing pages**: every page must be listed in three places -
   `htmlFiles` and `filesToCopy` in `production_source/build.js`, and `PAGES`
