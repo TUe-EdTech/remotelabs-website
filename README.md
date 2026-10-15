@@ -150,16 +150,18 @@ Never hand-edit `?v=` strings or `CACHE_NAME` — bump `VERSION` and rebuild; `n
   informational notice that the course isn't available yet. No CTA and no
   form link, by design.
 
-- **Shared chrome**: both pages reproduce the index page's layout exactly:
+- **Shared chrome**: both pages reproduce the index page's chrome exactly:
   the same header/footer markup (including the inline SVG sprite and
   status badge), the same inline critical-CSS block copied from
   `index.html` (the fixed-header and base hero styles live there, not
-  in `styles.min.css` - without it the header renders unstyled), the
-  same `.hero` / `.hero-display` two-column hero structure, and
-  `styles.min.css` loaded with a normal stylesheet link. Three
-  functional deviations: the footer Quick Links to Benefits/Contact
-  point to `https://remote-labs.eu/#benefits|#contact` (those sections
-  don't exist on the landing pages), the header doesn't hide on scroll
+  in `styles.min.css` - without it the header renders unstyled), and
+  `styles.min.css` loaded with a normal stylesheet link. The hero uses
+  the site's `.hero` styles plus a small `.lp-hero` override that
+  centers the campaign message in a single column (title, paragraphs,
+  CTA all centered). Three functional deviations: the footer Quick
+  Links to Benefits/Contact point to
+  `https://remote-labs.eu/#benefits|#contact` (those sections don't
+  exist on the landing pages), the header doesn't hide on scroll
   (`script.js` is not loaded on campaign pages), and the hero has no
   video (campaign pages stay lightweight). The CSP adds
   `https://img.shields.io` to `img-src` for the footer status badge.
