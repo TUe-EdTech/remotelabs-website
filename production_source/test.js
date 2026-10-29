@@ -11,7 +11,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const ROOT = __dirname;
-const PAGES = ['index.html', 'privacy.html', 'feedback.html', 'online-learning.html'];
+const PAGES = ['index.html', 'privacy.html'];
 
 let failures = 0;
 
@@ -139,35 +139,6 @@ if (fs.existsSync(versionPath)) {
     }
 } else {
     console.log('  --   VERSION file not found, skipping version checks');
-}
-
-// Campaign pages must stay out of search: noindex meta in the page and
-// no entry in sitemap.xml (which robots.txt points to). Dropping either
-// would silently make ad landing pages indexable.
-console.log('\nCampaign noindex checks:');
-const CAMPAIGN_PAGES = ['feedback.html', 'online-learning.html'];
-for (const page of CAMPAIGN_PAGES) {
-    const file = path.join(ROOT, page);
-    if (!fs.existsSync(file)) { fail(page, 'missing'); continue; }
-    const html = fs.readFileSync(file, 'utf8');
-    if (/<meta name="robots" content="noindex, follow">/i.test(html)) {
-        console.log('  ok   ' + page + ' has noindex, follow');
-    } else {
-        fail(page, 'missing <meta name="robots" content="noindex, follow">');
-    }
-    if (/rel="canonical" href="https:\/\/remote-labs\.eu\/">/i.test(html)) {
-        console.log('  ok   ' + page + ' canonical points to the homepage');
-    } else {
-        fail(page, 'canonical does not point to https://remote-labs.eu/');
-    }
-}
-const sitemap = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8');
-for (const page of CAMPAIGN_PAGES) {
-    if (sitemap.includes('remote-labs.eu/' + page)) {
-        fail('sitemap.xml', 'campaign page ' + page + ' listed - remove it');
-    } else {
-        console.log('  ok   sitemap.xml does not list ' + page);
-    }
 }
 
 console.log('\n' + (failures === 0 ? 'All checks passed.' : failures + ' check(s) failed.'));

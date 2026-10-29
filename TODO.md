@@ -18,3 +18,15 @@ it from this file in the same commit that finishes it.
    the apex. HSTS protects returning visitors, but a 301
    `http -> https` and `www -> apex` would concentrate SEO signals on
    the canonical host. Server-side change; nothing to do in this repo.
+
+3. **Windows/OneDrive checkout: build.js assets copy fails** - on this
+   machine `fs.rmSync(deploy/assets)` (build.js Step 6) fails with EPERM:
+   OneDrive holds a lock on the freshly placed
+   `deploy/assets/Publications/Magazine_AMVELC_2026_digitaal.pdf`. The
+   partial delete removes fonts/images/videos from `deploy/assets` and
+   leaves the PDF. Workaround: after the build, re-copy
+   `production_source/assets/{fonts,images,videos}` into `deploy/assets/`
+   and verify with `diff -r production_source/assets deploy/assets`.
+   CI is unaffected (Linux). Consider making build.js copy-over instead
+   of delete+recreate, or excluding deploy/assets deletion failures as
+   fatal with a verification step.

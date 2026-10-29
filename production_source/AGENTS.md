@@ -229,11 +229,6 @@ For simple content changes (text, images):
 5. Add to navigation (if applicable)
 6. Test across browsers and devices
 
-Campaign/noindex pages (see the campaign landing pages section in the root
-`README.md`): keep them out of `sitemap.xml`, and do not add them to
-`lighthouserc.json` - Lighthouse's SEO category fails `noindex` pages by
-design.
-
 ---
 
 ## 🚀 Caching & Version Management

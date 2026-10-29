@@ -31,8 +31,6 @@ remotelabs-website/
 ├── deploy/                        # ✅ PRODUCTION FILES - Upload to server (CI-built)
 │   ├── index.html                 # Main page
 │   ├── privacy.html               # Privacy policy
-│   ├── feedback.html             # Campaign page (Remote Labs ad, feedback form, noindex)
-│   ├── online-learning.html             # Campaign page (online learning ad, notice only, noindex)
 │   ├── styles.min.css             # Minified styles (versioned ?v= from VERSION)
 │   ├── script.min.js              # Minified JavaScript
 │   ├── sw.js                      # Service Worker (cache name from VERSION)
@@ -60,8 +58,6 @@ remotelabs-website/
     ├── AGENTS.md                  # Detailed development guide
     ├── index.html                 # Source HTML
     ├── privacy.html               # Privacy policy source
-    ├── feedback.html              # Campaign page source (Remote Labs ad)
-    ├── online-learning.html              # Campaign page source (online learning ad)
     ├── styles.css                 # Source CSS
     ├── script.js                  # Source JavaScript
     ├── sw.js                      # Source Service Worker
@@ -138,58 +134,6 @@ Every push and pull request to `main` runs these checks in GitHub Actions (`.git
 5. **Commit source and `deploy/` together**. CI rebuilds, re-runs all gates and auto-commits the `deploy/` output on main.
 
 Never hand-edit `?v=` strings or `CACHE_NAME` — bump `VERSION` and rebuild; `npm test` fails if source or `deploy/` drift from `VERSION`.
-
-### Campaign Landing Pages
-
-`feedback.html` and `online-learning.html` are lean campaign pages, one per ad:
-
-- **`feedback.html`** (ad: Remote Labs) - pre-launch "coming soon" message
-  with a **Share your feedback** button linking to an external feedback
-  form (placeholder URL until the campaign form exists).
-- **`online-learning.html`** (ad: online learning / MOOCs, without Remote Labs) -
-  informational notice that the course isn't available yet. No CTA and no
-  form link, by design.
-
-- **Shared chrome**: both pages reproduce the index page's chrome exactly:
-  the same header/footer markup (including the inline SVG sprite and
-  status badge), the same inline critical-CSS block copied from
-  `index.html` (the fixed-header and base hero styles live there, not
-  in `styles.min.css` - without it the header renders unstyled), and
-  `styles.min.css` loaded with a normal stylesheet link. The hero uses
-  the site's `.hero` styles plus a small `.lp-hero` override that
-  centers the campaign message in a single column (title, paragraphs,
-  CTA all centered). Deliberate deviations from the index chrome: the
-  header has no "Go to Remote Labs" CTA button (removed per campaign
-  decision - the logo is the only header link and points to
-  `https://remote-labs.eu/`); the footer "Go to Remote Labs" Quick Link
-  points to `https://remote-labs.eu/` instead of the platform
-  (`remotelabs.tue.nl`) - campaign visitors should land on the site, not
-  the platform app; the footer Quick Links to Benefits/Contact point to
-  `https://remote-labs.eu/#benefits|#contact` (those sections don't
-  exist on the landing pages); the header doesn't hide on scroll
-  (`script.js` is not loaded on campaign pages); and the hero has no
-  video (campaign pages stay lightweight). The CSP adds
-  `https://img.shields.io` to `img-src` for the footer status badge.
-  Note: the index page's own platform CTAs still point to
-  `remotelabs.tue.nl` on purpose (see Domain & Hosting) - this applies
-  to the campaign pages only.
-- **No client-side experiment script** - the ads link directly to their
-  landing page, so the strict CSP stays untouched.
-- **SEO**: both pages are `noindex, follow` with a canonical link to
-  `https://remote-labs.eu/`, and they are deliberately NOT in `sitemap.xml`.
-- **Lighthouse CI**: they are deliberately NOT in `lighthouserc.json` -
-  Lighthouse's SEO category fails `noindex` pages by design. Spot-check
-  them manually (they are static and lightweight).
-- **Attribution/conversion**: traffic on both pages is tracked
-  automatically in the existing Umami property (both pages load the same
-  script and website-id as `index.html` - pageviews appear per path).
-  The feedback.html CTA links directly to the Microsoft feedback form
-  (`https://forms.cloud.microsoft/e/HcHkv5rYBA`); since only
-  `feedback.html` links to it, form submissions are unambiguous.
-  Variant B has no conversion link.
-- **Adding/changing pages**: every page must be listed in three places -
-  `htmlFiles` and `filesToCopy` in `production_source/build.js`, and `PAGES`
-  in `production_source/test.js`.
 
 ---
 
