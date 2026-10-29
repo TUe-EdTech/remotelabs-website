@@ -48,15 +48,32 @@ function getPartnerLink(filename) {
 }
 
 /**
+ * Resolve the asset version to append to logo URLs. Explicit argument
+ * wins; otherwise read ASSET_VERSION from the root VERSION file; empty
+ * string when neither is available (URL stays unversioned).
+ */
+function resolveAssetVersion(version) {
+    if (version) return version;
+    try {
+        const data = fs.readFileSync(path.join(__dirname, '..', 'VERSION'), 'utf8');
+        const m = data.match(/ASSET_VERSION=v([\d.]+)/);
+        if (m) return m[1];
+    } catch (e) { /* fall through */ }
+    return '';
+}
+
+/**
  * Generate partner-logo HTML and inject it into the #partnerLogos
  * placeholder in the given HTML file.
  *
  * @param {string} logosDir - Absolute path to the partner-logos directory.
  * @param {string} htmlPath - Absolute path to the HTML file to update.
  * @param {function} [log] - Optional logger function (msg, type).
+ * @param {string} [version] - Asset version for the ?v= query string
+ *   (defaults to ASSET_VERSION from the root VERSION file).
  * @returns {number} Number of logos generated, or -1 if skipped.
  */
-function generatePartnerLogosHTML(logosDir, htmlPath, log) {
+function generatePartnerLogosHTML(logosDir, htmlPath, log, version) {
     function logger(msg, type) {
         if (log) log(msg, type);
         else console.log((type ? type.toUpperCase() + ': ' : '') + msg);
@@ -76,11 +93,14 @@ function generatePartnerLogosHTML(logosDir, htmlPath, log) {
         return -1;
     }
 
+    const v = resolveAssetVersion(version);
+    const vQuery = v ? `?v=${v}` : '';
+
     let htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
     const logoHTML = logoFiles.map(file => {
         const filename = path.parse(file).name;
-        const src = `assets/images/logos/partner-logos/${file}`;
+        const src = `assets/images/logos/partner-logos/${file}${vQuery}`;
         const alt = filename.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         const href = getPartnerLink(filename);
 

@@ -132,7 +132,9 @@ function minifyJS() {
 function generatePartnerLogosHTML() {
   const logosDir = path.join(PRODUCTION_DIR, 'assets', 'images', 'logos', 'partner-logos');
   const htmlPath = path.join(EXPERIMENTAL_DEPLOY_DIR, 'index.html');
-  const count = generateLogosHTML(logosDir, htmlPath, log);
+  // Experimental build uses the literal ?v=exp query (see
+  // updateHTMLReferences), so version the logo URLs the same way.
+  const count = generateLogosHTML(logosDir, htmlPath, log, 'exp');
   return count >= 0;
 }
 

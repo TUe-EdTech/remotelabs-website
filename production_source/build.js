@@ -2,7 +2,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
 const { generatePartnerLogosHTML } = require('../scripts/partner-logos.js');
 
 console.log('Starting build process...\n');
@@ -16,6 +15,8 @@ console.log('Starting build process...\n');
 // auto-bump here drifted the deployed version ahead of source (deploy/
 // ended up at v2.1.5 while the committed source said v2.1.4).
 console.log('Syncing versions from VERSION...');
+let cacheVersion;
+let assetVersion;
 try {
   const versionPath = path.join(__dirname, '../VERSION');
   let versionData = fs.readFileSync(versionPath, 'utf8');
@@ -25,8 +26,8 @@ try {
   if (!cacheMatch || !assetMatch) {
     throw new Error('CACHE_NAME/ASSET_VERSION (vMAJOR.MINOR.PATCH) not found in VERSION file');
   }
-  const cacheVersion = cacheMatch[1];
-  const assetVersion = assetMatch[1];
+  cacheVersion = cacheMatch[1];
+  assetVersion = assetMatch[1];
 
   // Update Service Worker
   const swPath = path.join(__dirname, 'sw.js');
@@ -35,12 +36,13 @@ try {
   swContent = swContent.replace(/const ASSET_VERSION = '[\d.]+'/g, `const ASSET_VERSION = '${assetVersion.substring(1)}'`);
   fs.writeFileSync(swPath, swContent);
 
-  // Update HTML files
-  const htmlFiles = ['index.html', 'privacy.html'];
-  for (const htmlFile of htmlFiles) {
-    let htmlContent = fs.readFileSync(htmlFile, 'utf8');
-    htmlContent = htmlContent.replace(/\?v=[\d.]+/g, `?v=${assetVersion.substring(1)}`);
-    fs.writeFileSync(htmlFile, htmlContent);
+  // Update HTML files and the fonts stylesheet (all local asset refs
+  // carry ?v=<ASSET_VERSION>, so they must all be synced together)
+  const filesToSync = ['index.html', 'privacy.html', 'assets/fonts/fonts.css'];
+  for (const file of filesToSync) {
+    let content = fs.readFileSync(file, 'utf8');
+    content = content.replace(/\?v=[\d.]+/g, `?v=${assetVersion.substring(1)}`);
+    fs.writeFileSync(file, content);
   }
 
   console.log(`✓ Versions synced to ${cacheVersion} (cache) / ${assetVersion} (assets)\n`);
@@ -72,10 +74,16 @@ try {
 // Step 3: Build JavaScript
 console.log('Building JavaScript...');
 try {
-  execSync('npx uglifyjs script.js -o ../deploy/script.min.js -c -m', {
-    cwd: __dirname,
-    stdio: 'inherit'
-  });
+  // Use the uglify-js library API (like clean-css above) instead of
+  // shelling out to `npx uglifyjs`: no npx/bin-name resolution, and a
+  // minification failure is fatal so a stale artifact can never ship.
+  const UglifyJS = require('uglify-js');
+  const jsSource = fs.readFileSync(path.join(__dirname, 'script.js'), 'utf8');
+  const jsResult = UglifyJS.minify(jsSource, { compress: true, mangle: true });
+  if (jsResult.error) {
+    throw new Error(jsResult.error.message);
+  }
+  fs.writeFileSync(path.join(__dirname, '../deploy/script.min.js'), jsResult.code);
   console.log('✓ JavaScript minified successfully\n');
 } catch (error) {
   console.error('✗ JavaScript build failed:', error.message);
@@ -121,6 +129,7 @@ try {
   console.log('');
 } catch (error) {
   console.error('✗ Icon copy failed:', error.message);
+  process.exit(1);
 }
 
 // Step 6: Copy assets folder
@@ -144,6 +153,7 @@ try {
   console.log('');
 } catch (error) {
   console.error('✗ Assets copy failed:', error.message);
+  process.exit(1);
 }
 
 // Step 7: Generate partner logos HTML
@@ -151,10 +161,13 @@ console.log('Generating partner logos...');
 try {
   const logosDir = path.join(__dirname, 'assets', 'images', 'logos', 'partner-logos');
   const htmlPath = path.join(__dirname, '../deploy/index.html');
-  const count = generatePartnerLogosHTML(logosDir, htmlPath);
+  // Inject the current ASSET_VERSION so logo URLs are cache-busted like
+  // every other local asset (?v= is synced from the VERSION file above).
+  const count = generatePartnerLogosHTML(logosDir, htmlPath, null, assetVersion.substring(1));
   console.log('');
 } catch (error) {
   console.error('✗ Partner logos generation failed:', error.message);
+  process.exit(1);
 }
 
 console.log('Build completed successfully! ✓');

@@ -190,8 +190,9 @@ function runBuild(dryRun = false) {
     const originalDir = process.cwd();
     process.chdir(PRODUCTION_DIR);
     
-    // Run build
-    execSync('npm run build', { stdio: 'inherit' });
+    // Run the canonical build (build.js syncs VERSION, minifies via the
+    // library APIs, and regenerates deploy/ including assets and logos)
+    execSync('npm run build:full', { stdio: 'inherit' });
     
     process.chdir(originalDir);
     
@@ -237,12 +238,14 @@ function copyToDeploy(dryRun = false) {
   try {
     log('Copying built files to deploy/...', 'info');
     
-    // Copy key files from production_source to deploy
+    // Copy key files from production_source to deploy. The minified
+    // styles.min.css / script.min.js are NOT here - they are build
+    // outputs written straight into deploy/ by `npm run build:full`
+    // (which --deploy implies via --build), so copying them from
+    // production_source/ could never find them.
     const filesToCopy = [
       'index.html',
       'privacy.html',
-      'styles.min.css',
-      'script.min.js',
       'sw.js',
       'manifest.json',
       'robots.txt',

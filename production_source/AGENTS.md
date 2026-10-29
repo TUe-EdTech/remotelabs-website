@@ -223,7 +223,7 @@ For simple content changes (text, images):
    `<style>` block for self-contained pages - CSP allows inline styles, but
    never inline scripts)
 3. Add functionality to `production_source/script.js` (if needed)
-4. Register the page in three places: the `htmlFiles` and `filesToCopy`
+4. Register the page in three places: the `filesToSync` and `filesToCopy`
    lists in `build.js`, and `PAGES` in `test.js` (keeps `?v=` sync, the
    deploy copy and the CSP/inline-script checks working for the new page)
 5. Add to navigation (if applicable)
@@ -261,11 +261,14 @@ ASSET_VERSION=v2.1.1
 To release (or whenever assets change and clients must get fresh copies):
 
 1. Edit the root `VERSION` file and bump `CACHE_NAME` / `ASSET_VERSION`
-   (normally the PATCH number; MAJOR/MINOR deliberately).
+   (normally the PATCH number; MAJOR/MINOR deliberately) — or run
+   `node scripts/bump-version.js`, which bumps PATCH and runs the build
+   in one step (safe: CI never runs that script, only `build:full`).
 2. Run `cd production_source && npm run build:full`. The build **syncs**
    (does not bump): it writes the VERSION value into `sw.js`,
-   `index.html`, and `privacy.html`, and rebuilds `deploy/` from the same
-   value — so source and deploy artifacts can never disagree.
+   `index.html`, `privacy.html`, and `assets/fonts/fonts.css`, and
+   rebuilds `deploy/` from the same value — so source and deploy
+   artifacts can never disagree.
 3. Commit everything (source + `deploy/`).
 
 Background: the build used to auto-bump PATCH on every run. Because CI
@@ -277,10 +280,12 @@ drift, with a message telling you to rebuild and commit.
 #### 3. Full Build
 
 `production_source/build.js` is the canonical build script. It:
-1. Syncs version strings from the `VERSION` file (sw.js + HTML files)
+1. Syncs version strings from the `VERSION` file (sw.js + HTML files +
+   `assets/fonts/fonts.css`, so every local asset URL is versioned)
 2. Minifies CSS via the clean-css library API (minify failure is fatal — a
    failed minification must never silently ship a stale artifact)
-3. Minifies JS via `npx uglifyjs` (failure is fatal)
+3. Minifies JS via the uglify-js library API (failure is fatal; no `npx`
+   bin-name resolution involved)
 4. Copies HTML, sw.js, robots.txt, sitemap.xml, .htaccess to `deploy/`
 5. Copies icon files and assets folder to `deploy/`
 6. Generates partner-logo HTML (via `scripts/partner-logos.js`)
@@ -296,8 +301,10 @@ If not using the build (not recommended):
    ```javascript
    const CACHE_NAME = 'remotelabs-v2.1.1';  // must match VERSION
    ```
-3. **Update asset query strings** in `production_source/index.html` and
-   `production_source/privacy.html` (all `?v=` references)
+3. **Update asset query strings** in `production_source/index.html`,
+   `production_source/privacy.html` and `assets/fonts/fonts.css` (all
+   `?v=` references — every local asset URL is versioned: images, videos,
+   posters, fonts, partner logos)
 4. **Rebuild and commit `deploy/`** — or just run `npm run build:full`
    which does all of the above automatically
 5. **Verify**: `npm test` passes (it checks source and deploy/ against

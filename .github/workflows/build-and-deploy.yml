@@ -21,6 +21,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: production_source/package-lock.json
 
       - name: Install dependencies
         run: |
@@ -45,9 +47,7 @@ jobs:
         run: node scripts/check-links.js deploy
 
       - name: Run Lighthouse CI
-        run: |
-          npm install -g @lhci/cli@0.14
-          lhci autorun --config=lighthouserc.json
+        run: npx --yes @lhci/cli@0.14 autorun --config=lighthouserc.json
 
       - name: Commit build artifacts
         if: github.ref == 'refs/heads/main'

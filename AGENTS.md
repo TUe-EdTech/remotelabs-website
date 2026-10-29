@@ -37,10 +37,11 @@ Essential context for any change:
 - `production_source/AGENTS.md` is the detailed development guide
   (structure, standards, caching, testing, deployment).
 - The root `VERSION` file is the single source of truth for asset/cache
-  versions. Release ritual: bump `VERSION`, run
-  `cd production_source && npm run build:full`, commit source and `deploy/`
-  together. The build syncs version strings; it never bumps. `npm test`
-  fails if source or `deploy/` drift from `VERSION`.
+  versions. Release ritual: bump `VERSION` (or run
+  `node scripts/bump-version.js`, which bumps PATCH and builds in one
+  step), run `cd production_source && npm run build:full`, commit source
+  and `deploy/` together. The build syncs version strings; it never bumps.
+  `npm test` fails if source or `deploy/` drift from `VERSION`.
 - CI (`.github/workflows/build-and-deploy.yml`) runs `npm test`,
   `node scripts/check-links.js deploy` and Lighthouse budgets
   (`lighthouserc.json`) on every push/PR to main, then auto-commits the
