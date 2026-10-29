@@ -29,9 +29,10 @@
 
     # Long cache for fingerprinted/static assets; HTML is handled by the
     # service worker (network-first) so it stays fresh.
-    # Note: .mp4 is excluded because videos are not versioned with ?v= in
-    # the HTML; a replaced video would stay stale for a year.
-    <FilesMatch "\.(css|js|svg|png|jpg|jpeg|webp|woff2?)$">
+    # Every local asset referenced from the HTML (and fonts.css) carries
+    # ?v=<ASSET_VERSION>, synced from the VERSION file by build.js, so all
+    # of these are safe to mark immutable: a replaced file gets a new URL.
+    <FilesMatch "\.(css|js|svg|png|jpg|jpeg|webp|avif|woff2?|mp4|pdf)$">
         Header set Cache-Control "public, max-age=31536000, immutable"
     </FilesMatch>
     <FilesMatch "\.html$">

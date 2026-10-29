@@ -215,18 +215,19 @@ Note: the deprecated `X-XSS-Protection` and `Expect-CT` headers were removed.
 
 ### 🔧 Service Worker Behavior
 
-The updated `sw.js` uses a **Network-First** strategy with runtime cache-as-you-go:
-- **HTML navigations**: Always fetched from network first; falls back to cached copy only when offline
-- **CSS/JS/images**: Try network first, cache the response, fall back to cache if offline
-- **No static precache list**: Assets are cached on first fetch, so there is no manual-bump failure mode
-- **Old caches**: Automatically cleaned up on activation
+`sw.js` uses a per-request-type strategy with runtime cache-as-you-go:
+- **HTML navigations**: network first (always fresh); the successful response is cached too, so the offline fallback can serve the last-seen page
+- **Versioned assets**: every local asset URL carries `?v=<ASSET_VERSION>` (images, videos, posters, fonts, partner logos — synced from `VERSION` by the build). These are served **cache first**; because a version bump also changes the cache name, old caches are dropped on activate and each asset is re-fetched exactly once per release
+- **Everything else**: network first, cache-as-you-go, cache fallback
+- **No static precache list**: assets are cached on first fetch, so there is no manual-bump failure mode
+- **Old caches**: automatically cleaned up on activation
 - **Immediate activation**: `skipWaiting()` and `clients.claim()` ensure no delays
 - **Registration**: `script.js` registers the service worker on page load (http/https only)
 
 This means:
 - ✅ Users always get fresh HTML
-- ✅ Users get fresh CSS/JS when online
-- ✅ Offline support still works
+- ✅ Repeat visits load versioned assets straight from the SW cache (no revalidation)
+- ✅ Offline support works (cached pages and assets)
 - ✅ Old versions don't persist
 
 ### 📋 Caching Troubleshooting
@@ -269,8 +270,8 @@ Application > Service Workers > Unregister, then hard refresh.
 - Review and update privacy policy
 
 ### Version Updates (After Changes):
-1. Bump the root `VERSION` file (e.g. `v2.1.7` → `v2.1.8`)
-2. Run `cd production_source && npm run build:full` (syncs sw.js/HTML and rebuilds `deploy/`)
+1. Bump the root `VERSION` file (e.g. `v2.1.7` → `v2.1.8`) — or run `node scripts/bump-version.js`, which bumps PATCH and runs the build in one step
+2. Run `cd production_source && npm run build:full` (syncs sw.js/HTML/fonts.css and rebuilds `deploy/`)
 3. Commit source + `deploy/` together
 
 ## Emergency Contacts

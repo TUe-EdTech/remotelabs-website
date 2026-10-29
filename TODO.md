@@ -27,6 +27,24 @@ it from this file in the same commit that finishes it.
    leaves the PDF. Workaround: after the build, re-copy
    `production_source/assets/{fonts,images,videos}` into `deploy/assets/`
    and verify with `diff -r production_source/assets deploy/assets`.
-   CI is unaffected (Linux). Consider making build.js copy-over instead
-   of delete+recreate, or excluding deploy/assets deletion failures as
-   fatal with a verification step.
+   CI is unaffected (Linux). Assets-copy failures are now fatal (the
+   build exits 1 instead of shipping a partial deploy/); the remaining
+   option is to make build.js copy-over instead of delete+recreate.
+
+4. **Hero video weight (biggest perf lever)** - `hero-loop.mp4` is 8.9 MB:
+   145 s loop, 720p H.264 at ~511 kbps (size is driven by duration). This
+   is what drags the Lighthouse performance score to ~0.75 (budget 0.7).
+   Trim the loop to ~20-30 s and/or re-encode (CRF 28-30) to ~1.5-2.5 MB,
+   then tighten `lighthouserc.json` toward 0.9 (already noted in
+   production_source/AGENTS.md). Bump `VERSION`, `npm run build:full`,
+   commit source + `deploy/`.
+
+5. **Oversized partner logos** - `assets/images/logos/partner-logos/`
+   totals ~266 KB but renders at max 120x40 (ZPNU.png source is
+   10412x2450). Downscale to ~240 px wide (WebP/palette PNG) -> ~40 KB.
+   Bump `VERSION`, rebuild, commit.
+
+6. **Experiment images** - 3x JPEG 773x498 (~186 KB total) displayed at
+   <= ~373 px wide / 250 px tall in the grid. Serve ~800 px WebP or
+   q80 JPEG (~60 KB total) and add `decoding="async"`. Bump `VERSION`,
+   rebuild, commit.

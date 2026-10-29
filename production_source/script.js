@@ -3,6 +3,19 @@
 (function () {
     'use strict';
 
+    // Asset version query (?v=...) taken from this script's own URL
+    // (script.min.js?v=...), so dynamically loaded media - the workflow
+    // video switching below - gets the same cache-busting version as the
+    // HTML-referenced assets. Empty string when unavailable.
+    var ASSET_VERSION = (function () {
+        var el = document.currentScript;
+        if (el && el.src) {
+            var m = el.src.match(/[?&]v=([^&]+)/);
+            if (m) return '?v=' + m[1];
+        }
+        return '';
+    })();
+
     // Apply the main stylesheet once it has loaded. The <link> is declared
     // with media="print" in the HTML to avoid blocking first paint; swapping
     // to "all" here replaces the previous inline onload handler so the CSP
@@ -194,7 +207,7 @@
         steps.forEach(function (step) {
             step.addEventListener('click', function () {
                 var videoId = this.getAttribute('data-video');
-                var videoPath = 'assets/videos/' + videoId + '.mp4';
+                var videoPath = 'assets/videos/' + videoId + '.mp4' + ASSET_VERSION;
 
                 video.pause();
                 video.currentTime = 0;
