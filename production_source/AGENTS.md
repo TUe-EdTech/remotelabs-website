@@ -83,6 +83,7 @@ remotelabs-website/
 │   ├── sw.js                      # Service worker for offline support (registered by script.js)
 │   ├── assets/                    # Static assets
 │   │   ├── Partner logos/          # Partner organization logos
+│   │   ├── Publications/           # Publication PDFs (footer Publications list)
 │   │   ├── TUe-logo-descriptor-line-scarlet-S.png
 │   │   └── videos/                # Video files
 │   ├── 400.shtml                  # Custom error pages (at deploy root, not a subfolder)
