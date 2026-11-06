@@ -23,7 +23,7 @@ These documents must be reviewed and updated in the same change whenever
 you make a major change (new feature, workflow or build change, repo
 structure change), and periodically otherwise:
 
-- `README.md` — handover guide (folder structure, workflows, caching, build commands)
+- `README.md` — project README (overview, folder structure, workflows, build commands)
 - `production_source/AGENTS.md` — detailed development guide
 - `TODO.md` — improvement tracker
 - This file

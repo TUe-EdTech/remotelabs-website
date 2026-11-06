@@ -73,7 +73,7 @@ npm install
 remotelabs-website/
 ├── .git/                          # Git repository (do not deploy)
 ├── .gitattributes                 # Git configuration
-├── README.md                      # Handover guide
+├── README.md                      # Project README (overview, structure, workflows)
 ├── deploy/                        # ✅ PRODUCTION FILES - Upload to server
 │   ├── index.html                 # Main landing page
 │   ├── privacy.html               # Privacy policy page
@@ -513,7 +513,7 @@ Note: the deprecated `X-XSS-Protection` and `Expect-CT` headers are not used.
 
 ### Documentation Maintenance
 
-Review and update `README.md` (root handover guide), this file, the root
+Review and update `README.md` (root project README), this file, the root
 `AGENTS.md` and `TODO.md` in the same commit as any major change — and
 periodically otherwise. If a command, version ritual, file list or
 behaviour description here no longer matches reality, the doc is stale and

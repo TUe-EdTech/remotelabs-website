@@ -1,42 +1,55 @@
-# Remote Labs Website - Handover Guide
+# Remote Labs Website
 
-## Overview
+[![CI](https://github.com/TUe-EdTech/remotelabs-website/actions/workflows/build-and-deploy.yml/badge.svg)](https://github.com/TUe-EdTech/remotelabs-website/actions)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Content: CC BY-SA 4.0](https://img.shields.io/badge/content-CC%20BY--SA%204.0-lightgrey.svg)](CONTENT-LICENSE.md)
 
-This is the official website for Remote Labs at Eindhoven University of Technology. It's a static website that provides information about our 24/7 access to physical lab experiments.
+The official website of **Remote Labs** at Eindhoven University of Technology
+(TU/e) — a static site presenting our 24/7 remote access to physical lab
+experiments.
 
-> **Start here**: `TODO.md` tracks completed and pending improvements with
-> commit references; `AGENTS.md` summarizes the workflow rules for agents
-> and contributors; `production_source/AGENTS.md` is the detailed
-> development guide.
+- **Live site**: <https://remote-labs.eu>
+- **Remote Labs platform** (the app students log into): <https://remotelabs.tue.nl>
 
-## Open Source
+## Features
 
-This repository is open source (approved by TU/e, 2026):
+- Pure static site: HTML/CSS/JS, no server-side code, no database, no cookies
+- Progressive Web App: service worker with network-first HTML, cache-first
+  versioned assets, offline support
+- Accessibility and performance budgets enforced in CI (Lighthouse)
+- Strict Content-Security-Policy (no inline scripts), SRI-pinned analytics,
+  full security header set via `.htaccess`
+- Privacy policy page (GDPR), Umami analytics (self-hosted cloud, cookieless)
+- Custom error pages, sitemap, robots.txt, web app manifest
 
-- **Code** (HTML/CSS/JS sources, build and CI scripts): [MIT License](LICENSE)
-- **Website content** (text, images, videos): [CC BY-SA 4.0](CONTENT-LICENSE.md)
-- **Third-party assets** (fonts, logos, media): [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)
+## Quick start
 
-Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
-Please report security issues privately as described in [SECURITY.md](SECURITY.md)
-and follow our [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+No build step is required to serve the site — `deploy/` is ready to upload:
 
-## Quick Start
+```bash
+# View locally: just open deploy/index.html in a browser
 
-The website is a simple static site. No build process or server required.
+# Deploy your own copy: upload the contents of deploy/ to any static web host
+```
 
-### To view locally:
-Just open `deploy/index.html` in your web browser.
+To work on the site itself:
 
-### To deploy:
-Copy all files from the `deploy/` folder to your web server's root directory.
+```bash
+git clone https://github.com/TUe-EdTech/remotelabs-website.git
+cd remotelabs-website/production_source
+npm install            # once
+npm run build:full     # canonical build: syncs VERSION, minifies, fills ../deploy/
+npm test               # source + deploy/ + VERSION consistency tests
+node ../scripts/check-links.js ../deploy   # link/asset integrity
+```
 
-## Folder Structure
+## Repository structure
 
 ```
 remotelabs-website/
+├── README.md                     # This file
 ├── AGENTS.md                     # Agent/contributor guide (read before planning work)
-├── TODO.md                       # Improvement tracker: done/pending work
+├── TODO.md                       # Open improvement items
 ├── LICENSE                       # MIT license for code
 ├── CONTENT-LICENSE.md            # CC BY-SA 4.0 for website content
 ├── THIRD-PARTY-NOTICES.md        # Fonts, logos, media credits and terms
@@ -44,322 +57,82 @@ remotelabs-website/
 ├── SECURITY.md                   # Vulnerability reporting policy
 ├── CODE_OF_CONDUCT.md            # Contributor Covenant 2.1
 ├── VERSION                       # Single source of truth for asset/cache versions
-├── .gitattributes                # LF normalization (prevents phantom diffs)
-├── .github/                      # CI + repo config
-│   ├── CODEOWNERS                 # Review ownership
-│   ├── dependabot.yml             # Dependency updates (Actions + npm)
-│   └── workflows/                 # CI: build, tests, link check, Lighthouse, secret scan
-├── deploy/                        # ✅ PRODUCTION FILES - Upload to server (CI-built)
-│   ├── index.html                 # Main page
-│   ├── privacy.html               # Privacy policy
-│   ├── styles.min.css             # Minified styles (versioned ?v= from VERSION)
-│   ├── script.min.js              # Minified JavaScript
-│   ├── sw.js                      # Service Worker (cache name from VERSION)
-│   ├── manifest.json              # Web app manifest
-│   ├── robots.txt                 # Search engine crawl rules + sitemap pointer
-│   ├── sitemap.xml                # XML sitemap
-│   ├── .htaccess                  # Real HTTP security headers (see Security)
-│   ├── assets/                    # Images, videos, logos, fonts
-│   ├── 400-500 .shtml             # Custom error pages (at deploy root)
-│   └── cookie_consent.html / dnt_script.html  # TU/e integration fragments
-├── experimental/                  # 🧪 EXPERIMENTAL DEVELOPMENT
-│   ├── index.html                 # Experimental HTML source
-│   ├── styles.css                 # Experimental CSS source
-│   ├── script.js                  # Experimental JavaScript source
-│   └── assets/fontawesome/        # Experimental-only assets (shared assets come from production_source/ at build time)
-├── experimental_deploy/           # 🎯 EXPERIMENTAL BUILD OUTPUT (gitignored)
-├── scripts/                      # Build and utility scripts
-│   ├── build-experimental.js      # Build script for experimental folder
-│   ├── build-experimental.bat     # Windows batch version
-│   ├── check-links.js             # Link/asset/anchor integrity check
-│   ├── partner-logos.js           # Shared partner-logo HTML generation
-│   └── sync-experimental.js       # Sync experimental → production_source
-├── lighthouserc.json             # CI Lighthouse budgets
-└── production_source/            # Development source of truth
-    ├── AGENTS.md                  # Detailed development guide
-    ├── index.html                 # Source HTML
-    ├── privacy.html               # Privacy policy source
-    ├── styles.css                 # Source CSS
-    ├── script.js                  # Source JavaScript
-    ├── sw.js                      # Source Service Worker
-    ├── build.js                   # Canonical build (syncs VERSION, minifies, fills deploy/)
-    ├── test.js                    # Source + version consistency tests (npm test)
-    └── package.json               # Build configuration
+├── .github/                      # CI + repo config (workflows, CODEOWNERS, Dependabot)
+├── deploy/                       # Built production site - upload this to the web server
+│   ├── index.html                # Main page
+│   ├── privacy.html              # Privacy policy
+│   ├── styles.min.css            # Minified styles (versioned ?v= from VERSION)
+│   ├── script.min.js             # Minified JavaScript
+│   ├── sw.js                     # Service worker (cache name from VERSION)
+│   ├── manifest.json / robots.txt / sitemap.xml / .htaccess / icons
+│   ├── assets/                   # Images, videos, logos, fonts, publications
+│   └── 400-500.shtml             # Custom error pages
+├── production_source/            # Development source of truth (edit here, never in deploy/)
+│   ├── index.html / privacy.html / styles.css / script.js / sw.js
+│   ├── build.js                  # Canonical build
+│   ├── test.js                   # Consistency tests (npm test)
+│   ├── AGENTS.md                 # Detailed development guide
+│   └── package.json              # Build tooling (clean-css, uglify-js)
+├── experimental/                 # Sandbox for trying out redesigns before production
+├── experimental_deploy/          # Experimental build output (gitignored)
+├── scripts/                      # Utility scripts (build-experimental, check-links, bump-version, ...)
+└── lighthouserc.json             # CI Lighthouse budgets
 ```
 
-## Making Changes
+## Development workflow
 
-### 🎯 Experimental Workflow (NEW)
+1. Edit files in `production_source/` (never edit `deploy/` directly — it is
+   CI-built).
+2. Bump the root `VERSION` file when assets change and visitors must get fresh
+   copies — `node scripts/bump-version.js` bumps PATCH and builds in one step.
+   The build syncs the version into `sw.js`, the HTML files and `fonts.css`;
+   never hand-edit `?v=` strings or `CACHE_NAME`.
+3. Rebuild: `cd production_source && npm run build:full`
+4. Verify: `npm test` and `node scripts/check-links.js deploy`
+5. Commit **source and `deploy/` together**. CI rebuilds, re-runs all gates and
+   auto-commits the `deploy/` output on `main`.
 
-The `experimental/` folder provides a sandbox environment for testing new designs and features before merging into production. This allows for rapid iteration and A/B testing.
+`npm test` fails if `VERSION`, the sources or `deploy/` disagree, so version
+drift cannot ship. The versioning model (service-worker cache name + immutable
+`?v=` asset URLs) is what makes deployments cache-safe; the details and the
+caching troubleshooting guide live in `production_source/AGENTS.md`.
 
-**Key Features:**
-- Black and white minimalistic color scheme (replaces blue)
-- More squared/less rounded button corners
-- Block-style benefits section (replaces button-style)
-- Left-aligned title with natural balance
-- Two-column hero layout with summary panel
-- Static video display (removed full-width on scroll)
-- Pulsing dot indicator for active workflow step
+To try out a redesign, edit `experimental/` and preview with
+`node scripts/build-experimental.js` (output in `experimental_deploy/`), then
+sync approved changes into `production_source/` with
+`node scripts/sync-experimental.js`.
 
-**Workflow:**
+### CI gates (every push/PR to `main`)
 
-1. **Edit files** in the `experimental/` folder:
-   - `experimental/index.html` - HTML structure
-   - `experimental/styles.css` - CSS styles
-   - `experimental/script.js` - JavaScript behavior
-
-2. **Build for preview**:
-   ```bash
-   # Using Node.js (preferred)
-   node scripts/build-experimental.js
-   
-   # Or on Windows (double-click)
-   scripts/build-experimental.bat
-   ```
-   This creates minified files in `experimental_deploy/`
-
-3. **Preview locally**:
-   Open `experimental_deploy/index.html` in your browser to see the built version exactly as it will appear in production.
-
-4. **Test changes**: Verify all functionality works as expected in the experimental version.
-
-5. **Merge to production**: Once approved, manually copy changes from `experimental/` to `production_source/` and rebuild.
-
-6. **Commit to git**: All changes in `experimental/` and `experimental_deploy/` are tracked. The build is automatic on commit via the build script.
-
-**Automatic Build on Commit:**
-A git hook can be set up to automatically run `node scripts/build-experimental.js` when committing changes to the experimental folder. This ensures `experimental_deploy/` is always up-to-date.
-
-### Automated Quality Gates (CI)
-
-Every push and pull request to `main` runs these checks in GitHub Actions (`.github/workflows/build-and-deploy.yml`) against the freshly built `deploy/` output:
-
-1. **Source consistency tests** — `npm test` in `production_source/` (JS syntax, CSP without `unsafe-inline`, version consistency).
-2. **Link and asset integrity** — `node scripts/check-links.js deploy` verifies that every local link, image, video, font, icon, manifest entry and sitemap URL resolves to a real file, and that every in-page anchor (including SVG `<use>` icon refs) has a matching id. Run it manually with `node scripts/check-links.js experimental_deploy` to check an experimental preview.
-3. **Lighthouse budgets** — `lighthouserc.json` fails the build if any category drops below its minimum score (accessibility / best-practices / SEO >= 0.9; performance >= 0.7, the current measured level minus margin — the 8.9 MB hero video is the drag, but re-encoding/trimming it was evaluated and declined, commit `5d785a50`; the budget stays at 0.7, see the performance notes in `production_source/AGENTS.md`).
-
----
-
-### Production Workflow
-
-1. **Edit files** in the `production_source/` folder
-2. **Bump the version** in the root `VERSION` file (PATCH) whenever assets changed and visitors must get fresh copies — this is the only place versions are ever set
-3. **Build** (syncs version strings from `VERSION` into `sw.js`/HTML, minifies CSS/JS, regenerates `deploy/`):
-   ```bash
-   cd production_source
-   npm install    # First time only
-   npm run build:full
-   ```
-4. **Verify locally**: `npm test`, then `node scripts/check-links.js deploy`
-5. **Commit source and `deploy/` together**. CI rebuilds, re-runs all gates and auto-commits the `deploy/` output on main.
-
-Never hand-edit `?v=` strings or `CACHE_NAME` — bump `VERSION` and rebuild; `npm test` fails if source or `deploy/` drift from `VERSION`.
-
----
-
-## Important Files
-
-- **Main Page**: `production_source/index.html` - Edit this for content changes (never edit `deploy/` directly)
-- **Styles**: `production_source/styles.css` - All styles, including the former inline toggle/workflow block
-- **JavaScript**: `production_source/script.js` - Site behaviour
-- **Service Worker**: `production_source/sw.js` - Offline caching (version synced from `VERSION`)
-- **Images/Logos**: `production_source/assets/` - All images and videos
-- **Error Pages**: `deploy/400.shtml`, `deploy/404.shtml`, etc. (at deploy root)
-
-## Video Loading Behaviour
-
-- The hero video autoplays on normal connections; on Save-Data / 2G it is skipped (the AVIF poster stays) and only loads when the user presses Play.
-- The below-the-fold workflow video ships with `preload="none"` and starts loading/playing via IntersectionObserver as its section approaches the viewport.
-- Clicking a workflow step still switches its video instantly as before.
-
-## Domain & Hosting
-
-- **Site domain**: remote-labs.eu (canonical; the server also answers on
-  www.remote-labs.eu without redirecting — all self-references, the
-  sitemap and robots.txt use the apex)
-- **Platform domain**: remotelabs.tue.nl (the Remote Labs platform
-  application itself; the "Go to Remote Labs" CTAs point here — do not
-  "fix" them to the site domain)
-- **Current Hosting**: TU/e web servers
-- **SSL**: HTTPS enabled (required)
+1. `npm test` — syntax, CSP (no inline scripts), version consistency
+2. `scripts/check-links.js deploy` — every local link/asset/anchor resolves
+3. Lighthouse budgets (`lighthouserc.json`) — accessibility / best-practices /
+   SEO >= 0.9, performance >= 0.7
+4. gitleaks secret scan (`.github/workflows/secrets-scan.yml`, plus a weekly
+   full-history scan)
 
 ## Security
 
-**Content-Security-Policy** is delivered as a `<meta>` tag in the `<head>` of
-`index.html` (this is the one security header browsers honour via `<meta>`).
+Security headers (CSP via `<meta>`, the rest via `deploy/.htaccess`), SRI on
+the analytics script, and a strict no-inline-script policy are enforced by
+`npm test` and CI. To report a vulnerability, see [SECURITY.md](SECURITY.md) —
+please do not open public issues for security reports.
 
-All other security headers are **ignored by browsers when set via `<meta>`** and
-must be sent as real HTTP response headers. They live in `deploy/.htaccess`
-(Apache). If the site is hosted behind Nginx / IIS / a TU/e proxy, replicate the
-same headers there:
-- X-Frame-Options
-- X-Content-Type-Options
-- Referrer-Policy
-- Strict-Transport-Security
-- Permissions-Policy
+## Contributing
 
-Note: the deprecated `X-XSS-Protection` and `Expect-CT` headers were removed.
+Contributions are welcome — please read [CONTRIBUTING.md](CONTRIBUTING.md) and
+our [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) first. Open an issue to discuss
+bigger changes before opening a PR.
 
-## SEO
+## License
 
-- `robots.txt` and `sitemap.xml` live in `deploy/` and are copied by the build.
-- `index.html` includes Open Graph / Twitter Card tags, a canonical link, and
-  JSON-LD Organization structured data. Update the URLs/description there if the
-  domain or messaging changes.
+- **Code** (HTML/CSS/JS sources, build and CI scripts): [MIT](LICENSE)
+- **Website content** (text, images, videos): [CC BY-SA 4.0](CONTENT-LICENSE.md)
+- **Third-party assets** (fonts, logos, magazine PDF): see
+  [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) — they remain the property
+  of their owners and are used with permission
 
-## Caching & Deployment
+## Contact
 
-### ⚠️ IMPORTANT: Preventing Caching Issues
-
-**Problem**: Visitors may see outdated content even after deployment due to aggressive caching by:
-1. **Service Worker** - Caches assets locally in the browser
-2. **Browser Cache** - Caches static files (CSS, JS, HTML)
-3. **CDN/Proxy Cache** - TU/e hosting may cache responses
-
-### ✅ Solution: Versioning & Cache Control
-
-#### Before Each Deployment:
-
-1. **Bump the root `VERSION` file** (PATCH number) — the single source of truth for both the service-worker cache name and the asset query strings.
-2. **Run the build**: `cd production_source && npm run build:full`. It syncs the new version into `sw.js`, `index.html`, `privacy.html` and regenerates `deploy/` — you never edit version strings by hand.
-3. Commit source and `deploy/` together.
-
-`npm test` (locally and in CI) fails if `VERSION`, the source files, or `deploy/` disagree — version drift cannot reach production.
-
-#### Deployment Steps:
-
-1. Make your changes in `production_source/`
-2. Bump `VERSION` and run `npm run build:full`
-3. Upload the contents of `deploy/` to the server
-4. **Verify**: Open in incognito mode or clear cache before testing
-
-### 🔧 Service Worker Behavior
-
-`sw.js` uses a per-request-type strategy with runtime cache-as-you-go:
-- **HTML navigations**: network first (always fresh); the successful response is cached too, so the offline fallback can serve the last-seen page
-- **Versioned assets**: every local asset URL carries `?v=<ASSET_VERSION>` (images, videos, posters, fonts, partner logos — synced from `VERSION` by the build). These are served **cache first**; because a version bump also changes the cache name, old caches are dropped on activate and each asset is re-fetched exactly once per release
-- **Everything else**: network first, cache-as-you-go, cache fallback
-- **No static precache list**: assets are cached on first fetch, so there is no manual-bump failure mode
-- **Old caches**: automatically cleaned up on activation
-- **Immediate activation**: `skipWaiting()` and `clients.claim()` ensure no delays
-- **Registration**: `script.js` registers the service worker on page load (http/https only)
-
-This means:
-- ✅ Users always get fresh HTML
-- ✅ Repeat visits load versioned assets straight from the SW cache (no revalidation)
-- ✅ Offline support works (cached pages and assets)
-- ✅ Old versions don't persist
-
-### 📋 Caching Troubleshooting
-
-| Symptom | Cause | Solution |
-|---------|-------|----------|
-| Visitors see old content | Service worker cache not invalidated | Bump `CACHE_NAME` version |
-| CSS/JS not updating | Browser cache | Add/bump `?v=2.1.1` query string |
-| HTML not updating | Browser cache | `Cache-Control: no-cache` meta tag |
-| Some users still see old version | CDN cache | Contact TU/e IT to clear cache |
-
-### 🎯 Verification Checklist
-
-After deploying:
-- [ ] Open site in **incognito/private window** (bypasses cache)
-- [ ] Check Chrome DevTools > Application > Service Workers (should show the cache name from `VERSION`, e.g. `remotelabs-v2.1.7`)
-- [ ] Check DevTools > Network tab: CSS/JS URLs carry the current `?v=` from `VERSION`
-- [ ] Hard refresh (Ctrl+F5) to ensure fresh load
-- [ ] Test on mobile device
-- [ ] Ask a colleague to verify (they won't have cached version)
-
-### 💡 Pro Tip: Emergency Cache Busting
-
-Do **not** paste inline `<script>` snippets into the page — the CSP and
-`npm test` forbid inline scripts (XSS hardening). The service worker is
-network-first by design, so a `VERSION` bump plus deployment updates
-everyone automatically. For a single stuck browser: DevTools >
-Application > Service Workers > Unregister, then hard refresh.
-
-## Maintenance Tasks
-
-### Regular:
-- Content updates (text, images)
-- Check links are working
-- Test on mobile devices
-
-### As Needed:
-- Update partner logos in `assets/Partner logos/`
-- Update video content in `assets/videos/`
-- Review and update privacy policy
-
-### Version Updates (After Changes):
-1. Bump the root `VERSION` file (e.g. `v2.1.7` → `v2.1.8`) — or run `node scripts/bump-version.js`, which bumps PATCH and runs the build in one step
-2. Run `cd production_source && npm run build:full` (syncs sw.js/HTML/fonts.css and rebuilds `deploy/`)
-3. Commit source + `deploy/` together
-
-## Emergency Contacts
-
-- **Primary**: Karel Aarts (k.m.a.aarts@tue.nl)
-- **Technical Support**: TU/e IT Department
-
-## Notes
-
-- This is a static site - no database, no server-side code
-- All files are HTML, CSS, and JavaScript
-- No cookies are collected (as stated on the site)
-- Service worker provides basic offline support
-- **AppCache is deprecated** - Removed `cache.manifest` reference
-
-## Quick Reference: Build Commands
-
-```bash
-# Install dependencies (once)
-cd production_source
-npm install
-
-# Full build (canonical): syncs VERSION, minifies, regenerates deploy/
-npm run build:full
-
-# Individual steps (build.js already chains these)
-npm run build:css    # Minify CSS (npx cleancss — the binary is named cleancss)
-npm run build:js     # Minify JavaScript
-npm run build:html   # Copy HTML files
-
-# Quality gates (also run in CI)
-npm test                             # Source + version consistency tests
-node ../scripts/check-links.js ../deploy   # Link/asset/anchor integrity
-```
-
----
-
-## Recent Changes (Experimental v1)
-
-### Applied User Feedback:
-
-1. **Removed** "Explore Features" button from hero section
-2. **Implemented** 2-column hero layout with summary panel on the right
-   - Title and subtitle in left column (middle-aligned, max-width: 500px)
-   - "What is Remote Labs?" summary in right column
-3. **Reverted** video to static display (removed full-width on scroll as it caused layout issues)
-4. **Replaced** "▶ Playing" button with pulsing dot indicator
-   - Animated black dot that pulses (scales from 1x to 1.2x)
-   - Cleaner, more minimalistic look
-5. **Revamped** Key Benefits section
-   - Changed from 3 icon-based benefit blocks to 4 numbered benefit items
-   - New layout: 2-column grid with numbered items
-   - Each benefit has a number (01-04) and descriptive text
-   - Benefits: Access Anywhere, Real Equipment, Flexible Learning, Cost Effective
-6. **Centered** bottom CTA section
-   - "Interested in exploring Remote Labs..." text now centered
-   - CTA buttons centered with max-width: 800px
-   - Secondary CTA text also centered
-
-### Visual Design Updates:
-
-- **Color Scheme**: Black and white minimalistic (no blue accent)
-- **Button Style**: Less rounded corners (3px border-radius for standard buttons, 4px for hero CTA)
-- **Typography**: Maintained Poppins for headings, Lato for body text
-- **Spacing**: Improved margins and padding for better visual hierarchy
-
----
-
-**Last Updated**: 2026
-**Maintained by**: Karel Aarts | DRIVE | Eindhoven University of Technology
+Maintained by **Karel Aarts** (DRIVE, Eindhoven University of Technology) —
+k.m.a.aarts@tue.nl. Issues and pull requests via GitHub.
