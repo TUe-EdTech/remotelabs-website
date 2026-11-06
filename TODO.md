@@ -44,11 +44,3 @@ it from this file in the same commit that finishes it.
 Note: the 8.9 MB hero video is NOT a TODO - re-encoding/trimming it was
 evaluated and declined (commit `5d785a50`); the original stays and the
 Lighthouse performance budget stays at 0.7. See production_source/AGENTS.md.
-
-6. **Open-sourcing prep** - git history contained personal data (old-server
-analytics with visitor IPs, hosting account and server paths) plus
-committed `node_modules/`, backups and legacy files; the history is being
-rewritten with git filter-repo to strip them. Remaining before going
-public: LICENSE / SECURITY.md / CODE_OF_CONDUCT, CI hardening, then flip
-the repo to public and enable secret scanning + branch protection.
-No API keys/passwords/private keys were found in history or HEAD.

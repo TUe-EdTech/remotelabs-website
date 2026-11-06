@@ -73,7 +73,7 @@ npm install
 remotelabs-website/
 ├── .git/                          # Git repository (do not deploy)
 ├── .gitattributes                 # Git configuration
-├── README.md                      # Handover guide (private)
+├── README.md                      # Handover guide
 ├── deploy/                        # ✅ PRODUCTION FILES - Upload to server
 │   ├── index.html                 # Main landing page
 │   ├── privacy.html               # Privacy policy page
@@ -583,8 +583,4 @@ navigator.serviceWorker.getRegistrations().then(r => r.forEach(f => f.unregister
 
 **Last Updated**: 2026
 **Maintainer**: Development Team
-**Repository**: https://github.com/TUe-EdTech/remotelabs-website
-
----
-
-*This document is for internal use only. The repository is private.*
+**Repository**: https://github.com/TUe-EdTech/remotelabs-website (public)

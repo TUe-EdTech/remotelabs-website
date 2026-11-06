@@ -9,6 +9,18 @@ This is the official website for Remote Labs at Eindhoven University of Technolo
 > and contributors; `production_source/AGENTS.md` is the detailed
 > development guide.
 
+## Open Source
+
+This repository is open source (approved by TU/e, 2026):
+
+- **Code** (HTML/CSS/JS sources, build and CI scripts): [MIT License](LICENSE)
+- **Website content** (text, images, videos): [CC BY-SA 4.0](CONTENT-LICENSE.md)
+- **Third-party assets** (fonts, logos, media): [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)
+
+Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
+Please report security issues privately as described in [SECURITY.md](SECURITY.md)
+and follow our [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
 ## Quick Start
 
 The website is a simple static site. No build process or server required.
@@ -25,9 +37,18 @@ Copy all files from the `deploy/` folder to your web server's root directory.
 remotelabs-website/
 ├── AGENTS.md                     # Agent/contributor guide (read before planning work)
 ├── TODO.md                       # Improvement tracker: done/pending work
+├── LICENSE                       # MIT license for code
+├── CONTENT-LICENSE.md            # CC BY-SA 4.0 for website content
+├── THIRD-PARTY-NOTICES.md        # Fonts, logos, media credits and terms
+├── CONTRIBUTING.md               # How to contribute (issues, PRs, build, tests)
+├── SECURITY.md                   # Vulnerability reporting policy
+├── CODE_OF_CONDUCT.md            # Contributor Covenant 2.1
 ├── VERSION                       # Single source of truth for asset/cache versions
 ├── .gitattributes                # LF normalization (prevents phantom diffs)
-├── .github/workflows/             # CI: build, tests, link check, Lighthouse
+├── .github/                      # CI + repo config
+│   ├── CODEOWNERS                 # Review ownership
+│   ├── dependabot.yml             # Dependency updates (Actions + npm)
+│   └── workflows/                 # CI: build, tests, link check, Lighthouse, secret scan
 ├── deploy/                        # ✅ PRODUCTION FILES - Upload to server (CI-built)
 │   ├── index.html                 # Main page
 │   ├── privacy.html               # Privacy policy
