@@ -21,6 +21,14 @@ npm-debug.log*
 .env.local
 .env.*.local
 
+# Keys and certificates - never commit
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+
 # Package manager locks (optional - keep if you want to track exact versions)
 # package-lock.json
 # npm-shrinkwrap.json
