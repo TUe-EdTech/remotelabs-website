@@ -207,6 +207,7 @@
         steps.forEach(function (step) {
             step.addEventListener('click', function () {
                 var videoId = this.getAttribute('data-video');
+                if (!/^[a-zA-Z0-9_-]+$/.test(videoId || '')) return;
                 var videoPath = 'assets/videos/' + videoId + '.mp4' + ASSET_VERSION;
 
                 video.pause();
