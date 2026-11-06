@@ -1028,6 +1028,10 @@ function setupVideoSwitching() {
     steps.forEach(step => {
         step.addEventListener('click', function() {
             const videoId = this.getAttribute('data-video');
+            if (!/^[a-zA-Z0-9_-]+$/.test(videoId || '')) {
+                console.error('Invalid video id:', videoId);
+                return;
+            }
             const videoPath = 'assets/videos/' + videoId + '.mp4';
             
 
