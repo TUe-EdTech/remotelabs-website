@@ -11,9 +11,9 @@
 //   - the critical-css block and the async stylesheet link survive HTML
 //     comment stripping in deploy/index.html (guards the build-time
 //     critical-CSS injection against comment-swallowing regressions)
-//   - VERSION, sw.js, the HTML asset references and the deploy/ artifacts
-//     all carry the same version (catches "bumped VERSION but did not run
-//     the build" and source/deploy drift)
+//   - VERSION, sw.js and every ?v= asset reference in every text file
+//     (source and deploy/) all carry the same version (catches "bumped
+//     VERSION but did not run the build" and source/deploy drift)
 //
 // Adding a new page? Add it to PAGES below, and to filesToSync/filesToCopy
 // in build.js.
@@ -150,17 +150,29 @@ if (!versions) {
     ok(`VERSION/sw.js cache (${swCache[1]}) and asset (${swAsset[1]}) versions match`);
   }
 
-  // Source HTML asset references must match VERSION (catches "bumped
-  // VERSION but did not run the build" before deploy/ is involved).
-  checkAssetRefs('index.html', path.join(ROOT, 'index.html'), expectedAssetRef, 'run npm run build:full to sync');
-
-  // deploy/ artifacts must carry the same version as the source. CI
+  // Every text file that carries ?v= asset references (HTML pages,
+  // fonts.css, ...) must match VERSION, in source and in deploy/. CI
   // regenerates deploy/ from source on every run, so committed drift means
   // someone pushed source changes (or a VERSION bump) without rebuilding
-  // and committing deploy/.
-  const deployIndex = path.join(ROOT, '../deploy/index.html');
-  if (fs.existsSync(deployIndex)) {
-    checkAssetRefs('deploy/index.html', deployIndex, expectedAssetRef, 'run npm run build:full and commit deploy/');
+  // and committing deploy/. This also guards against a partially synced
+  // deploy/ on the server: a stale fonts.css makes the font preload URLs
+  // miss and downloads the fonts twice.
+  const textExts = new Set(['.html', '.css', '.js', '.json', '.xml', '.txt', '.svg']);
+  const walkTextFiles = (dir, out = []) => {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (e.name === 'node_modules' || e.name === 'deploy') continue;
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) walkTextFiles(p, out);
+      else if (textExts.has(path.extname(e.name).toLowerCase())) out.push(p);
+    }
+    return out;
+  };
+  const versionedFiles = [...walkTextFiles(ROOT), ...walkTextFiles(path.join(ROOT, '../deploy'))];
+  for (const f of versionedFiles) {
+    // ?v= followed by a digit is a real asset reference; bare "?v=" in
+    // comments/docs (?v=<ASSET_VERSION>, ?v=...) is not.
+    if (!/\?v=\d/.test(fs.readFileSync(f, 'utf8'))) continue;
+    checkAssetRefs(path.relative(ROOT, f), f, expectedAssetRef, 'run npm run build:full and commit deploy/');
   }
   const deploySw = path.join(ROOT, '../deploy/sw.js');
   if (fs.existsSync(deploySw)) {
