@@ -324,9 +324,10 @@ If not using the build (not recommended):
 
 The GitHub Actions workflow (`.github/workflows/build-and-deploy.yml`) runs these gates against the freshly built `deploy/` output before it is committed:
 
-1. `npm test` (in `production_source/`) — JS syntax, CSP without `unsafe-inline`, version consistency
-2. `node scripts/check-links.js deploy` — every local link, asset, manifest icon and sitemap URL must resolve to a real file; every in-page anchor (including SVG `<use>` icon refs) must have a matching id
-3. Lighthouse CI (`lighthouserc.json`) — minimum scores: performance >= 0.7 (median of 3 runs via `numberOfRuns`, to absorb shared-runner variance; dragged down by the 8.9 MB hero video), accessibility >= 0.9, best-practices >= 0.9, SEO >= 0.9
+1. `npm test` (in `production_source/`) — JS syntax, CSP without `unsafe-inline`, version consistency, critical-CSS injection guards
+2. `npm run test:render` — `check-render.js` serves `deploy/` and loads each page in headless Chrome, asserting the critical CSS applies at first paint and the full stylesheet applies after load (catches an unstyled ship like v2.1.20, where the critical block was swallowed by an HTML comment while all static checks passed)
+3. `node scripts/check-links.js deploy` — every local link, asset, manifest icon and sitemap URL must resolve to a real file; every in-page anchor (including SVG `<use>` icon refs) must have a matching id
+4. Lighthouse CI (`lighthouserc.json`) — minimum scores: performance >= 0.7 (median of 3 runs via `numberOfRuns`, to absorb shared-runner variance; dragged down by the 8.9 MB hero video), accessibility >= 0.9, best-practices >= 0.9, SEO >= 0.9
 
    **Standing decision (commit `5d785a50`): the original hero video stays — do not
    re-propose re-encoding or trimming it.** The 8.9 MB `hero-loop.mp4` is already

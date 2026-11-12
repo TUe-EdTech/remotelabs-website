@@ -48,6 +48,11 @@ jobs:
       - name: Check link and asset integrity
         run: node scripts/check-links.js deploy
 
+      - name: Check the built site actually renders styled
+        run: |
+          cd production_source
+          npm run test:render
+
       - name: Run Lighthouse CI
         run: npx --yes @lhci/cli@0.14 autorun --config=lighthouserc.json
 

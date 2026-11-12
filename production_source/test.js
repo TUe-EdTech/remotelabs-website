@@ -52,7 +52,7 @@ function assertSyntax(file) {
 }
 
 console.log('\nJS syntax checks:');
-['script.js', 'sw.js', 'build.js', 'test.js'].forEach(assertSyntax);
+['script.js', 'sw.js', 'build.js', 'test.js', 'check-render.js'].forEach(assertSyntax);
 
 // ---------------------------------------------------------------------------
 // HTML page checks

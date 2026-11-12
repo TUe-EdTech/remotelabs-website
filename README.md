@@ -42,6 +42,7 @@ cd remotelabs-website/production_source
 npm install            # once
 npm run build:full     # canonical build: syncs VERSION, minifies, fills ../deploy/
 npm test               # source + deploy/ + VERSION consistency tests
+npm run test:render    # headless-Chrome check that deploy/ actually renders styled
 node ../scripts/check-links.js ../deploy   # link/asset integrity
 ```
 
@@ -73,8 +74,9 @@ remotelabs-website/
 │   ├── index.html / privacy.html / styles.css / script.js / sw.js
 │   ├── build.js                  # Canonical build
 │   ├── test.js                   # Consistency tests (npm test)
+│   ├── check-render.js           # Render smoke test (npm run test:render, headless Chrome)
 │   ├── AGENTS.md                 # Detailed development guide
-│   └── package.json              # Build tooling (clean-css, uglify-js)
+│   └── package.json              # Build/test tooling (clean-css, uglify-js, chrome-launcher, chrome-remote-interface)
 ├── experimental/                 # Sandbox for trying out redesigns before production
 ├── experimental_deploy/          # Experimental build output (gitignored)
 ├── scripts/                      # Utility scripts (build-experimental, check-links, bump-version, ...)
@@ -107,8 +109,12 @@ sync approved changes into `production_source/` with
 ### CI gates (every push/PR to `main`)
 
 1. `npm test` — syntax, CSP (no inline scripts), version consistency
-2. `scripts/check-links.js deploy` — every local link/asset/anchor resolves
-3. Lighthouse budgets (`lighthouserc.json`) — accessibility / best-practices /
+2. `npm run test:render` — headless Chrome loads the built pages and asserts the
+   CSS applies (catches e.g. the critical-CSS block being swallowed by an HTML
+   comment, which shipped an unstyled page in v2.1.20 despite passing all
+   static checks)
+3. `scripts/check-links.js deploy` — every local link/asset/anchor resolves
+4. Lighthouse budgets (`lighthouserc.json`) — accessibility / best-practices /
    SEO >= 0.9, performance >= 0.7
 4. gitleaks secret scan (`.github/workflows/secrets-scan.yml`, plus a weekly
    full-history scan)

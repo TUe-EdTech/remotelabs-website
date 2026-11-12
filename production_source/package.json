@@ -5,7 +5,8 @@
   "main": "script.js",
   "scripts": {
     "build:full": "node build.js",
-    "test": "node test.js"
+    "test": "node test.js",
+    "test:render": "node check-render.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,8 @@
   },
   "homepage": "https://github.com/TUe-EdTech/remotelabs-website#readme",
   "devDependencies": {
+    "chrome-launcher": "^1.2.3",
+    "chrome-remote-interface": "^0.34.0",
     "clean-css": "^5.3.3",
     "uglify-js": "^3.19.3"
   }
