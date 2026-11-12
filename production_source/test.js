@@ -1,8 +1,19 @@
 #!/usr/bin/env node
-// Source-consistency checks for the Remote Labs website.
-// Guards the security/robustness improvements (no inline scripts, no onclick
-// handlers, CSP without 'unsafe-inline' in script-src, consistent asset
-// versioning). Run with: npm test
+// Source-consistency checks for the Remote Labs website. Run with: npm test
+//
+// Guards the security and robustness invariants:
+//   - all JS files parse (node --check)
+//   - no inline event handlers (onclick, ...) and no executable inline
+//     <script> blocks in the HTML pages (CSP keeps script-src without
+//     'unsafe-inline')
+//   - CSP script-src never contains 'unsafe-inline'
+//   - the email address is a real mailto: link
+//   - VERSION, sw.js, the HTML asset references and the deploy/ artifacts
+//     all carry the same version (catches "bumped VERSION but did not run
+//     the build" and source/deploy drift)
+//
+// Adding a new page? Add it to PAGES below, and to filesToSync/filesToCopy
+// in build.js.
 
 'use strict';
 
@@ -16,130 +27,150 @@ const PAGES = ['index.html', 'privacy.html'];
 let failures = 0;
 
 function fail(file, msg) {
-    console.error('  FAIL ' + file + ': ' + msg);
-    failures++;
+  console.error(`  FAIL ${file}: ${msg}`);
+  failures++;
 }
 
+function ok(msg) {
+  console.log(`  ok   ${msg}`);
+}
+
+// ---------------------------------------------------------------------------
+// JS syntax
+// ---------------------------------------------------------------------------
+
 function assertSyntax(file) {
-    try {
-        execSync('node --check ' + file, { cwd: ROOT, stdio: 'pipe' });
-        console.log('  ok   ' + file + ' parses');
-    } catch (e) {
-        fail(file, 'syntax error - ' + (e.stderr || e.message).toString().split('\n')[0]);
-    }
+  try {
+    execSync(`node --check ${file}`, { cwd: ROOT, stdio: 'pipe' });
+    ok(`${file} parses`);
+  } catch (e) {
+    fail(file, 'syntax error - ' + (e.stderr || e.message).toString().split('\n')[0]);
+  }
 }
 
 console.log('\nJS syntax checks:');
 ['script.js', 'sw.js', 'build.js', 'test.js'].forEach(assertSyntax);
 
+// ---------------------------------------------------------------------------
+// HTML page checks
+// ---------------------------------------------------------------------------
+
+function checkPage(page) {
+  const file = path.join(ROOT, page);
+  if (!fs.existsSync(file)) { fail(page, 'missing'); return; }
+  const html = fs.readFileSync(file, 'utf8');
+
+  // No inline event handler attributes (onclick, onload, onerror, etc.)
+  const handlers = html.match(/\son[a-z]+="/gi);
+  if (handlers) fail(page, `${handlers.length} inline event handler(s) found (e.g. onclick)`);
+
+  // No executable inline <script> blocks. Allowed: external src, and
+  // type="application/ld+json" structured data (not executed as JS).
+  const scriptTags = html.match(/<script\b[^>]*>/gi) || [];
+  for (const tag of scriptTags) {
+    if (/src=/.test(tag)) continue;
+    if (/type="application\/ld\+json"/i.test(tag)) continue;
+    fail(page, 'executable inline <script> block found: ' + tag.trim());
+  }
+
+  // CSP must not allow 'unsafe-inline' for script-src
+  const csp = html.match(/Content-Security-Policy"[^>]*content="([^"]*)"/i);
+  if (csp) {
+    const scriptSrc = (csp[1].match(/script-src\s+([^;]+)/i) || [])[1] || '';
+    if (/unsafe-inline/i.test(scriptSrc)) {
+      fail(page, "CSP script-src still contains 'unsafe-inline'");
+    } else {
+      ok(`${page} script-src has no unsafe-inline`);
+    }
+  }
+
+  // Email links must be real mailto: (not href="#")
+  const emailLinks = html.match(/k\.m\.a\.aarts@tue\.nl/g) || [];
+  const mailtoLinks = html.match(/mailto:k\.m\.a\.aarts@tue\.nl/g) || [];
+  if (emailLinks.length && mailtoLinks.length === 0) {
+    fail(page, 'email address present but no mailto: link');
+  }
+}
+
 console.log('\nHTML consistency checks:');
-for (const page of PAGES) {
-    const file = path.join(ROOT, page);
-    if (!fs.existsSync(file)) { fail(page, 'missing'); continue; }
-    const html = fs.readFileSync(file, 'utf8');
+for (const page of PAGES) checkPage(page);
 
-    // No inline event handler attributes (onclick, onload, onerror, etc.)
-    const handlers = html.match(/\son[a-z]+="/gi);
-    if (handlers) fail(page, handlers.length + ' inline event handler(s) found (e.g. onclick)');
+// ---------------------------------------------------------------------------
+// Version consistency
+// ---------------------------------------------------------------------------
 
-    // No executable inline <script> blocks. Allowed: external src, and
-    // type="application/ld+json" structured data (not executed as JS).
-    const scriptTags = html.match(/<script\b[^>]*>/gi) || [];
-    for (const tag of scriptTags) {
-        if (/src=/.test(tag)) continue;
-        if (/type="application\/ld\+json"/i.test(tag)) continue;
-        fail(page, 'executable inline <script> block found: ' + tag.trim());
-    }
+function readVersionFile() {
+  const versionPath = path.join(ROOT, '../VERSION');
+  if (!fs.existsSync(versionPath)) return null;
+  const versionData = fs.readFileSync(versionPath, 'utf8');
+  const cacheMatch = versionData.match(/CACHE_NAME=(v\d+\.\d+\.\d+)/);
+  const assetMatch = versionData.match(/ASSET_VERSION=(v\d+\.\d+\.\d+)/);
+  if (!cacheMatch || !assetMatch) return null;
+  return { cacheVersion: cacheMatch[1], assetVersion: assetMatch[1] };
+}
 
-    // CSP must not allow 'unsafe-inline' for script-src
-    const csp = html.match(/Content-Security-Policy"[^>]*content="([^"]*)"/i);
-    if (csp) {
-        const scriptSrc = (csp[1].match(/script-src\s+([^;]+)/i) || [])[1] || '';
-        if (/unsafe-inline/i.test(scriptSrc)) {
-            fail(page, "CSP script-src still contains 'unsafe-inline'");
-        } else {
-            console.log('  ok   ' + page + ' script-src has no unsafe-inline');
-        }
-    }
-
-    // Email links must be real mailto: (not href="#")
-    const emailLinks = html.match(/k\.m\.a\.aarts@tue\.nl/g) || [];
-    const mailtoLinks = html.match(/mailto:k\.m\.a\.aarts@tue\.nl/g) || [];
-    if (emailLinks.length && mailtoLinks.length === 0) {
-        fail(page, 'email address present but no mailto: link');
-    }
+// Every ?v= reference in `file` must equal `expected`; reports the first
+// mismatch with a hint about which command fixes it. `label` is the name
+// shown in the output.
+function checkAssetRefs(label, file, expected, hint) {
+  const refs = fs.readFileSync(file, 'utf8').match(/\?v=[\d.]+/g) || [];
+  const bad = refs.filter((r) => r !== expected);
+  if (refs.length === 0) {
+    fail(label, 'no ?v= asset references found');
+  } else if (bad.length) {
+    fail(label, `asset references ${bad[0]} != VERSION (${expected}) - ${hint}`);
+  } else {
+    ok(`${label} asset references match VERSION (${refs.length} refs)`);
+  }
 }
 
 console.log('\nVersion consistency checks:');
-const versionPath = path.join(ROOT, '../VERSION');
-if (fs.existsSync(versionPath)) {
-    const versionData = fs.readFileSync(versionPath, 'utf8');
-    const cacheMatch = versionData.match(/CACHE_NAME=(v\d+\.\d+\.\d+)/);
-    const assetMatch = versionData.match(/ASSET_VERSION=(v\d+\.\d+\.\d+)/);
-    const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
-    const swCache = sw.match(/const CACHE_NAME = 'remotelabs-v(\d+\.\d+\.\d+)'/);
-    const swAsset = sw.match(/const ASSET_VERSION = '(\d+\.\d+\.\d+)'/);
-
-    if (cacheMatch && swCache && cacheMatch[1].substring(1) !== swCache[1]) {
-        fail('sw.js', 'CACHE_NAME (' + swCache[1] + ') != VERSION (' + cacheMatch[1] + ')');
-    }
-    if (assetMatch && swAsset && assetMatch[1].substring(1) !== swAsset[1]) {
-        fail('sw.js', 'ASSET_VERSION (' + swAsset[1] + ') != VERSION (' + assetMatch[1] + ')');
-    }
-    if (cacheMatch && swCache && assetMatch && swAsset) {
-        console.log('  ok   VERSION/sw.js cache (' + swCache[1] + ') and asset (' + swAsset[1] + ') versions match');
-    }
-
-    // index.html asset references must match VERSION (catches "bumped
-    // VERSION but did not run the build" before deploy/ is involved).
-    if (assetMatch) {
-        const expected = '?v=' + assetMatch[1].substring(1);
-        const refs = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').match(/\?v=[\d.]+/g) || [];
-        const bad = refs.filter(r => r !== expected);
-        if (refs.length === 0) {
-            fail('index.html', 'no ?v= asset references found');
-        } else if (bad.length) {
-            fail('index.html', 'asset references ' + bad[0] + ' != VERSION (' + expected + ') - run npm run build:full to sync');
-        } else {
-            console.log('  ok   index.html asset references match VERSION (' + refs.length + ' refs)');
-        }
-    }
-
-    // deploy/ artifacts must carry the same version as the source.
-    // CI regenerates deploy/ from source on every run, so committed
-    // drift means someone pushed source changes (or a VERSION bump)
-    // without rebuilding and committing deploy/.
-    if (assetMatch) {
-        const deployIndex = path.join(ROOT, '../deploy/index.html');
-        if (fs.existsSync(deployIndex)) {
-            const expected = '?v=' + assetMatch[1].substring(1);
-            const refs = fs.readFileSync(deployIndex, 'utf8').match(/\?v=[\d.]+/g) || [];
-            const bad = refs.filter(r => r !== expected);
-            if (refs.length === 0) {
-                fail('../deploy/index.html', 'no ?v= asset references found');
-            } else if (bad.length) {
-                fail('../deploy/index.html', 'asset references ' + bad[0] + ' != VERSION (' + expected + ') - run npm run build:full and commit deploy/');
-            } else {
-                console.log('  ok   deploy/index.html asset references match VERSION (' + refs.length + ' refs)');
-            }
-        }
-    }
-    if (cacheMatch) {
-        const deploySw = path.join(ROOT, '../deploy/sw.js');
-        if (fs.existsSync(deploySw)) {
-            const swdCache = fs.readFileSync(deploySw, 'utf8').match(/const CACHE_NAME = 'remotelabs-v(\d+\.\d+\.\d+)'/);
-            if (!swdCache) {
-                fail('../deploy/sw.js', 'CACHE_NAME not found');
-            } else if (swdCache[1] !== cacheMatch[1].substring(1)) {
-                fail('../deploy/sw.js', 'CACHE_NAME (' + swdCache[1] + ') != VERSION (' + cacheMatch[1] + ') - run npm run build:full and commit deploy/');
-            } else {
-                console.log('  ok   deploy/sw.js CACHE_NAME matches VERSION');
-            }
-        }
-    }
+const versions = readVersionFile();
+if (!versions) {
+  console.log('  --   VERSION file not found or unparsable, skipping version checks');
 } else {
-    console.log('  --   VERSION file not found, skipping version checks');
+  const { cacheVersion, assetVersion } = versions;
+  const expectedAssetRef = '?v=' + assetVersion.substring(1);
+
+  // sw.js must carry the same versions as the VERSION file. The literal
+  // declaration shape matters: build.js rewrites these exact patterns.
+  const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8');
+  const swCache = sw.match(/const CACHE_NAME = 'remotelabs-v(\d+\.\d+\.\d+)'/);
+  const swAsset = sw.match(/const ASSET_VERSION = '(\d+\.\d+\.\d+)'/);
+  if (swCache && cacheVersion.substring(1) !== swCache[1]) {
+    fail('sw.js', `CACHE_NAME (${swCache[1]}) != VERSION (${cacheVersion})`);
+  }
+  if (swAsset && assetVersion.substring(1) !== swAsset[1]) {
+    fail('sw.js', `ASSET_VERSION (${swAsset[1]}) != VERSION (${assetVersion})`);
+  }
+  if (swCache && swAsset) {
+    ok(`VERSION/sw.js cache (${swCache[1]}) and asset (${swAsset[1]}) versions match`);
+  }
+
+  // Source HTML asset references must match VERSION (catches "bumped
+  // VERSION but did not run the build" before deploy/ is involved).
+  checkAssetRefs('index.html', path.join(ROOT, 'index.html'), expectedAssetRef, 'run npm run build:full to sync');
+
+  // deploy/ artifacts must carry the same version as the source. CI
+  // regenerates deploy/ from source on every run, so committed drift means
+  // someone pushed source changes (or a VERSION bump) without rebuilding
+  // and committing deploy/.
+  const deployIndex = path.join(ROOT, '../deploy/index.html');
+  if (fs.existsSync(deployIndex)) {
+    checkAssetRefs('deploy/index.html', deployIndex, expectedAssetRef, 'run npm run build:full and commit deploy/');
+  }
+  const deploySw = path.join(ROOT, '../deploy/sw.js');
+  if (fs.existsSync(deploySw)) {
+    const swdCache = fs.readFileSync(deploySw, 'utf8').match(/const CACHE_NAME = 'remotelabs-v(\d+\.\d+\.\d+)'/);
+    if (!swdCache) {
+      fail('../deploy/sw.js', 'CACHE_NAME not found');
+    } else if (swdCache[1] !== cacheVersion.substring(1)) {
+      fail('../deploy/sw.js', `CACHE_NAME (${swdCache[1]}) != VERSION (${cacheVersion}) - run npm run build:full and commit deploy/`);
+    } else {
+      ok('deploy/sw.js CACHE_NAME matches VERSION');
+    }
+  }
 }
 
-console.log('\n' + (failures === 0 ? 'All checks passed.' : failures + ' check(s) failed.'));
+console.log('\n' + (failures === 0 ? 'All checks passed.' : `${failures} check(s) failed.`));
 process.exit(failures === 0 ? 0 : 1);

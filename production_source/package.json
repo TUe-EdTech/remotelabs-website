@@ -4,13 +4,7 @@
   "description": "A clean, professional one-page website for Remote Labs - 24/7 Access to Physical Lab Experiments at Eindhoven University of Technology.",
   "main": "script.js",
   "scripts": {
-    "build:css": "npx cleancss -o ../deploy/styles.min.css styles.css",
-    "build:js": "npx uglifyjs script.js -o ../deploy/script.min.js -c -m",
-    "build:html": "cp index.html privacy.html sw.js robots.txt sitemap.xml ../deploy/ && cp .htaccess ../deploy/",
-    "build:icons": "cp icon-*.svg ../deploy/",
-    "build": "npm run build:css && npm run build:js && npm run build:html && npm run build:icons",
     "build:full": "node build.js",
-    "dev": "echo 'Run this from production_source/ folder'",
     "test": "node test.js"
   },
   "repository": {

@@ -105,7 +105,7 @@ function generatePartnerLogosHTML(logosDir, htmlPath, log, version) {
         const href = getPartnerLink(filename);
 
         return `                                <a href="${href}" target="_blank" rel="noopener noreferrer" aria-label="Visit ${alt}">
-                                    <img src="${src}" alt="${alt}" class="partner-logo" width="120" height="40">
+                                    <img src="${src}" alt="${alt}" class="partner-logo" width="120" height="40" loading=\"lazy\" decoding=\"async\">
                                 </a>`;
     }).join('\n');
 

@@ -41,6 +41,17 @@ it from this file in the same commit that finishes it.
    q80 JPEG (~60 KB total) and add `decoding="async"`. Bump `VERSION`,
    rebuild, commit.
 
+6. **Critical CSS is duplicated** - the inline `<style>` block in
+   `production_source/index.html` repeats rules that also live in
+   `production_source/styles.css` (kept in sync by hand). Consider
+   extracting the above-the-fold subset from styles.css at build time so
+   there is a single source.
+
+7. **Legacy `scripts/*.bat` wrappers** - `build-experimental.bat` and
+   `sync-experimental.bat` duplicate the JS scripts and still reference
+   the retired `npm run build` and a silent minify-fallback. Either delete
+   them or regenerate them as thin wrappers around the JS entry points.
+
 Note: the 8.9 MB hero video is NOT a TODO - re-encoding/trimming it was
 evaluated and declined (commit `5d785a50`); the original stays and the
 Lighthouse performance budget stays at 0.7. See production_source/AGENTS.md.

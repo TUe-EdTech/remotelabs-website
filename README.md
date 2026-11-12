@@ -16,6 +16,8 @@ experiments.
 - Pure static site: HTML/CSS/JS, no server-side code, no database, no cookies
 - Progressive Web App: service worker with network-first HTML, cache-first
   versioned assets, offline support
+- Loading placeholders for lazy media (shimmer behind images, poster panel
+  on the workflow video) so below-the-fold content never shows as a blank box
 - Accessibility and performance budgets enforced in CI (Lighthouse)
 - Strict Content-Security-Policy (no inline scripts), SRI-pinned analytics,
   full security header set via `.htaccess`
