@@ -1191,15 +1191,25 @@ body .video-container .video-wrapper.hero-video-wrapper {
    JS no classes are added and images simply render as normal.
    The prefers-reduced-motion block above already neutralizes the shimmer
    animation and the fade transition. */
+/* Compositor-friendly shimmer: the highlight is a pseudo-element moved with
+   transform (not background-position), so the animation never touches the
+   main thread. */
 .placeholder-loading {
-  background: linear-gradient(100deg, var(--gray-100) 40%, var(--gray-200) 50%, var(--gray-100) 60%);
-  background-size: 200% 100%;
-  animation: placeholder-shimmer 1.4s linear infinite;
+  position: relative;
+  overflow: hidden;
+  background: var(--gray-100);
   border-radius: 6px
 }
+.placeholder-loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, var(--gray-200) 50%, transparent 80%);
+  transform: translateX(-100%);
+  animation: placeholder-shimmer 1.4s linear infinite
+}
 @keyframes placeholder-shimmer {
-  from { background-position: 200% 0 }
-  to { background-position: -200% 0 }
+  to { transform: translateX(100%) }
 }
 img.media-loading {
   opacity: 0

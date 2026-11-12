@@ -6,7 +6,8 @@
 //      pages and fonts.css (every local asset URL carries ?v=<ASSET_VERSION>)
 //   2. Minify styles.css  -> ../deploy/styles.min.css   (clean-css library API)
 //   3. Minify script.js    -> ../deploy/script.min.js    (uglify-js library API)
-//   4. Copy HTML/config files (filesToCopy) into ../deploy/
+//   4. Copy HTML/config files (filesToCopy) into ../deploy/ (inline <style>
+//      blocks are minified in the deploy copy only; sources stay readable)
 //   5. Copy icons into ../deploy/
 //   6. Replace ../deploy/assets with the source assets folder
 //   7. Inject partner-logo markup into ../deploy/index.html
@@ -109,12 +110,32 @@ function buildJs() {
 // Steps 4-6: file copies
 // ---------------------------------------------------------------------------
 
+// Minify inline <style> blocks in an HTML string. The sources keep readable
+// CSS; the deployed HTML ships compact render-blocking CSS (less main-thread
+// parse time on slow devices). Minification failure is fatal, like the
+// stylesheet minification above.
+function minifyInlineStyles(html) {
+  const CleanCSS = require('clean-css');
+  return html.replace(/<style>([\s\S]*?)<\/style>/g, (match, css) => {
+    const result = new CleanCSS().minify(css);
+    if (result.errors && result.errors.length > 0) {
+      throw new Error(result.errors.join('; '));
+    }
+    return '<style>' + result.styles + '</style>';
+  });
+}
+
 function copyFiles(files, label) {
   for (const file of files) {
     const sourcePath = path.join(SOURCE_DIR, file);
     const destPath = path.join(DEPLOY_DIR, file);
     if (fs.existsSync(sourcePath)) {
-      fs.copyFileSync(sourcePath, destPath);
+      if (file.endsWith('.html')) {
+        const html = fs.readFileSync(sourcePath, 'utf8');
+        fs.writeFileSync(destPath, minifyInlineStyles(html));
+      } else {
+        fs.copyFileSync(sourcePath, destPath);
+      }
       console.log(`  copied ${file}`);
     } else {
       console.warn(`  warning: source file ${file} not found, skipping`);
