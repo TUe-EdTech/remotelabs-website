@@ -210,19 +210,23 @@ for (const page of PAGES) {
     fail(page, 'source critical-css placeholder is not empty - build.js fills it, keep it empty in the source');
   }
 }
-const deployIndexPath = path.join(ROOT, '../deploy/index.html');
-if (fs.existsSync(deployIndexPath)) {
-  const visible = stripHtmlComments(fs.readFileSync(deployIndexPath, 'utf8'));
-  const m = visible.match(/<style id="critical-css">([\s\S]*?)<\/style>/);
-  if (!m || !m[1].trim()) {
-    fail('deploy/index.html', 'critical-css block missing or empty outside HTML comments (injected CSS swallowed by a comment?)');
-  } else {
-    ok(`deploy/index.html critical-css block present outside comments (${m[1].length} chars)`);
+for (const page of PAGES) {
+  const deployPath = path.join(ROOT, '../deploy', page);
+  if (!fs.existsSync(deployPath)) continue;
+  const visible = stripHtmlComments(fs.readFileSync(deployPath, 'utf8'));
+  const srcVisible = stripHtmlComments(fs.readFileSync(path.join(ROOT, page), 'utf8'));
+  if (/id="critical-css"/.test(srcVisible)) {
+    const m = visible.match(/<style id="critical-css">([\s\S]*?)<\/style>/);
+    if (!m || !m[1].trim()) {
+      fail(`deploy/${page}`, 'critical-css block missing or empty outside HTML comments (injected CSS swallowed by a comment?)');
+    } else {
+      ok(`deploy/${page} critical-css block present outside comments (${m[1].length} chars)`);
+    }
   }
-  if (!/id="async-stylesheet"/.test(visible)) {
-    fail('deploy/index.html', 'async stylesheet link missing outside HTML comments');
-  } else {
-    ok('deploy/index.html async stylesheet link present outside comments');
+  if (/id="async-stylesheet"/.test(srcVisible) && !/id="async-stylesheet"/.test(visible)) {
+    fail(`deploy/${page}`, 'async stylesheet link missing outside HTML comments');
+  } else if (/id="async-stylesheet"/.test(srcVisible)) {
+    ok(`deploy/${page} async stylesheet link present outside comments`);
   }
 }
 

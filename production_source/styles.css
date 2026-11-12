@@ -207,7 +207,16 @@ body {
   }
 }
 .status-badge-container {
-  text-align: left
+  text-align: left;
+  /* Reserve the badge's height (shields for-the-badge = 28px) so the lazy
+     image does not shift the footer when it loads. width stays auto so a
+     status change ("up" -> "down") only changes the intrinsic aspect. */
+  min-height: 28px
+}
+.status-badge {
+  display: inline-block;
+  height: 28px;
+  width: auto
 }
 /* How It Works Section Styles - Aligned with site design */
 .how-it-works {
