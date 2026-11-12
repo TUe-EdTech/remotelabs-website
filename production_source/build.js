@@ -7,7 +7,9 @@
 //   2. Minify styles.css  -> ../deploy/styles.min.css   (clean-css library API)
 //   3. Minify script.js    -> ../deploy/script.min.js    (uglify-js library API)
 //   4. Copy HTML/config files (filesToCopy) into ../deploy/ (inline <style>
-//      blocks are minified in the deploy copy only; sources stay readable)
+//      blocks are minified in the deploy copy only, and the empty
+//      <style id="critical-css"> placeholder in index.html is filled from
+//      the marked critical section of styles.css - sources stay readable)
 //   5. Copy icons into ../deploy/
 //   6. Replace ../deploy/assets with the source assets folder
 //   7. Inject partner-logo markup into ../deploy/index.html
@@ -125,6 +127,33 @@ function minifyInlineStyles(html) {
   });
 }
 
+// Extract the marked critical section (/* critical-start */ ...
+// /* critical-end */) from styles.css and minify it. styles.css is the single
+// source for the above-the-fold CSS; index.html only carries an empty
+// <style id="critical-css"> placeholder that this fills in the deploy copy.
+function getCriticalCss() {
+  const css = fs.readFileSync(path.join(SOURCE_DIR, 'styles.css'), 'utf8');
+  const m = css.match(/\/\* critical-start \*\/([\s\S]*?)\/\* critical-end \*\//);
+  if (!m) {
+    throw new Error('critical-start/critical-end markers not found in styles.css');
+  }
+  const CleanCSS = require('clean-css');
+  const result = new CleanCSS().minify(m[1]);
+  if (result.errors && result.errors.length > 0) {
+    throw new Error(result.errors.join('; '));
+  }
+  return result.styles;
+}
+
+function injectCriticalCss(html) {
+  if (!html.includes('id="critical-css"')) return html;
+  const critical = getCriticalCss();
+  return html.replace(
+    /<style id="critical-css">[\s\S]*?<\/style>/,
+    `<style id="critical-css">${critical}</style>`
+  );
+}
+
 function copyFiles(files, label) {
   for (const file of files) {
     const sourcePath = path.join(SOURCE_DIR, file);
@@ -132,7 +161,7 @@ function copyFiles(files, label) {
     if (fs.existsSync(sourcePath)) {
       if (file.endsWith('.html')) {
         const html = fs.readFileSync(sourcePath, 'utf8');
-        fs.writeFileSync(destPath, minifyInlineStyles(html));
+        fs.writeFileSync(destPath, injectCriticalCss(minifyInlineStyles(html)));
       } else {
         fs.copyFileSync(sourcePath, destPath);
       }
@@ -144,6 +173,56 @@ function copyFiles(files, label) {
   if (label) console.log(`  (${label})`);
 }
 
+// Copy srcDir over destDir (overwriting existing files). Files that cannot
+// be overwritten because the OS locks them (OneDrive does this on Windows)
+// are skipped with a warning instead of failing the build - the locked file
+// is unchanged, so the copy already on disk is still correct. Any other
+// error is fatal: a partial assets folder must never ship.
+function copyDirOverwrite(srcDir, destDir, warnings) {
+  fs.mkdirSync(destDir, { recursive: true });
+  for (const entry of fs.readdirSync(srcDir, { withFileTypes: true })) {
+    const srcPath = path.join(srcDir, entry.name);
+    const destPath = path.join(destDir, entry.name);
+    if (entry.isDirectory()) {
+      copyDirOverwrite(srcPath, destPath, warnings);
+    } else {
+      try {
+        fs.copyFileSync(srcPath, destPath);
+      } catch (error) {
+        if (error.code === 'EPERM' && fs.existsSync(destPath)) {
+          warnings.push(path.relative(destDir, destPath) + ' (locked, kept existing copy)');
+        } else {
+          throw error;
+        }
+      }
+    }
+  }
+}
+
+// Remove files/dirs in destDir that no longer exist in srcDir. Locked files
+// (EPERM) are left in place with a warning - they cannot be stale content we
+// just wrote, and deleting them is not worth failing the build over.
+function removeStale(srcDir, destDir, warnings) {
+  if (!fs.existsSync(destDir)) return;
+  for (const entry of fs.readdirSync(destDir, { withFileTypes: true })) {
+    const destPath = path.join(destDir, entry.name);
+    const srcPath = path.join(srcDir, entry.name);
+    if (!fs.existsSync(srcPath)) {
+      try {
+        fs.rmSync(destPath, { recursive: true, force: true });
+      } catch (error) {
+        if (error.code === 'EPERM') {
+          warnings.push(path.relative(destDir, destPath) + ' (locked, could not remove)');
+        } else {
+          throw error;
+        }
+      }
+    } else if (entry.isDirectory()) {
+      removeStale(srcPath, destPath, warnings);
+    }
+  }
+}
+
 function copyAssets() {
   const sourceAssets = path.join(SOURCE_DIR, 'assets');
   const destAssets = path.join(DEPLOY_DIR, 'assets');
@@ -151,14 +230,17 @@ function copyAssets() {
     console.warn('  warning: source assets folder not found, skipping');
     return;
   }
-  // Delete then re-copy: deploy/assets must mirror the source exactly, so a
-  // stale leftover file can never ship. Failure here is fatal (a partial
-  // assets folder must not deploy).
-  if (fs.existsSync(destAssets)) {
-    fs.rmSync(destAssets, { recursive: true, force: true });
-  }
-  fs.cpSync(sourceAssets, destAssets, { recursive: true });
-  console.log('  assets/ replaced');
+  // Copy-over instead of delete+recreate: deleting first breaks on
+  // Windows/OneDrive, where a freshly written file can still be locked
+  // (EPERM) and the delete then aborts midway, leaving a partial
+  // deploy/assets. Copying over keeps the old files in place until they are
+  // overwritten, and removeStale() afterwards drops anything that is no
+  // longer in the source, so deploy/assets still mirrors the source exactly.
+  const warnings = [];
+  copyDirOverwrite(sourceAssets, destAssets, warnings);
+  removeStale(sourceAssets, destAssets, warnings);
+  for (const w of warnings) console.warn(`  warning: assets/${w}`);
+  console.log(`  assets/ synced (${warnings.length} locked file(s) kept as-is)`);
 }
 
 // ---------------------------------------------------------------------------

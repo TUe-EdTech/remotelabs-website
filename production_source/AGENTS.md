@@ -156,7 +156,7 @@ borders, icons, and active states are all black.
 - **Variables**: Use CSS variables for colors and common values
 - **Responsive**: Mobile-first approach
 - **Breakpoints**: 480px (mobile), 768px (tablet), 1024px (desktop)
-- **Specificity**: Keep low, avoid `!important` (exception: the inline critical CSS in `index.html` uses `!important` on video padding to override responsive media-query rules — this is the only justified use)
+- **Specificity**: Keep low, avoid `!important` (exception: the critical section of `styles.css`, inlined into `index.html` at build time, uses `!important` on video padding to override responsive media-query rules — this is the only justified use)
 
 ### JavaScript Practices
 - Use ES6+ features (arrow functions, template literals, etc.)
@@ -197,10 +197,12 @@ borders, icons, and active states are all black.
 - `production_source/styles.css` is the readable source of the full
   stylesheet; `npm run build:full` minifies it to `deploy/styles.min.css`.
   Edit the source, never the minified file
-- The inline `<style>` block in the `<head>` of
-  `production_source/index.html` is the critical above-the-fold subset,
-  inlined so first paint is not blocked by the async-loaded
-  `styles.min.css`. Keep rules shared between the two files in sync
+- The critical above-the-fold CSS lives in the marked
+  `/* critical-start */ ... /* critical-end */` section of
+  `styles.css`; the build extracts it and fills the
+  `<style id="critical-css">` placeholder in `index.html`, so first paint
+  is not blocked by the async-loaded `styles.min.css`. `styles.css` is the
+  single source - edit critical rules there, never in `index.html`
 - Test responsiveness on mobile, tablet, desktop
 
 ### Updating JavaScript

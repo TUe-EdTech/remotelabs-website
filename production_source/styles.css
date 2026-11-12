@@ -2,8 +2,8 @@
    Remote Labs - full stylesheet (source of truth for styles.min.css)
    --------------------------------------------------------------------------
    build.js minifies this file to deploy/styles.min.css via the clean-css
-   library API. A small critical subset is also inlined in index.html for
-   first paint - keep the two in sync when changing above-the-fold styles.
+   library API, and inlines the marked critical section below into
+   deploy/index.html for first paint - edit CSS only here.
    Asset URLs carry ?v=<ASSET_VERSION>, synced from the root VERSION file.
 
    Sections:
@@ -18,6 +18,315 @@
                                                  13. Loading placeholders (lazy media,
                                                    video poster panel)
    ========================================================================== */
+/* ==========================================================================
+   CRITICAL (above-the-fold) CSS - marked section.
+   build.js extracts everything between critical-start / critical-end and
+   inlines it into the <style id="critical-css"> block of deploy/index.html.
+   So styles.css is the SINGLE source for these rules - edit them here,
+   never in index.html. Where a rule here differs from the same selector
+   later in this file, the value here applies only until styles.min.css
+   finishes loading (the later rule then wins), which is intentional.
+   ========================================================================== */
+/* critical-start */
+/* Critical above-the-fold CSS, inlined so first paint is not blocked by the
+   async-loaded styles.min.css (the media="print" link below, swapped to "all"
+   by script.js once loaded). The full stylesheet lives in styles.css - keep
+   shared rules in sync between the two. */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box
+}
+body {
+  font-family: 'Lato','Helvetica Neue',Arial,sans-serif;
+  line-height: 1.6;
+  color: #000;
+  background: #fff;
+  -webkit-text-size-adjust: 100%;
+  overflow-anchor: none
+}
+.icon {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+  vertical-align: -.125em;
+  display: inline-block
+}
+.main-header {
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,.1);
+  padding: 1.5rem 0;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  transform: translateY(0)
+}
+.main-header.hidden {
+  transform: translateY(-100%)
+}
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: .75rem
+}
+.logo-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer
+}
+.logo-text {
+  font-family: 'Poppins','Poppins Fallback',sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--black);
+  text-decoration: none
+}
+.cta-button {
+  background: #000;
+  color: #fff;
+  padding: .85rem 1.5rem;
+  border-radius: 3px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: .95rem
+}
+.hero {
+  padding: 120px 0 80px;
+  text-align: left
+}
+.hero-title {
+  font-size: 3.5rem;
+  margin-bottom: 1.2rem;
+  line-height: 1.1
+}
+.hero-subtitle {
+  font-size: 1.1rem;
+  max-width: 90%;
+  margin: 0 0 2rem 0;
+  line-height: 1.5
+}
+.hero-cta-button {
+  background: #000;
+  color: #fff;
+  padding: .9rem 1.8rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  font-size: 1rem;
+  text-align: left
+}
+@media (max-width:768px) {
+  .container {
+    padding: 0 12px
+  }
+  .hero {
+    padding: 100px 0 60px
+  }
+  .hero-title {
+    font-size: 2.2rem
+  }
+  .hero-subtitle {
+    font-size: 1rem
+  }
+  .cta-button,
+  .hero-cta-button {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem
+  }
+}
+@media (max-width:480px) {
+  .hero-title {
+    font-size: 1.8rem
+  }
+  .container {
+    padding: 0 10px
+  }
+}
+/* Mobile Optimization - Phone Version */
+@media (max-width:480px) {
+  .header-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem
+  }
+  .logo {
+    justify-content: flex-start
+  }
+  .logo-text {
+    font-size: 1rem
+  }
+  .cta-button {
+    width: auto;
+    min-width: 140px;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+    height: 36px
+  }
+  .hero {
+    padding: 140px 0 60px;
+    margin-top: 70px
+  }
+  .hero-title {
+    font-size: 2rem;
+    line-height: 1.2
+  }
+  .hero-subtitle {
+    font-size: 0.95rem;
+    line-height: 1.5
+  }
+  .video-embed-wrapper {
+    padding: 62.5% 0 0 0
+  }
+  .workflow-steps {
+    grid-template-columns: 1fr
+  }
+  .workflow-step {
+    padding: 1.5rem
+  }
+  .step-icon {
+    flex-direction: row;
+    align-items: center
+  }
+  .step-number {
+    margin-top: 0
+  }
+  .footer-section {
+    margin-bottom: 2rem
+  }
+}
+.status-badge-container {
+  text-align: left
+}
+/* How It Works Section Styles - Aligned with site design */
+.how-it-works {
+  padding: 60px 0;
+  background: #fff
+}
+.section-header {
+  text-align: left;
+  margin-bottom: 1rem
+}
+.workflow-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem
+}
+.workflow-header-text {
+  flex: 1;
+  max-width: 60%
+}
+.section-title {
+  font-family: 'Poppins','Poppins Fallback',sans-serif;
+  font-weight: 700;
+  font-size: 2.2rem;
+  color: #000;
+  margin-bottom: 1rem;
+  text-align: left
+}
+.section-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  max-width: 800px;
+  margin: 0 0 2rem 0;
+  line-height: 1.6;
+  text-align: left
+}
+.workflow-section {
+  display: none
+}
+.workflow-section.active {
+  display: block
+}
+.workflow-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+  gap: 2rem;
+  margin-top: 1rem
+}
+.workflow-step {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  border: 1px solid #e5e7eb;
+  text-align: left
+}
+.workflow-step:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0,0,0,0.1)
+}
+.step-icon {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem
+}
+.step-icon i,
+.step-icon .icon {
+  font-size: 2rem;
+  color: #000;
+  text-align: left
+}
+.step-number {
+  background: #000;
+  color: #fff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold
+}
+.workflow-step h3 {
+  font-family: 'Poppins','Poppins Fallback',sans-serif;
+  font-weight: 700;
+  color: #333;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  text-align: left
+}
+.workflow-step p {
+  color: #666;
+  line-height: 1.6;
+  text-align: left
+}
+@media (max-width:768px) {
+  .how-it-works {
+    padding: 40px 0
+  }
+  .workflow-header-container {
+    flex-direction: column;
+    gap: 1rem
+  }
+  .workflow-header-text {
+    max-width: 100%
+  }
+  .toggle-switch-container {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto
+  }
+  .workflow-steps {
+    grid-template-columns: 1fr
+  }
+}
+/* critical-end */
+
 
 /* ---- 1. Design tokens (monochrome palette) ---- */
 :root {
