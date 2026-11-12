@@ -202,7 +202,12 @@ borders, icons, and active states are all black.
   `styles.css`; the build extracts it and fills the
   `<style id="critical-css">` placeholder in `index.html`, so first paint
   is not blocked by the async-loaded `styles.min.css`. `styles.css` is the
-  single source - edit critical rules there, never in `index.html`
+  single source - edit critical rules there, never in `index.html`.
+  Keep the placeholder EMPTY in the source and never quote the literal
+  placeholder tag inside an HTML comment: the build regex anchors on the
+  empty tag, and a quoted copy in a comment once swallowed the injected
+  CSS (and the tags after it) into the comment, shipping an unstyled
+  page (fixed in v2.1.21; test.js guards it)
 - Test responsiveness on mobile, tablet, desktop
 
 ### Updating JavaScript

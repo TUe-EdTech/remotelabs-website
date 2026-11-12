@@ -8,6 +8,9 @@
 //     'unsafe-inline')
 //   - CSP script-src never contains 'unsafe-inline'
 //   - the email address is a real mailto: link
+//   - the critical-css block and the async stylesheet link survive HTML
+//     comment stripping in deploy/index.html (guards the build-time
+//     critical-CSS injection against comment-swallowing regressions)
 //   - VERSION, sw.js, the HTML asset references and the deploy/ artifacts
 //     all carry the same version (catches "bumped VERSION but did not run
 //     the build" and source/deploy drift)
@@ -169,6 +172,45 @@ if (!versions) {
     } else {
       ok('deploy/sw.js CACHE_NAME matches VERSION');
     }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Critical-CSS injection checks (deploy output)
+// ---------------------------------------------------------------------------
+// build.js fills the empty <style id="critical-css"> placeholder in
+// index.html with the marked critical section of styles.css. If the fill
+// regex ever matches inside an HTML comment (e.g. a comment quoting the
+// literal tag), the injected CSS and the tags after it end up commented out
+// and the page renders unstyled. Guard both sides: with HTML comments
+// stripped, the source placeholder must be empty and the deploy page must
+// still carry a non-empty critical-css block and the async stylesheet link.
+
+function stripHtmlComments(html) {
+  return html.replace(/<!--[\s\S]*?-->/g, '');
+}
+
+console.log('\nCritical-CSS injection checks:');
+for (const page of PAGES) {
+  const visible = stripHtmlComments(fs.readFileSync(path.join(ROOT, page), 'utf8'));
+  const m = visible.match(/<style id="critical-css">([\s\S]*?)<\/style>/);
+  if (m && m[1].trim()) {
+    fail(page, 'source critical-css placeholder is not empty - build.js fills it, keep it empty in the source');
+  }
+}
+const deployIndexPath = path.join(ROOT, '../deploy/index.html');
+if (fs.existsSync(deployIndexPath)) {
+  const visible = stripHtmlComments(fs.readFileSync(deployIndexPath, 'utf8'));
+  const m = visible.match(/<style id="critical-css">([\s\S]*?)<\/style>/);
+  if (!m || !m[1].trim()) {
+    fail('deploy/index.html', 'critical-css block missing or empty outside HTML comments (injected CSS swallowed by a comment?)');
+  } else {
+    ok(`deploy/index.html critical-css block present outside comments (${m[1].length} chars)`);
+  }
+  if (!/id="async-stylesheet"/.test(visible)) {
+    fail('deploy/index.html', 'async stylesheet link missing outside HTML comments');
+  } else {
+    ok('deploy/index.html async stylesheet link present outside comments');
   }
 }
 

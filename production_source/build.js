@@ -148,8 +148,11 @@ function getCriticalCss() {
 function injectCriticalCss(html) {
   if (!html.includes('id="critical-css"')) return html;
   const critical = getCriticalCss();
+  // Anchor on the EMPTY placeholder only. A looser match would also hit the
+  // literal tag quoted inside an HTML comment and swallow the injected CSS
+  // (plus the tags after it) into that comment - test.js guards against it.
   return html.replace(
-    /<style id="critical-css">[\s\S]*?<\/style>/,
+    /<style id="critical-css">\s*<\/style>/,
     `<style id="critical-css">${critical}</style>`
   );
 }

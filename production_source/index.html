@@ -26,12 +26,12 @@
     <meta property="og:title" content="Remote Labs - 24/7 Access to Physical Lab Experiments">
     <meta property="og:description" content="Enabling students and professionals to conduct real physical lab experiments remotely, 24/7, at Eindhoven University of Technology.">
     <meta property="og:url" content="https://remote-labs.eu/">
-    <meta property="og:image" content="https://remote-labs.eu/assets/videos/posterimagevideo-og.jpg?v=2.1.20">
+    <meta property="og:image" content="https://remote-labs.eu/assets/videos/posterimagevideo-og.jpg?v=2.1.21">
     <meta property="og:locale" content="en_US">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Remote Labs - 24/7 Access to Physical Lab Experiments">
     <meta name="twitter:description" content="Enabling students and professionals to conduct real physical lab experiments remotely, 24/7, at Eindhoven University of Technology.">
-    <meta name="twitter:image" content="https://remote-labs.eu/assets/videos/posterimagevideo-og.jpg?v=2.1.20">
+    <meta name="twitter:image" content="https://remote-labs.eu/assets/videos/posterimagevideo-og.jpg?v=2.1.21">
 
     <!-- Structured data -->
     <script type="application/ld+json">
@@ -66,36 +66,39 @@
     <link rel="icon" type="image/svg+xml" sizes="192x192" href="icon-192x192.svg">
     <link rel="icon" type="image/svg+xml" sizes="512x512" href="icon-512x512.svg">
     <title>Remote Labs - 24/7 Access to Physical Lab Experiments</title>
-    <link rel="preload" href="styles.min.css?v=2.1.20" as="style">
-    <link rel="preload" href="script.min.js?v=2.1.20" as="script">
-    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.20" as="style">
-    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.20" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.20" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="styles.min.css?v=2.1.21" as="style">
+    <link rel="preload" href="script.min.js?v=2.1.21" as="script">
+    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.21" as="style">
+    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.21" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.21" as="font" type="font/woff2" crossorigin>
     <!-- Preload the LCP hero poster (AVIF, 18 KB vs 107 KB JPG) on the critical path.
          The responsive variants are declared via imagesrcset/imagesizes so the
          browser fetches the right size for the viewport. -->
     <link rel="preload" as="image" fetchpriority="high"
-          imagesrcset="assets/videos/posterimagevideo-651.avif?v=2.1.20 651w, assets/videos/posterimagevideo-1302.avif?v=2.1.20 1302w"
+          imagesrcset="assets/videos/posterimagevideo-651.avif?v=2.1.21 651w, assets/videos/posterimagevideo-1302.avif?v=2.1.21 1302w"
           imagesizes="(max-width: 768px) 100vw, 651px"
-          href="assets/videos/posterimagevideo-651.avif?v=2.1.20">
+          href="assets/videos/posterimagevideo-651.avif?v=2.1.21">
     <!-- Preconnect to the analytics origins: script host (no-cors classic
          script tag) and beacon host (CORS fetches). Avoids a ~350ms
          connection setup on the analytics request path. -->
     <link rel="preconnect" href="https://cloud.umami.is">
     <link rel="preconnect" href="https://gateway.umami.is" crossorigin>
     
-    <!-- Critical above-the-fold CSS. The <style id="critical-css"> block
-         below is EMPTY in the source on purpose: build.js fills it in
+    <!-- Critical above-the-fold CSS. The critical-css style block below is
+         EMPTY in the source on purpose: build.js fills it in
          deploy/index.html from the marked critical section at the top of
          styles.css (single source of truth - edit CSS there, not here).
+         Never quote the literal placeholder tag markup inside this comment:
+         the build regex anchors on the empty tag, and a quoted copy in a
+         comment once swallowed the injected CSS into the comment.
          The full stylesheet loads async via the media="print" link. -->
     <style id="critical-css"></style>
     
-    <link rel="stylesheet" href="styles.min.css?v=2.1.20" media="print" id="async-stylesheet">
-    <noscript><link rel="stylesheet" href="styles.min.css?v=2.1.20"></noscript>
+    <link rel="stylesheet" href="styles.min.css?v=2.1.21" media="print" id="async-stylesheet">
+    <noscript><link rel="stylesheet" href="styles.min.css?v=2.1.21"></noscript>
     
     <!-- Self-hosted fonts (no external CDN dependency) -->
-    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.20">
+    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.21">
     <style>
 @font-face{font-family:'Poppins Fallback';src:local('Arial Black'),local('Impact'),local('sans-serif');font-weight:700}
     </style>
@@ -161,8 +164,8 @@
                     <!-- No fetchpriority here on purpose: the poster (preloaded with
              fetchpriority="high" in <head>) is the LCP candidate, and the
              8.9 MB video must not compete with critical resources. -->
-                    <video class="hero-video" playsinline loop autoplay muted poster="assets/videos/posterimagevideo-651.avif?v=2.1.20" preload="metadata" id="hero-video-player">
-                        <source src="assets/videos/hero-loop.mp4?v=2.1.20" type="video/mp4">
+                    <video class="hero-video" playsinline loop autoplay muted poster="assets/videos/posterimagevideo-651.avif?v=2.1.21" preload="metadata" id="hero-video-player">
+                        <source src="assets/videos/hero-loop.mp4?v=2.1.21" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                     <!-- Video Controls - Play/Pause and Mute/Unmute -->
@@ -250,7 +253,7 @@
                              approaches the viewport (see
                              setupWorkflowVideoLazyPlay). -->
                         <video id="workflow-video" class="workflow-video" playsinline muted loop preload="none">
-                            <source src="assets/videos/book-experiment.mp4?v=2.1.20" type="video/mp4">
+                            <source src="assets/videos/book-experiment.mp4?v=2.1.21" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
                     </div>
@@ -377,7 +380,7 @@
                         <div class="experiment-steps">
                             <div class="experiment-step">
                                 <div class="experiment-image-wrapper">
-                                    <img src="assets/images/experiments/flexible-axle.jpg?v=2.1.20" alt="Flexible Axle Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
+                                    <img src="assets/images/experiments/flexible-axle.jpg?v=2.1.21" alt="Flexible Axle Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
                                 </div>
                                 <div class="experiment-content">
                                     <h3>Flexible Axle</h3>
@@ -387,7 +390,7 @@
                             
                             <div class="experiment-step">
                                 <div class="experiment-image-wrapper">
-                                    <img src="assets/images/experiments/three-tank.jpg?v=2.1.20" alt="Three-tank System Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
+                                    <img src="assets/images/experiments/three-tank.jpg?v=2.1.21" alt="Three-tank System Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
                                 </div>
                                 <div class="experiment-content">
                                     <h3>Three-tank System</h3>
@@ -397,7 +400,7 @@
                             
                             <div class="experiment-step">
                                 <div class="experiment-image-wrapper">
-                                    <img src="assets/images/experiments/magnetic-levitation.jpg?v=2.1.20" alt="Magnetic Levitation Setup Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
+                                    <img src="assets/images/experiments/magnetic-levitation.jpg?v=2.1.21" alt="Magnetic Levitation Setup Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
                                 </div>
                                 <div class="experiment-content">
                                     <h3>Magnetic Levitation Setup</h3>
@@ -464,7 +467,7 @@
                     <h2>Publications</h2>
                     <div class="publications">
                         <div class="publication-item">
-                            <a href="assets/Publications/Magazine_AMVELC_2026_digitaal.pdf?v=2.1.20#page=13" class="publication-title" target="_blank" rel="noopener noreferrer">Slimme Remote Labs klaar voor de toekomst</a>
+                            <a href="assets/Publications/Magazine_AMVELC_2026_digitaal.pdf?v=2.1.21#page=13" class="publication-title" target="_blank" rel="noopener noreferrer">Slimme Remote Labs klaar voor de toekomst</a>
                             <div class="publication-meta">
                                 <span class="publication-journal">AMV Energy Learning Community</span>
                                 <span class="publication-year">• 2026</span>
@@ -517,7 +520,7 @@
                     <p style="margin-top: 1rem;">
                         Part of<br>
                         <a href="https://www.tue.nl/en/" target="_blank" rel="noopener noreferrer" aria-label="Visit Eindhoven University of Technology">
-                            <img src="assets/images/logos/TUe-logo-descriptor-line-scarlet-S.png?v=2.1.20" alt="TU/e - Eindhoven University of Technology" style="width: 150px; height: auto; margin-top: 0.5rem;" loading="lazy" width="235" height="64">
+                            <img src="assets/images/logos/TUe-logo-descriptor-line-scarlet-S.png?v=2.1.21" alt="TU/e - Eindhoven University of Technology" style="width: 150px; height: auto; margin-top: 0.5rem;" loading="lazy" width="235" height="64">
                         </a>
                     </p>
                 </div>
@@ -526,7 +529,7 @@
     </footer>
 
     <!-- Load minified JavaScript with defer for better performance -->
-    <script src="script.min.js?v=2.1.20" defer></script>
+    <script src="script.min.js?v=2.1.21" defer></script>
 
     <!-- Load Umami analytics -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="8d0377d8-c1de-4001-b844-27ec489392ce" integrity="sha384-Kl9WoD7/D7ZGlOvsI8CDV5klPo4Mc7WzV80E+05bdd6tZs+koxB0MmImAFo/8r7M" crossorigin="anonymous"></script>
