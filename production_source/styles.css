@@ -431,6 +431,53 @@ body {
     flex: 1
   }
 }
+
+/* ---- Reusable floating action button (.fab) ----
+   One component for every floating page button: the back-to-top button on
+   the home page (.fab--bottom-right) and the back button on the privacy
+   page (.fab--top-left). Kept INSIDE the critical section so both pages
+   style it at first paint (the buttons are created by JS before the async
+   stylesheet may have loaded). ---- */
+.fab {
+  position: fixed;
+  z-index: 10000;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--highlight-color);
+  color: var(--white);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity .3s, transform .2s, background .2s
+}
+.fab:hover {
+  background: #333;
+  transform: translateY(-2px)
+}
+.fab:focus-visible {
+  outline: 3px solid var(--black);
+  outline-offset: 2px
+}
+.fab .icon {
+  width: 1.1em;
+  height: 1.1em
+}
+.fab--top-left {
+  top: 1.5rem;
+  left: 1.5rem
+}
+.fab--bottom-right {
+  bottom: 2rem;
+  right: 2rem
+}
 /* critical-end */
 
 
@@ -727,33 +774,16 @@ section {
     grid-template-columns: 1fr
   }
 }
-/* ---- 6. Back-to-top button ---- */
+/* ---- 6. Back-to-top button ----
+   Visuals come from the shared .fab component (critical section above);
+   this class only handles the scroll show/hide. ---- */
 .back-to-top {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  background: var(--highlight-color);
-  color: var(--white);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  text-decoration: none;
   opacity: 0;
-  pointer-events: none;
-  transition: opacity .3s;
-  z-index: 1000
+  pointer-events: none
 }
 .back-to-top.visible {
   opacity: 1;
   pointer-events: auto
-}
-.back-to-top:hover {
-  background: #333;
-  transform: translateY(-2px)
 }
 /* ---- 7. Footer ---- */
 footer {

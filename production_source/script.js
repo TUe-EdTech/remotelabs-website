@@ -73,7 +73,7 @@
   // -----------------------------------------------------------------------
 
   const backToTop = document.createElement('button');
-  backToTop.className = 'back-to-top';
+  backToTop.className = 'back-to-top fab fab--bottom-right';
   backToTop.setAttribute('aria-label', 'Back to top');
   backToTop.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#icon-arrow-up"/></svg>';
   backToTop.addEventListener('click', () => {
