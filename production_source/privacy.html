@@ -19,10 +19,10 @@
 
     <!-- Preload and load minified CSS (async pattern: media="print" swapped
          to "all" by script.js to avoid render-blocking) -->
-    <link rel="preload" href="styles.min.css?v=2.1.23" as="style">
-    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.23" as="style">
-    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.23" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.23" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="styles.min.css?v=2.1.24" as="style">
+    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.24" as="style">
+    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.24" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.24" as="font" type="font/woff2" crossorigin>
     <!-- Critical above-the-fold CSS, injected by build.js from the marked
          critical section of styles.css (same placeholder as index.html - see
          the warning there about not quoting the tag inside a comment). This
@@ -30,12 +30,12 @@
          unstyled and the media="print" swap causes a large layout shift. -->
     <style id="critical-css"></style>
 
-    <link rel="stylesheet" href="styles.min.css?v=2.1.23" media="print" id="async-stylesheet">
+    <link rel="stylesheet" href="styles.min.css?v=2.1.24" media="print" id="async-stylesheet">
     <!-- Fallback if CSS fails to load or JS is disabled -->
-    <noscript><link rel="stylesheet" href="styles.min.css?v=2.1.23"></noscript>
+    <noscript><link rel="stylesheet" href="styles.min.css?v=2.1.24"></noscript>
 
     <!-- Self-hosted fonts (no external CDN dependency) -->
-    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.23">
+    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.24">
 
     <style>
         .privacy-container {
@@ -115,9 +115,9 @@
                 <p><strong>Analytics (only with your consent):</strong> if you accept analytics in the
                 consent banner on the home page, the site loads Umami, a cookieless analytics service.
                 It collects page URL, referrer, browser and operating system, device type, and country
-                (derived from your IP address, which is not stored). No personally identifiable
-                information is collected, no cookies or local storage are used by Umami, and users are
-                not tracked across websites.</p>
+                (derived from your IP address, which is not stored). The Umami tracker does not use
+                cookies, no personally identifiable information is collected, and users are not tracked
+                across websites.</p>
             </div>
 
             <div class="privacy-section">
@@ -150,10 +150,11 @@
                 remote-labs.eu itself, and we embed no third-party content except the consent-gated
                 analytics described above.</p>
                 <ul>
-                    <li><strong>Umami Cloud</strong> (operated by Umami Software, Estonia, with EU
-                        hosting) processes analytics data on our behalf as a processor, under a data
-                        processing agreement. Analytics data is stored in the EU; no transfer outside
-                        the EEA takes place.</li>
+                    <li><strong>Umami Cloud</strong> (operated by Umami Software, Estonia) processes
+                        analytics data on our behalf as a processor under a data processing agreement
+                        (DPA). Analytics data is stored in the EU data region selected for our account;
+                        the DPA covers the limited operational processing (CDN routing, security and
+                        server logging) that Umami may perform outside that region.</li>
                     <li>The <strong>system status</strong> link in the footer points to our own status
                         page (status.remote-labs.eu), which has its own privacy statement.</li>
                     <li>The <strong>Remote Labs platform</strong> (remotelabs.tue.nl) that this site links
@@ -167,8 +168,8 @@
                 <h3>6. Retention</h3>
                 <p>Correspondence you send us by email is kept only as long as needed to handle your
                 request and any follow-up, and to comply with legal retention obligations. Raw analytics
-                events are kept for a limited period configured in our Umami dashboard and then deleted;
-                aggregated, non-identifiable statistics may be kept longer.</p>
+                events are kept only for the retention period of our Umami Cloud plan (plan-based, for
+                example 2 years on the Pro plan - see Umami's Cloud FAQ) and are then deleted.</p>
             </div>
 
             <div class="privacy-section">
@@ -250,7 +251,7 @@
                     <h3>Publications</h3>
                     <div class="publications">
                         <div class="publication-item">
-                            <a href="assets/Publications/Magazine_AMVELC_2026_digitaal.pdf?v=2.1.23#page=13" class="publication-title" target="_blank" rel="noopener noreferrer">Slimme Remote Labs klaar voor de toekomst</a>
+                            <a href="assets/Publications/Magazine_AMVELC_2026_digitaal.pdf?v=2.1.24#page=13" class="publication-title" target="_blank" rel="noopener noreferrer">Slimme Remote Labs klaar voor de toekomst</a>
                             <div class="publication-meta">
                                 <span class="publication-journal">AMV Energy Learning Community</span>
                                 <span class="publication-year">• 2026</span>
@@ -308,7 +309,7 @@
     </footer>
 
     <!-- Load minified JavaScript -->
-    <script src="script.min.js?v=2.1.23" defer></script>
+    <script src="script.min.js?v=2.1.24" defer></script>
 
 </body>
 </html>

@@ -7,8 +7,8 @@
 // The two version literals below are load-bearing: build.js rewrites these
 // exact patterns when syncing the root VERSION file, and test.js matches on
 // them. Keep the `const ... = '...'` shape.
-const CACHE_NAME = 'remotelabs-v2.1.23';
-const ASSET_VERSION = '2.1.23';
+const CACHE_NAME = 'remotelabs-v2.1.24';
+const ASSET_VERSION = '2.1.24';
 
 // Install: activate immediately (no precaching needed).
 self.addEventListener('install', () => {
