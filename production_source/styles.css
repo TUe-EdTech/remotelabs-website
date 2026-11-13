@@ -209,30 +209,15 @@ body {
 }
 .status-badge-container {
   text-align: left;
-  /* Reserve the status pill's height so it does not shift the footer. */
+  /* Reserve the badge's height (shields for-the-badge = 28px) so the lazy
+     image does not shift the footer when it loads. width stays auto so a
+     status change ("up" -> "down") only changes the intrinsic aspect. */
   min-height: 28px
 }
-.status-link {
-  display: inline-flex;
-  align-items: center;
-  gap: .4rem;
+.status-badge {
+  display: inline-block;
   height: 28px;
-  padding: 0 .8rem;
-  border: 1px solid var(--gray-500);
-  border-radius: 14px;
-  color: var(--gray-300);
-  font-size: .8rem;
-  font-weight: 700;
-  text-decoration: none;
-  transition: color .3s, border-color .3s
-}
-.status-link:hover {
-  color: var(--white);
-  border-color: var(--white)
-}
-.status-link .icon {
-  width: 1em;
-  height: 1em
+  width: auto
 }
 /* Footer list items that are buttons (e.g. Privacy settings) should look
    exactly like the neighbouring links. */

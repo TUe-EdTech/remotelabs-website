@@ -19,10 +19,10 @@
 
     <!-- Preload and load minified CSS (async pattern: media="print" swapped
          to "all" by script.js to avoid render-blocking) -->
-    <link rel="preload" href="styles.min.css?v=2.1.25" as="style">
-    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.25" as="style">
-    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.25" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.25" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="styles.min.css?v=2.1.26" as="style">
+    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.26" as="style">
+    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.26" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.26" as="font" type="font/woff2" crossorigin>
     <!-- Critical above-the-fold CSS, injected by build.js from the marked
          critical section of styles.css (same placeholder as index.html - see
          the warning there about not quoting the tag inside a comment). This
@@ -30,12 +30,12 @@
          unstyled and the media="print" swap causes a large layout shift. -->
     <style id="critical-css"></style>
 
-    <link rel="stylesheet" href="styles.min.css?v=2.1.25" media="print" id="async-stylesheet">
+    <link rel="stylesheet" href="styles.min.css?v=2.1.26" media="print" id="async-stylesheet">
     <!-- Fallback if CSS fails to load or JS is disabled -->
-    <noscript><link rel="stylesheet" href="styles.min.css?v=2.1.25"></noscript>
+    <noscript><link rel="stylesheet" href="styles.min.css?v=2.1.26"></noscript>
 
     <!-- Self-hosted fonts (no external CDN dependency) -->
-    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.25">
+    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.26">
 
     <style>
         .privacy-container {
@@ -147,16 +147,23 @@
             <div class="privacy-section">
                 <h3>5. Third Parties, Processors and International Transfers</h3>
                 <p>This website is a static site: all fonts, images and videos are served from
-                remote-labs.eu itself, and we embed no third-party content except the consent-gated
-                analytics described above.</p>
+                remote-labs.eu itself. The only third-party requests are the consent-gated analytics
+                described above and the shields.io status badge described below.</p>
                 <ul>
                     <li><strong>Umami Cloud</strong> (operated by Umami Software, Estonia) processes
                         analytics data on our behalf as a processor under a data processing agreement
-                        (DPA). Analytics data is stored in the EU data region selected for our account;
-                        the DPA covers the limited operational processing (CDN routing, security and
-                        server logging) that Umami may perform outside that region.</li>
-                    <li>The <strong>system status</strong> link in the footer points to our own status
-                        page (status.remote-labs.eu), which has its own privacy statement.</li>
+                        (DPA), and only after your consent. Analytics data is stored in the EU data
+                        region selected for our account; the DPA covers the limited operational
+                        processing (CDN routing, security and server logging) that Umami may perform
+                        outside that region.</li>
+                    <li><strong>Status badge (shields.io, US):</strong> the system-status badge in the
+                        footer is an image loaded from img.shields.io. When it loads, your IP address
+                        is sent to shields.io (hosted in the US via fly.io and Cloudflare), which then
+                        fetches the current status from our status page on its own server. Shields.io
+                        states that it sets no cookies and stores no visit logs
+                        (<a href="https://shields.io/privacy" target="_blank" rel="noopener noreferrer" class="contact-link" style="color: #000;">shields.io privacy policy</a>).
+                        Clicking the badge opens our own status page (status.remote-labs.eu), which has
+                        its own privacy statement.</li>
                     <li>The <strong>Remote Labs platform</strong> (remotelabs.tue.nl) that this site links
                         to is a separate service with its own privacy statement.</li>
                 </ul>
@@ -251,7 +258,7 @@
                     <h3>Publications</h3>
                     <div class="publications">
                         <div class="publication-item">
-                            <a href="assets/Publications/Magazine_AMVELC_2026_digitaal.pdf?v=2.1.25#page=13" class="publication-title" target="_blank" rel="noopener noreferrer">Slimme Remote Labs klaar voor de toekomst</a>
+                            <a href="assets/Publications/Magazine_AMVELC_2026_digitaal.pdf?v=2.1.26#page=13" class="publication-title" target="_blank" rel="noopener noreferrer">Slimme Remote Labs klaar voor de toekomst</a>
                             <div class="publication-meta">
                                 <span class="publication-journal">AMV Energy Learning Community</span>
                                 <span class="publication-year">• 2026</span>
@@ -309,7 +316,7 @@
     </footer>
 
     <!-- Load minified JavaScript -->
-    <script src="script.min.js?v=2.1.25" defer></script>
+    <script src="script.min.js?v=2.1.26" defer></script>
 
 </body>
 </html>
