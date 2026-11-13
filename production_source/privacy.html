@@ -11,16 +11,18 @@
       (X-Frame-Options, X-Content-Type-Options, Referrer-Policy,
       Strict-Transport-Security, Permissions-Policy) MUST be sent as real
       HTTP response headers - see deploy/.htaccess.
+      This page loads no third-party resources at all: analytics on the home
+      page is consent-gated by consent.min.js and is not needed here.
     -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
     <title>Privacy Policy - Remote Labs</title>
 
     <!-- Preload and load minified CSS (async pattern: media="print" swapped
          to "all" by script.js to avoid render-blocking) -->
-    <link rel="preload" href="styles.min.css?v=2.1.22" as="style">
-    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.22" as="style">
-    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.22" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.22" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="styles.min.css?v=2.1.23" as="style">
+    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.23" as="style">
+    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.23" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.23" as="font" type="font/woff2" crossorigin>
     <!-- Critical above-the-fold CSS, injected by build.js from the marked
          critical section of styles.css (same placeholder as index.html - see
          the warning there about not quoting the tag inside a comment). This
@@ -28,12 +30,12 @@
          unstyled and the media="print" swap causes a large layout shift. -->
     <style id="critical-css"></style>
 
-    <link rel="stylesheet" href="styles.min.css?v=2.1.22" media="print" id="async-stylesheet">
+    <link rel="stylesheet" href="styles.min.css?v=2.1.23" media="print" id="async-stylesheet">
     <!-- Fallback if CSS fails to load or JS is disabled -->
-    <noscript><link rel="stylesheet" href="styles.min.css?v=2.1.22"></noscript>
-    
+    <noscript><link rel="stylesheet" href="styles.min.css?v=2.1.23"></noscript>
+
     <!-- Self-hosted fonts (no external CDN dependency) -->
-    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.22">
+    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.23">
 
     <style>
         .privacy-container {
@@ -41,29 +43,29 @@
             max-width: 800px;
             margin: 0 auto;
         }
-        
+
         .privacy-section {
             margin-bottom: 3rem;
         }
-        
+
         .privacy-section h3 {
             color: var(--highlight-color);
             margin-bottom: 1rem;
             font-size: 1.5rem;
         }
-        
+
         .privacy-section p {
             line-height: 1.8;
             margin-bottom: 1rem;
             color: var(--gray-700);
         }
-        
+
         .last-updated {
             color: var(--gray-500);
             font-style: italic;
             margin-bottom: 2rem;
         }
-        
+
         .contact-link {
             color: var(--highlight-color);
             font-weight: 600;
@@ -91,92 +93,136 @@
     <main id="main-content" role="main" tabindex="-1">
         <section class="privacy-container">
             <h1>Privacy Policy</h1>
-            <p class="last-updated">Last updated: June 2024</p>
+            <p class="last-updated">Last updated: November 2026</p>
 
             <div class="privacy-section">
-                <h3>1. Information We Collect</h3>
-                <p>We only collect information you voluntarily provide when contacting us via email or through our contact forms. This may include:</p>
+                <h3>1. Who We Are (Data Controller)</h3>
+                <p>The controller for the processing of your personal data is:</p>
+                <p>Eindhoven University of Technology (TU/e)<br>
+                Den Dolech 2, 5612 AZ Eindhoven<br>
+                The Netherlands</p>
+                <p>For questions about this policy or our processing of personal data, contact us at
+                <a href="mailto:k.m.a.aarts@tue.nl" class="contact-link" style="color: #000;">k.m.a.aarts@tue.nl</a>.
+                You can also reach the TU/e Data Protection Officer through the same address,
+                marked &ldquo;Data Protection Officer&rdquo;.</p>
+            </div>
+
+            <div class="privacy-section">
+                <h3>2. Information We Collect</h3>
+                <p><strong>Information you provide:</strong> when you contact us by email, we receive the
+                information you choose to share - typically your name, email address, institution or
+                organization, and the content of your message.</p>
+                <p><strong>Analytics (only with your consent):</strong> if you accept analytics in the
+                consent banner on the home page, the site loads Umami, a cookieless analytics service.
+                It collects page URL, referrer, browser and operating system, device type, and country
+                (derived from your IP address, which is not stored). No personally identifiable
+                information is collected, no cookies or local storage are used by Umami, and users are
+                not tracked across websites.</p>
+            </div>
+
+            <div class="privacy-section">
+                <h3>3. Purposes and Legal Basis</h3>
                 <ul>
-                    <li>Your name and email address</li>
-                    <li>Your institution or organization name</li>
-                    <li>Any additional information you choose to provide</li>
+                    <li>Responding to your inquiries and providing information about our services:
+                        necessary to take steps at your request prior to a contract, or our legitimate
+                        interest in answering questions (GDPR Art. 6(1)(b) and (f)).</li>
+                    <li>Analytics to understand and improve how the website is used: your explicit
+                        consent (GDPR Art. 6(1)(a)), given via the consent banner and withdrawable at
+                        any time (see section 8).</li>
                 </ul>
+                <p>We do not use your information for marketing purposes, and we do not sell it or share
+                it with third parties for their own purposes.</p>
             </div>
 
             <div class="privacy-section">
-                <h3>2. How We Use Your Information</h3>
-                <p>We use the information we collect solely for the following purposes:</p>
+                <h3>4. Cookies and Similar Technologies</h3>
+                <p>This website does not set any cookies and does not use web beacons or similar tracking
+                technologies. The only information stored on your device is your consent choice itself
+                (in localStorage), which is strictly necessary to remember your preference and is exempt
+                from consent under ePrivacy Art. 5(3).</p>
+                <p>If you enable Do Not Track (DNT) in your browser, analytics is never loaded, even if
+                you previously accepted.</p>
+            </div>
+
+            <div class="privacy-section">
+                <h3>5. Third Parties, Processors and International Transfers</h3>
+                <p>This website is a static site: all fonts, images and videos are served from
+                remote-labs.eu itself, and we embed no third-party content except the consent-gated
+                analytics described above.</p>
                 <ul>
-                    <li>To respond to your inquiries about Remote Labs</li>
-                    <li>To provide information about our services</li>
-                    <li>To improve our website and services based on your feedback</li>
+                    <li><strong>Umami Cloud</strong> (operated by Umami Software, Estonia, with EU
+                        hosting) processes analytics data on our behalf as a processor, under a data
+                        processing agreement. Analytics data is stored in the EU; no transfer outside
+                        the EEA takes place.</li>
+                    <li>The <strong>system status</strong> link in the footer points to our own status
+                        page (status.remote-labs.eu), which has its own privacy statement.</li>
+                    <li>The <strong>Remote Labs platform</strong> (remotelabs.tue.nl) that this site links
+                        to is a separate service with its own privacy statement.</li>
                 </ul>
-                <p>We do not use your information for marketing purposes or share it with third parties.</p>
+                <p>We may disclose information if required to comply with the law, enforce our policies,
+                or protect the rights, property or safety of others.</p>
             </div>
 
             <div class="privacy-section">
-                <h3>3. Information Sharing and Disclosure</h3>
-                <p>We do not sell, trade, or otherwise transfer your personal information to outside parties. This does not include trusted third parties who assist us in operating our website or servicing you, so long as those parties agree to keep this information confidential.</p>
-                <p>We may release information when we believe release is appropriate to comply with the law, enforce our site policies, or protect ours or others' rights, property, or safety.</p>
+                <h3>6. Retention</h3>
+                <p>Correspondence you send us by email is kept only as long as needed to handle your
+                request and any follow-up, and to comply with legal retention obligations. Raw analytics
+                events are kept for a limited period configured in our Umami dashboard and then deleted;
+                aggregated, non-identifiable statistics may be kept longer.</p>
             </div>
 
             <div class="privacy-section">
-                <h3>4. Data Security</h3>
-                <p>We implement a variety of security measures to maintain the safety of your personal information. These include:</p>
+                <h3>7. Data Security</h3>
+                <p>We apply appropriate technical and organizational measures, including HTTPS with HSTS
+                for all traffic, a strict Content-Security-Policy, SRI integrity checks on the analytics
+                script, and access limited to what is necessary. No method of transmission or storage is
+                100% secure, but we regularly review and update our measures.</p>
+            </div>
+
+            <div class="privacy-section">
+                <h3>8. Your Rights</h3>
+                <p>Under the GDPR you have the following rights regarding your personal data:</p>
                 <ul>
-                    <li>Secure data transmission using HTTPS</li>
-                    <li>Regular security audits and updates</li>
-                    <li>Limited access to personal data</li>
-                    <li>Encryption of sensitive information</li>
+                    <li><strong>Access:</strong> request copies of your personal data.</li>
+                    <li><strong>Rectification:</strong> request correction of inaccurate or incomplete data.</li>
+                    <li><strong>Erasure:</strong> request deletion of your personal data, under certain conditions.</li>
+                    <li><strong>Restriction:</strong> request that we restrict processing, under certain conditions.</li>
+                    <li><strong>Objection:</strong> object to processing based on legitimate interests.</li>
+                    <li><strong>Data portability:</strong> receive your data in a structured, commonly used, machine-readable format.</li>
+                    <li><strong>Withdraw consent:</strong> at any time, without affecting the lawfulness of
+                        processing before withdrawal - use the &ldquo;Privacy settings&rdquo; link in the
+                        footer of the home page to change or revoke your analytics choice.</li>
+                    <li><strong>Lodge a complaint:</strong> with the Dutch supervisory authority, the
+                        <a href="https://autoriteitpersoonsgegevens.nl/en" target="_blank" rel="noopener noreferrer" class="contact-link" style="color: #000;">Autoriteit Persoonsgegevens</a>.</li>
                 </ul>
-                <p>However, please note that no method of transmission over the Internet or method of electronic storage is 100% secure.</p>
+                <p>To exercise any of these rights, contact us at:
+                <a href="mailto:k.m.a.aarts@tue.nl" class="contact-link" style="color: #000;">k.m.a.aarts@tue.nl</a></p>
             </div>
 
             <div class="privacy-section">
-                <h3>5. Cookies and Tracking</h3>
-                <p>This website does not set any cookies.</p>
-                <p>We use Umami analytics to collect anonymous usage statistics to help us understand how our website is being used and to improve the user experience. Umami is a privacy-focused analytics service that:</p>
-                <ul>
-                    <li>Does not collect any personally identifiable information</li>
-                    <li>Does not use tracking cookies</li>
-                    <li>Does not track users across websites</li>
-                    <li>Respects Do Not Track browser settings</li>
-                </ul>
-                <p>Analytics data is collected automatically without requiring consent, as no cookies are set and no personally identifiable information is collected. You can opt out of analytics by enabling Do Not Track in your browser.</p>
+                <h3>9. Third-Party Links</h3>
+                <p>Our website contains links to third-party websites (for example TU/e, partner
+                institutions, and publications). We are not responsible for the privacy practices of
+                those sites; we encourage you to read their privacy policies.</p>
             </div>
 
             <div class="privacy-section">
-                <h3>6. Your Rights</h3>
-                <p>You have the following rights regarding your personal information:</p>
-                <ul>
-                    <li><strong>Right to Access:</strong> You can request copies of your personal data.</li>
-                    <li><strong>Right to Rectification:</strong> You can request that we correct any information you believe is inaccurate.</li>
-                    <li><strong>Right to Erasure:</strong> You can request that we erase your personal data, under certain conditions.</li>
-                    <li><strong>Right to Restrict Processing:</strong> You can request that we restrict the processing of your personal data, under certain conditions.</li>
-                    <li><strong>Right to Object to Processing:</strong> You can object to our processing of your personal data, under certain conditions.</li>
-                </ul>
-                <p>To exercise any of these rights, please contact us at: <a href="mailto:k.m.a.aarts@tue.nl" class="contact-link" style="color: #000;">k.m.a.aarts@tue.nl</a></p>
+                <h3>10. Children's Privacy</h3>
+                <p>Our services are not directed to individuals under the age of 16, and we do not
+                knowingly collect personal information from children under 16. If we learn that we have
+                collected such information without verifiable parental consent, we will delete it.</p>
             </div>
 
             <div class="privacy-section">
-                <h3>7. Third-Party Links</h3>
-                <p>Our website may contain links to third-party websites. We are not responsible for the privacy practices or content of these sites. We encourage you to read the privacy policies of any website you visit.</p>
+                <h3>11. Changes to This Policy</h3>
+                <p>We may update this Privacy Policy from time to time. Changes are effective when posted
+                on this page, with the &ldquo;Last updated&rdquo; date above. We encourage you to review
+                this page periodically.</p>
             </div>
 
             <div class="privacy-section">
-                <h3>8. Children's Privacy</h3>
-                <p>Our services are not directed to individuals under the age of 16. We do not knowingly collect personal information from children under 16. If we become aware that we have collected personal information from a child under age 16 without verification of parental consent, we will take steps to remove that information.</p>
-            </div>
-
-            <div class="privacy-section">
-                <h3>9. Changes to This Privacy Policy</h3>
-                <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date at the top of this policy.</p>
-                <p>You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.</p>
-            </div>
-
-            <div class="privacy-section">
-                <h3>10. Contact Us</h3>
-                <p>If you have any questions about this Privacy Policy, please contact us:</p>
+                <h3>12. Contact Us</h3>
+                <p>If you have any questions about this Privacy Policy or our data processing:</p>
                 <p><a href="mailto:k.m.a.aarts@tue.nl" class="contact-link" style="color: #000;">k.m.a.aarts@tue.nl</a></p>
                 <p>Eindhoven University of Technology<br>
                 Den Dolech 2, 5612 AZ Eindhoven<br>
@@ -199,12 +245,12 @@
                         <li><a href="https://remotelabs.tue.nl">Go to Remote Labs</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-section">
                     <h3>Publications</h3>
                     <div class="publications">
                         <div class="publication-item">
-                            <a href="assets/Publications/Magazine_AMVELC_2026_digitaal.pdf?v=2.1.22#page=13" class="publication-title" target="_blank" rel="noopener noreferrer">Slimme Remote Labs klaar voor de toekomst</a>
+                            <a href="assets/Publications/Magazine_AMVELC_2026_digitaal.pdf?v=2.1.23#page=13" class="publication-title" target="_blank" rel="noopener noreferrer">Slimme Remote Labs klaar voor de toekomst</a>
                             <div class="publication-meta">
                                 <span class="publication-journal">AMV Energy Learning Community</span>
                                 <span class="publication-year">• 2026</span>
@@ -240,7 +286,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="footer-section">
                     <h3>Contact Us</h3>
                     <div>
@@ -250,7 +296,7 @@
                         <p>+31 (0)40 247 9111</p>
                     </div>
                 </div>
-                
+
                 <div class="footer-section">
                     <h3>Remote Labs</h3>
                     <p>24/7 Access to Physical Lab Experiments, Anywhere</p>
@@ -262,7 +308,7 @@
     </footer>
 
     <!-- Load minified JavaScript -->
-    <script src="script.min.js?v=2.1.22" defer></script>
-    
+    <script src="script.min.js?v=2.1.23" defer></script>
+
 </body>
 </html>

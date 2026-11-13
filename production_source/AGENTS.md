@@ -38,6 +38,9 @@ This guide provides comprehensive documentation for the Remote Labs website at E
   on the workflow video until it starts playing (script.js
   `setupMediaPlaceholders`, styles.css section 13)
 - Security headers (CSP, X-Frame-Options, HSTS, etc.)
+- Consent-gated analytics (GDPR/ePrivacy): `consent.js` shows a banner and
+  loads Umami (cloud.umami.is) only after explicit consent; no cookies are
+  ever set and Do Not Track is honoured
 - Service worker for offline support (registered by script.js on page load over http/https)
 
 **Domain**: remote-labs.eu (site; the Remote Labs platform app lives at remotelabs.tue.nl)
@@ -98,6 +101,7 @@ remotelabs-website/
     ├── index.html                 # Source HTML
     ├── styles.css                 # Source CSS (readable; the build minifies it to deploy/styles.min.css)
     ├── script.js                  # Source JavaScript
+    ├── consent.js                 # Consent banner + consent-gated Umami load (minified to deploy/consent.min.js)
     ├── sw.js                      # Source Service Worker
     ├── package.json              # Node.js package configuration
     └── package-lock.json          # Dependency lock file (node_modules/ is gitignored, not tracked)
@@ -469,7 +473,9 @@ fallback. The headers include:
 Note: the deprecated `X-XSS-Protection` and `Expect-CT` headers are not used.
 
 ### Security Best Practices
-- No cookies collected
+- No cookies are ever set. Analytics (Umami) loads only after explicit consent
+  via `consent.min.js`; the consent choice itself is stored in localStorage,
+  which is strictly necessary and exempt under ePrivacy Art. 5(3)
 - No eval() or dynamic code evaluation
 - DOM manipulation instead of document.write()
 - Icons use an inline SVG sprite (no external CDN dependency, no SRI needed)
@@ -480,9 +486,9 @@ Note: the deprecated `X-XSS-Protection` and `Expect-CT` headers are not used.
 ### Security Considerations
 - All external resources loaded via HTTPS
 - Service worker only registers on HTTP/HTTPS (not file://)
-- The Umami analytics script-src hash (`sha256-...`) is fragile — if Umami
-  changes their snippet, the hash must be updated in the CSP or analytics will
-  break
+- The Umami analytics hashes are fragile — if Umami changes their snippet, both
+  the script-src hash in the CSP (`sha256-...`) and the SRI hash in
+  `consent.js` (`UMAMI_INTEGRITY`) must be updated or analytics will break
 - No user input processed on client side
 - No forms that could be vulnerable to CSRF
 

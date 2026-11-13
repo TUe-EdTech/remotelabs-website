@@ -13,15 +13,17 @@ experiments.
 
 ## Features
 
-- Pure static site: HTML/CSS/JS, no server-side code, no database, no cookies
+- Pure static site: HTML/CSS/JS, no server-side code, no database, no cookies,
+  no tracking without your consent
 - Progressive Web App: service worker with network-first HTML, cache-first
   versioned assets, offline support
 - Loading placeholders for lazy media (shimmer behind images, poster panel
   on the workflow video) so below-the-fold content never shows as a blank box
 - Accessibility and performance budgets enforced in CI (Lighthouse)
-- Strict Content-Security-Policy (no inline scripts), SRI-pinned analytics,
-  full security header set via `.htaccess`
-- Privacy policy page (GDPR), Umami analytics (self-hosted cloud, cookieless)
+- Strict Content-Security-Policy (no inline scripts), SRI-pinned analytics
+  loaded only after consent, full security header set via `.htaccess`
+- Privacy policy page (GDPR); cookieless Umami analytics is consent-gated
+  (banner in `consent.js`), never loaded before consent, DNT honoured
 - Custom error pages, sitemap, robots.txt, web app manifest
 
 ## Quick start
@@ -122,8 +124,8 @@ sync approved changes into `production_source/` with
 ## Security
 
 Security headers (CSP via `<meta>`, the rest via `deploy/.htaccess`), SRI on
-the analytics script, and a strict no-inline-script policy are enforced by
-`npm test` and CI. To report a vulnerability, see [SECURITY.md](SECURITY.md) —
+the consent-gated analytics script, and a strict no-inline-script policy are
+enforced by `npm test` and CI. To report a vulnerability, see [SECURITY.md](SECURITY.md) —
 please do not open public issues for security reports.
 
 ## Contributing

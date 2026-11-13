@@ -6,6 +6,7 @@
 //      pages and fonts.css (every local asset URL carries ?v=<ASSET_VERSION>)
 //   2. Minify styles.css  -> ../deploy/styles.min.css   (clean-css library API)
 //   3. Minify script.js    -> ../deploy/script.min.js    (uglify-js library API)
+//      Minify consent.js   -> ../deploy/consent.min.js   (uglify-js library API)
 //   4. Copy HTML/config files (filesToCopy) into ../deploy/ (inline <style>
 //      blocks are minified in the deploy copy only, and the empty
 //      <style id="critical-css"> placeholder in index.html is filled from
@@ -97,15 +98,20 @@ function buildCss() {
   console.log('  styles.css -> deploy/styles.min.css');
 }
 
-function buildJs() {
+function minifyJs(srcName, destName) {
   const UglifyJS = require('uglify-js');
-  const jsSource = fs.readFileSync(path.join(SOURCE_DIR, 'script.js'), 'utf8');
+  const jsSource = fs.readFileSync(path.join(SOURCE_DIR, srcName), 'utf8');
   const result = UglifyJS.minify(jsSource, { compress: true, mangle: true });
   if (result.error) {
-    throw new Error(result.error.message);
+    throw new Error(srcName + ': ' + result.error.message);
   }
-  fs.writeFileSync(path.join(DEPLOY_DIR, 'script.min.js'), result.code);
-  console.log('  script.js -> deploy/script.min.js');
+  fs.writeFileSync(path.join(DEPLOY_DIR, destName), result.code);
+  console.log(`  ${srcName} -> deploy/${destName}`);
+}
+
+function buildJs() {
+  minifyJs('script.js', 'script.min.js');
+  minifyJs('consent.js', 'consent.min.js');
 }
 
 // ---------------------------------------------------------------------------
@@ -292,6 +298,7 @@ function main() {
   console.log('\nGenerated files:');
   console.log('  - deploy/styles.min.css');
   console.log('  - deploy/script.min.js');
+  console.log('  - deploy/consent.min.js');
   console.log('  - deploy/index.html');
   console.log('  - deploy/privacy.html');
   console.log('  - deploy/sw.js');
