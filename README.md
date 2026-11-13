@@ -81,7 +81,7 @@ remotelabs-website/
 │   └── package.json              # Build/test tooling (clean-css, uglify-js, chrome-launcher, chrome-remote-interface)
 ├── experimental/                 # Sandbox for trying out redesigns before production
 ├── experimental_deploy/          # Experimental build output (gitignored)
-├── scripts/                      # Utility scripts (build-experimental, check-links, bump-version, ...)
+├── scripts/                      # Utility scripts (build-experimental, check-links, verify-live, bump-version, ...)
 └── lighthouserc.json             # CI Lighthouse budgets
 ```
 
@@ -97,6 +97,11 @@ remotelabs-website/
 4. Verify: `npm test` and `node scripts/check-links.js deploy`
 5. Commit **source and `deploy/` together**. CI rebuilds, re-runs all gates and
    auto-commits the `deploy/` output on `main`.
+6. Upload `deploy/` to the web server, then run `node scripts/verify-live.js`
+   from the repo root: it re-downloads every file from the live server and
+   fails on any non-200 or byte-count mismatch. A truncated upload once
+   shipped 0-byte `styles.min.css`/`script.min.js` (v2.1.33) — an unstyled
+   site — while all local checks stayed green, so never skip this step.
 
 `npm test` fails if `VERSION`, the sources or `deploy/` disagree, so version
 drift cannot ship. The versioning model (service-worker cache name + immutable

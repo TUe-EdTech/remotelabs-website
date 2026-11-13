@@ -395,12 +395,20 @@ The GitHub Actions workflow (`.github/workflows/build-and-deploy.yml`) runs thes
 
 ### Deployment Steps
 1. **Upload** all files from `deploy/` folder to server root
-2. **Verify** file permissions (readable by web server)
-3. **Test** live site:
+2. **Verify the upload landed intact** — from the repo root run
+   `node scripts/verify-live.js` (defaults to `https://remote-labs.eu` and
+   `deploy/`). It re-downloads every file from the live server and fails on
+   any non-200 response or byte-count mismatch. This step is mandatory:
+   the v2.1.33 upload wrote 0-byte `styles.min.css`/`script.min.js` to the
+   server, leaving the live site unstyled while every local check stayed
+   green. Local tests cannot catch a truncated upload — only comparing
+   served bytes can. Never skip this step.
+3. **Verify** file permissions (readable by web server)
+4. **Test** live site:
    - Open in incognito mode
    - Check DevTools > Application > Service Workers
    - Verify CSS/JS URLs have version query strings
-4. **Check** all links and functionality
+5. **Check** all links and functionality
 
 ### Server Configuration
 - **HTTPS**: Required (HSTS header enforced)
@@ -419,7 +427,10 @@ The GitHub Actions workflow (`.github/workflows/build-and-deploy.yml`) runs thes
 - **Root Directory**: `/` or `/public_html/` depending on hosting
 
 ### Post-Deployment
-- Verify all pages load correctly
+- Run `node scripts/verify-live.js` after every upload and require a clean
+  pass before calling the deploy done (see Deployment Steps)
+- Verify all pages load correctly (a page that loads unstyled means a
+  truncated CSS upload — check `verify-live.js` output first)
 - Test all interactive elements
 - Check video playback
 - Monitor for errors in console
@@ -563,6 +574,7 @@ node scripts/bump-version.js
 cp production_source/index.html production_source/privacy.html production_source/sw.js deploy/
 
 # Verify deployment
+node scripts/verify-live.js            # every deploy/ file must match the live server byte-for-byte (catches truncated uploads)
 curl -I https://remote-labs.eu/sw.js  # Check service worker header
 curl -I https://remote-labs.eu/      # Check HTML cache headers
 
