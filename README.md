@@ -112,9 +112,9 @@ sync approved changes into `production_source/` with
 
 1. `npm test` — syntax, CSP (no inline scripts), version consistency
 2. `npm run test:render` — headless Chrome loads the built pages and asserts the
-   CSS applies (catches e.g. the critical-CSS block being swallowed by an HTML
-   comment, which shipped an unstyled page in v2.1.20 despite passing all
-   static checks)
+   render-blocking CSS applies at first paint (catches e.g. the stylesheet link
+   being swallowed by an HTML comment, which shipped an unstyled page in v2.1.20
+   despite passing all static checks)
 3. `scripts/check-links.js deploy` — every local link/asset/anchor resolves
 4. Lighthouse budgets (`lighthouserc.json`) — accessibility / best-practices /
    SEO >= 0.9, performance >= 0.7

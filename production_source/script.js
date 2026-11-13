@@ -2,14 +2,13 @@
 // Loaded with <script defer>, so the DOM is fully parsed by the time this runs.
 //
 // What this file does, in order:
-//   1. Activate the async-loaded main stylesheet (media="print" -> "all")
-//   2. Tag touch devices and read the reduced-motion preference (used below)
-//   3. Back-to-top button + one rAF-throttled scroll handler (header hide/show)
-//   4. Hero video controls (play/pause, mute) + data-saver gating
-//   5. Workflow section: lazy-playing video, per-step video switching, toggle switch
-//   6. Loading placeholders for lazy media (image shimmer, video poster panel)
-//   7. Smooth scrolling for in-page anchors
-//   8. Service worker registration (after page load, http/https only)
+//   1. Tag touch devices and read the reduced-motion preference (used below)
+//   2. Back-to-top button + one rAF-throttled scroll handler (header hide/show)
+//   3. Hero video controls (play/pause, mute) + data-saver gating
+//   4. Workflow section: lazy-playing video, per-step video switching, toggle switch
+//   5. Loading placeholders for lazy media (image shimmer, video poster panel)
+//   6. Smooth scrolling for in-page anchors
+//   7. Service worker registration (after page load, http/https only)
 (function () {
   'use strict';
 
@@ -39,23 +38,8 @@
   }
 
   // -----------------------------------------------------------------------
-  // 1. Async stylesheet + touch-device tag (run immediately, see bottom)
+  // 1. Touch-device tag (run immediately, see bottom)
   // -----------------------------------------------------------------------
-
-  // Apply the main stylesheet once it has loaded. The <link> is declared
-  // with media="print" in the HTML to avoid blocking first paint; swapping
-  // to "all" here replaces the previous inline onload handler so the CSP
-  // can drop 'unsafe-inline' from script-src.
-  function swapAsyncStylesheet() {
-    const link = document.getElementById('async-stylesheet');
-    if (!link) return;
-    const apply = () => { link.media = 'all'; };
-    if (link.sheet) {
-      apply();
-    } else {
-      link.addEventListener('load', apply);
-    }
-  }
 
   // Tag touch devices so CSS can provide tap feedback without per-element
   // JS listeners (see the .touch-device rules in styles.css).
@@ -65,7 +49,6 @@
     }
   }
 
-  swapAsyncStylesheet();
   tagTouchDevice();
 
   // -----------------------------------------------------------------------

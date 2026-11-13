@@ -2,8 +2,8 @@
    Remote Labs - full stylesheet (source of truth for styles.min.css)
    --------------------------------------------------------------------------
    build.js minifies this file to deploy/styles.min.css via the clean-css
-   library API, and inlines the marked critical section below into
-   deploy/index.html for first paint - edit CSS only here.
+   library API - edit CSS only here. The pages load styles.min.css as a
+   render-blocking link, so this file is the single source of all styles.
    Asset URLs carry ?v=<ASSET_VERSION>, synced from the root VERSION file.
 
    Sections:
@@ -17,18 +17,8 @@
                                                    with their component or at the end
                                                  13. Loading placeholders (lazy media,
                                                    video poster panel)
-     14. Consent banner (kept INSIDE the critical section - see below)
+     14. Consent banner
    ========================================================================== */
-/* ==========================================================================
-   CRITICAL (above-the-fold) CSS - marked section.
-   build.js extracts everything between critical-start / critical-end and
-   inlines it into the <style id="critical-css"> block of deploy/index.html.
-   So styles.css is the SINGLE source for these rules - edit them here,
-   never in index.html. Where a rule here differs from the same selector
-   later in this file, the value here applies only until styles.min.css
-   finishes loading (the later rule then wins), which is intentional.
-   ========================================================================== */
-/* critical-start */
 :root {
   --highlight-color: #000;
   --black: #000;
@@ -52,10 +42,6 @@
   --font-body: 'Lato','Helvetica Neue',Arial,sans-serif;
   --font-display: 'Poppins','Poppins Fallback',sans-serif;
 }
-/* Critical above-the-fold CSS, inlined so first paint is not blocked by the
-   async-loaded styles.min.css (the media="print" link below, swapped to "all"
-   by script.js once loaded). The full stylesheet lives in styles.css - keep
-   shared rules in sync between the two. */
 * {
   margin: 0;
   padding: 0;
@@ -362,11 +348,8 @@ body {
 }
 
 /* ---- 14. Consent banner (GDPR / ePrivacy; built by consent.js) ----
-   Lives INSIDE the critical section on purpose: the banner is appended to
-   the DOM by JS before the async stylesheet may have loaded, and an unstyled
-   (in-flow) banner caused a large layout shift when styles.min.css applied.
-   With these rules inlined at first paint the banner is position:fixed from
-   the start, so showing it never shifts the page. ---- */
+   position:fixed, so appending the banner to the DOM never shifts the
+   page. ---- */
 .consent-banner {
   position: fixed;
   left: 0;
@@ -445,9 +428,7 @@ body {
 /* ---- Reusable floating action button (.fab) ----
    One component for every floating page button: the back-to-top button on
    the home page (.fab--bottom-right, "Top") and the back button on the
-   privacy page (.fab--top-left, "Back"). Same pill with icon + label.
-   Kept INSIDE the critical section so both pages style it at first paint
-   (the buttons are created by JS before the async stylesheet may load). ---- */
+   privacy page (.fab--top-left, "Back"). Same pill with icon + label. ---- */
 .fab {
   position: fixed;
   z-index: 10000;
@@ -487,7 +468,6 @@ body {
   bottom: 2rem;
   right: 2rem
 }
-/* critical-end */
 
 
 /* ---- 1. Design tokens (monochrome palette) ---- */

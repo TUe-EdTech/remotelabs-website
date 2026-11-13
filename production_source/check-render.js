@@ -1,10 +1,11 @@
 // Render smoke test for the built site. Serves deploy/ locally, loads each
 // page in headless Chrome and asserts that the CSS actually applies.
 //
-// Why: in v2.1.20 the critical-CSS block was swallowed by an HTML comment
-// and the site shipped unstyled - every static check passed, Lighthouse
-// still scored well, and only the live page looked broken. This check
-// fails the build in that situation.
+// Why: in v2.1.20 the page's inline CSS block was swallowed by an HTML
+// comment and the site shipped unstyled - every static check passed,
+// Lighthouse still scored well, and only the live page looked broken.
+// This check fails the build in that situation: it asserts the blocking
+// stylesheet is in effect already at first paint (body reset, site font).
 //
 // Usage: node check-render.js [deployDir]   (default: ../deploy)
 // Chrome is found via chrome-launcher (CHROME_PATH env var overrides).
@@ -97,7 +98,9 @@ async function main() {
 
       // Wait for DOMContentLoaded by polling readyState (the
       // Page.domContentLoadedEventFired event is not emitted reliably by
-      // all headless Chrome versions).
+      // all headless Chrome versions). Also require the navigation to have
+      // committed - before that, evaluate() runs on about:blank, whose
+      // readyState is already 'complete'.
       const poll = async (expr) => {
         for (let i = 0; i < 100; i++) {
           const v = await evaluate(client, expr);
@@ -106,29 +109,19 @@ async function main() {
         }
         return await evaluate(client, expr);
       };
-      await poll(`document.readyState !== 'loading' ? document.readyState : ''`);
+      await poll(`location.href === ${JSON.stringify(url)} && document.readyState !== 'loading' ? document.readyState : ''`);
 
-      // 1. Critical CSS must be applied at first paint, before the async
-      //    stylesheet swap: the inline #critical-css element must exist in
-      //    the DOM with rules (a comment-swallowed block is absent), and body
-      //    must already be reset (margin 0) and using the site font.
+      // 1. The stylesheet is render-blocking, so at DOMContentLoaded (first
+      //    paint) body must already be reset (margin 0) and using the site
+      //    font - an unstyled first paint means the <link> was swallowed
+      //    (e.g. by an HTML comment) or failed to load.
       const atDcl = await evaluate(client, `(() => {
-        const el = document.getElementById('critical-css');
         const cs = getComputedStyle(document.body);
         return {
-          hasPlaceholder: !!el,
-          criticalRules: el && el.sheet ? el.sheet.cssRules.length : 0,
           bodyMargin: cs.margin,
           bodyFont: cs.fontFamily
         };
       })()`);
-      if (!atDcl.hasPlaceholder) {
-        fail(page, 'no #critical-css element in the DOM - the placeholder was swallowed (e.g. by an HTML comment)');
-      } else if (atDcl.criticalRules === 0) {
-        fail(page, '#critical-css exists but has 0 CSS rules');
-      } else {
-        ok(`${page} critical-css applied at first paint (${atDcl.criticalRules} rules)`);
-      }
       if (atDcl.bodyMargin !== '0px') {
         fail(page, `body margin at first paint is '${atDcl.bodyMargin}' (UA default 8px) - critical CSS not in effect, page renders unstyled`);
       }
@@ -136,12 +129,12 @@ async function main() {
         fail(page, `body font at first paint is '${atDcl.bodyFont}' - stylesheet not applied`);
       }
 
-      // 2. After load, script.js must have swapped the async stylesheet to
-      //    media="all" and the full stylesheet must be in effect.
+      // 2. After load, the render-blocking main stylesheet must be in effect
+      //    (sheet parsed with rules, header fixed).
       let after = null;
       for (let i = 0; i < 100; i++) {
         after = await evaluate(client, `(() => {
-          const link = document.getElementById('async-stylesheet');
+          const link = document.getElementById('main-stylesheet');
           const header = document.querySelector('.main-header');
           const links = [...document.querySelectorAll('link[rel="stylesheet"]')].map((l) => ({
             href: l.getAttribute('href'),
@@ -150,19 +143,19 @@ async function main() {
           }));
           return {
             readyState: document.readyState,
-            asyncMedia: link ? link.media : null,
-            asyncRules: link && link.sheet ? link.sheet.cssRules.length : 0,
+            mainMedia: link ? link.media : null,
+            mainRules: link && link.sheet ? link.sheet.cssRules.length : 0,
             headerPos: header ? getComputedStyle(header).position : null,
             links
           };
         })()`);
-        if (after.readyState === 'complete' && after.asyncMedia === 'all' && after.asyncRules > 0) break;
+        if (after.readyState === 'complete' && after.mainRules > 0) break;
         await new Promise((r) => setTimeout(r, 100));
       }
-      if (after.asyncMedia !== 'all' || after.asyncRules === 0) {
-        fail(page, `async stylesheet not applied after load (media=${after.asyncMedia}, rules=${after.asyncRules})`);
+      if (after.mainRules === 0) {
+        fail(page, `main stylesheet not applied after load (media=${after.mainMedia}, rules=${after.mainRules})`);
       } else {
-        ok(`${page} styles.min.css applied (${after.asyncRules} rules, media=${after.asyncMedia})`);
+        ok(`${page} styles.min.css applied (${after.mainRules} rules, media=${after.mainMedia || 'all'})`);
       }
       if (after.headerPos && after.headerPos !== 'fixed') {
         fail(page, `.main-header position is '${after.headerPos}', expected 'fixed' - full stylesheet not in effect`);

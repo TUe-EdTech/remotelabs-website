@@ -158,18 +158,15 @@ borders, icons, and active states are all black.
 - **Methodology**: Consistent class naming (not strict BEM, but predictable and component-scoped)
 - **Organization**: Group styles by component/functionality
 - **Variables**: Use CSS variables for colors and common values. The `:root`
-  token block lives INSIDE the critical section (right after `critical-start`)
-  so tokens are inlined at first paint. Design tokens: `--radius` (3px, all
-  rectangular elements - buttons, cards, banner, .fab), `--shadow-sm/md/lg`,
+  token block sits at the top of `styles.css`. Design tokens: `--radius` (3px,
+  all rectangular elements - buttons, cards, banner, .fab), `--shadow-sm/md/lg`,
   `--shadow-banner`, `--focus-ring`, `--font-body`, `--font-display`, plus the
   gray scale. `border-radius: 50%` only for icon-only circles (step number,
   video placeholder icon). Monochrome only - no gradients, no non-palette hex
-  values (use the gray tokens instead of raw #333/#666/...). New shared
-  components (e.g. `.fab`) go in the critical section too, so JS-created
-  elements are styled at first paint.
+  values (use the gray tokens instead of raw #333/#666/...)
 - **Responsive**: Mobile-first approach
 - **Breakpoints**: 480px (mobile), 768px (tablet), 1024px (desktop)
-- **Specificity**: Keep low, avoid `!important` (exception: the critical section of `styles.css`, inlined into `index.html` at build time, uses `!important` on video padding to override responsive media-query rules — this is the only justified use)
+- **Specificity**: Keep low, avoid `!important` (exception: `.video-wrapper.hero-video-wrapper` uses `!important` on padding-bottom to override the base aspect-ratio rule — this is the only justified use)
 
 ### JavaScript Practices
 - Use ES6+ features (arrow functions, template literals, etc.)
@@ -210,17 +207,13 @@ borders, icons, and active states are all black.
 - `production_source/styles.css` is the readable source of the full
   stylesheet; `npm run build:full` minifies it to `deploy/styles.min.css`.
   Edit the source, never the minified file
-- The critical above-the-fold CSS lives in the marked
-  `/* critical-start */ ... /* critical-end */` section of
-  `styles.css`; the build extracts it and fills the
-  `<style id="critical-css">` placeholder in `index.html`, so first paint
-  is not blocked by the async-loaded `styles.min.css`. `styles.css` is the
-  single source - edit critical rules there, never in `index.html`.
-  Keep the placeholder EMPTY in the source and never quote the literal
-  placeholder tag inside an HTML comment: the build regex anchors on the
-  empty tag, and a quoted copy in a comment once swallowed the injected
-  CSS (and the tags after it) into the comment, shipping an unstyled
-  page (fixed in v2.1.21; test.js guards it)
+- The pages load `styles.min.css` as a plain render-blocking `<link
+  id="main-stylesheet">` (preloaded in `<head>`). Do NOT reintroduce the
+  old async pattern (`media="print"` + JS swap): whenever the swap landed
+  after first paint it caused a large layout shift (CLS ~0.37, fixed in
+  v2.1.33). There is no separate inline critical block anymore - the
+  blocking stylesheet is the single source of styles. test.js guards the
+  blocking link; check-render.js guards that styles apply at first paint
 - Test responsiveness on mobile, tablet, desktop
 
 ### Updating JavaScript
@@ -337,8 +330,8 @@ If not using the build (not recommended):
 
 The GitHub Actions workflow (`.github/workflows/build-and-deploy.yml`) runs these gates against the freshly built `deploy/` output before it is committed:
 
-1. `npm test` (in `production_source/`) — JS syntax, CSP without `unsafe-inline`, version consistency, critical-CSS injection guards
-2. `npm run test:render` — `check-render.js` serves `deploy/` and loads each page in headless Chrome, asserting the critical CSS applies at first paint and the full stylesheet applies after load (catches an unstyled ship like v2.1.20, where the critical block was swallowed by an HTML comment while all static checks passed)
+1. `npm test` (in `production_source/`) — JS syntax, CSP without `unsafe-inline`, version consistency, render-blocking stylesheet link guards
+2. `npm run test:render` — `check-render.js` serves `deploy/` and loads each page in headless Chrome, asserting the stylesheet applies at first paint and after load (catches an unstyled ship like v2.1.20, where the page's inline CSS was swallowed by an HTML comment while all static checks passed)
 3. `node scripts/check-links.js deploy` — every local link, asset, manifest icon and sitemap URL must resolve to a real file; every in-page anchor (including SVG `<use>` icon refs) must have a matching id
 4. Lighthouse CI (`lighthouserc.json`) — minimum scores: performance >= 0.7 (median of 3 runs via `numberOfRuns`, to absorb shared-runner variance; dragged down by the 8.9 MB hero video), accessibility >= 0.9, best-practices >= 0.9, SEO >= 0.9
 

@@ -17,25 +17,19 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
     <title>Privacy Policy - Remote Labs</title>
 
-    <!-- Preload and load minified CSS (async pattern: media="print" swapped
-         to "all" by script.js to avoid render-blocking) -->
-    <link rel="preload" href="styles.min.css?v=2.1.32" as="style">
-    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.32" as="style">
-    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.32" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.32" as="font" type="font/woff2" crossorigin>
-    <!-- Critical above-the-fold CSS, injected by build.js from the marked
-         critical section of styles.css (same placeholder as index.html - see
-         the warning there about not quoting the tag inside a comment). This
-         page has no other inline layout CSS, so without it first paint is
-         unstyled and the media="print" swap causes a large layout shift. -->
-    <style id="critical-css"></style>
-
-    <link rel="stylesheet" href="styles.min.css?v=2.1.32" media="print" id="async-stylesheet">
-    <!-- Fallback if CSS fails to load or JS is disabled -->
-    <noscript><link rel="stylesheet" href="styles.min.css?v=2.1.32"></noscript>
+    <!-- Preload the minified CSS; the stylesheet link below is
+         render-blocking (same reasoning as index.html) -->
+    <link rel="preload" href="styles.min.css?v=2.1.33" as="style">
+    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.33" as="style">
+    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.33" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.33" as="font" type="font/woff2" crossorigin>
+    <!-- Main stylesheet is render-blocking on purpose: it is small
+         (styles.min.css, preloaded above) and the old async media="print"
+         swap caused layout shifts when it landed after first paint. -->
+    <link rel="stylesheet" href="styles.min.css?v=2.1.33" id="main-stylesheet">
 
     <!-- Self-hosted fonts (no external CDN dependency) -->
-    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.32">
+    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.33">
 
     <style>
         /* Clean standalone page: no site header/footer, only a back button
@@ -245,7 +239,7 @@
     </main>
 
     <!-- Load minified JavaScript -->
-    <script src="script.min.js?v=2.1.32" defer></script>
+    <script src="script.min.js?v=2.1.33" defer></script>
 
 </body>
 </html>

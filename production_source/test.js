@@ -8,9 +8,9 @@
 //     'unsafe-inline')
 //   - CSP script-src never contains 'unsafe-inline'
 //   - the email address is a real mailto: link
-//   - the critical-css block and the async stylesheet link survive HTML
-//     comment stripping in deploy/index.html (guards the build-time
-//     critical-CSS injection against comment-swallowing regressions)
+//   - the render-blocking main stylesheet link (and the absence of the old
+//     media="print" async trick) survives HTML comment stripping in the
+//     deploy pages (guards against an unstyled or layout-shifting ship)
 //   - VERSION, sw.js and every ?v= asset reference in every text file
 //     (source and deploy/) all carry the same version (catches "bumped
 //     VERSION but did not run the build" and source/deploy drift)
@@ -188,45 +188,33 @@ if (!versions) {
 }
 
 // ---------------------------------------------------------------------------
-// Critical-CSS injection checks (deploy output)
+// Render-blocking stylesheet checks (deploy output)
 // ---------------------------------------------------------------------------
-// build.js fills the empty <style id="critical-css"> placeholder in
-// index.html with the marked critical section of styles.css. If the fill
-// regex ever matches inside an HTML comment (e.g. a comment quoting the
-// literal tag), the injected CSS and the tags after it end up commented out
-// and the page renders unstyled. Guard both sides: with HTML comments
-// stripped, the source placeholder must be empty and the deploy page must
-// still carry a non-empty critical-css block and the async stylesheet link.
+// The pages load styles.min.css via a plain render-blocking <link>. If that
+// tag ever ends up inside an HTML comment, the page renders unstyled; and
+// the old media="print" async-swap pattern must not come back (it caused
+// layout shifts whenever the swap landed after first paint). With HTML
+// comments stripped, the deploy page must still carry the blocking link.
 
 function stripHtmlComments(html) {
   return html.replace(/<!--[\s\S]*?-->/g, '');
 }
 
-console.log('\nCritical-CSS injection checks:');
-for (const page of PAGES) {
-  const visible = stripHtmlComments(fs.readFileSync(path.join(ROOT, page), 'utf8'));
-  const m = visible.match(/<style id="critical-css">([\s\S]*?)<\/style>/);
-  if (m && m[1].trim()) {
-    fail(page, 'source critical-css placeholder is not empty - build.js fills it, keep it empty in the source');
-  }
-}
+console.log('\nRender-blocking stylesheet checks:');
 for (const page of PAGES) {
   const deployPath = path.join(ROOT, '../deploy', page);
   if (!fs.existsSync(deployPath)) continue;
   const visible = stripHtmlComments(fs.readFileSync(deployPath, 'utf8'));
   const srcVisible = stripHtmlComments(fs.readFileSync(path.join(ROOT, page), 'utf8'));
-  if (/id="critical-css"/.test(srcVisible)) {
-    const m = visible.match(/<style id="critical-css">([\s\S]*?)<\/style>/);
-    if (!m || !m[1].trim()) {
-      fail(`deploy/${page}`, 'critical-css block missing or empty outside HTML comments (injected CSS swallowed by a comment?)');
+  if (/id="main-stylesheet"/.test(srcVisible)) {
+    const linkOk = /<link[^>]*rel="stylesheet"[^>]*id="main-stylesheet"[^>]*>|<link[^>]*id="main-stylesheet"[^>]*rel="stylesheet"[^>]*>/.test(visible);
+    if (!linkOk) {
+      fail(`deploy/${page}`, 'render-blocking main stylesheet link missing outside HTML comments');
+    } else if (/media="print"/.test(visible)) {
+      fail(`deploy/${page}`, 'stylesheet must be render-blocking - media="print" async swap causes layout shifts');
     } else {
-      ok(`deploy/${page} critical-css block present outside comments (${m[1].length} chars)`);
+      ok(`deploy/${page} render-blocking stylesheet link present outside comments`);
     }
-  }
-  if (/id="async-stylesheet"/.test(srcVisible) && !/id="async-stylesheet"/.test(visible)) {
-    fail(`deploy/${page}`, 'async stylesheet link missing outside HTML comments');
-  } else if (/id="async-stylesheet"/.test(srcVisible)) {
-    ok(`deploy/${page} async stylesheet link present outside comments`);
   }
 }
 

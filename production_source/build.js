@@ -8,9 +8,7 @@
 //   3. Minify script.js    -> ../deploy/script.min.js    (uglify-js library API)
 //      Minify consent.js   -> ../deploy/consent.min.js   (uglify-js library API)
 //   4. Copy HTML/config files (filesToCopy) into ../deploy/ (inline <style>
-//      blocks are minified in the deploy copy only, and the empty
-//      <style id="critical-css"> placeholder in index.html is filled from
-//      the marked critical section of styles.css - sources stay readable)
+//      blocks are minified in the deploy copy only - sources stay readable)
 //   5. Copy icons into ../deploy/
 //   6. Replace ../deploy/assets with the source assets folder
 //   7. Inject partner-logo markup into ../deploy/index.html
@@ -133,36 +131,6 @@ function minifyInlineStyles(html) {
   });
 }
 
-// Extract the marked critical section (/* critical-start */ ...
-// /* critical-end */) from styles.css and minify it. styles.css is the single
-// source for the above-the-fold CSS; index.html only carries an empty
-// <style id="critical-css"> placeholder that this fills in the deploy copy.
-function getCriticalCss() {
-  const css = fs.readFileSync(path.join(SOURCE_DIR, 'styles.css'), 'utf8');
-  const m = css.match(/\/\* critical-start \*\/([\s\S]*?)\/\* critical-end \*\//);
-  if (!m) {
-    throw new Error('critical-start/critical-end markers not found in styles.css');
-  }
-  const CleanCSS = require('clean-css');
-  const result = new CleanCSS().minify(m[1]);
-  if (result.errors && result.errors.length > 0) {
-    throw new Error(result.errors.join('; '));
-  }
-  return result.styles;
-}
-
-function injectCriticalCss(html) {
-  if (!html.includes('id="critical-css"')) return html;
-  const critical = getCriticalCss();
-  // Anchor on the EMPTY placeholder only. A looser match would also hit the
-  // literal tag quoted inside an HTML comment and swallow the injected CSS
-  // (plus the tags after it) into that comment - test.js guards against it.
-  return html.replace(
-    /<style id="critical-css">\s*<\/style>/,
-    `<style id="critical-css">${critical}</style>`
-  );
-}
-
 function copyFiles(files, label) {
   for (const file of files) {
     const sourcePath = path.join(SOURCE_DIR, file);
@@ -170,7 +138,7 @@ function copyFiles(files, label) {
     if (fs.existsSync(sourcePath)) {
       if (file.endsWith('.html')) {
         const html = fs.readFileSync(sourcePath, 'utf8');
-        fs.writeFileSync(destPath, injectCriticalCss(minifyInlineStyles(html)));
+        fs.writeFileSync(destPath, minifyInlineStyles(html));
       } else {
         fs.copyFileSync(sourcePath, destPath);
       }
