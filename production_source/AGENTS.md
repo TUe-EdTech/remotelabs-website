@@ -157,7 +157,16 @@ borders, icons, and active states are all black.
 ### CSS Architecture
 - **Methodology**: Consistent class naming (not strict BEM, but predictable and component-scoped)
 - **Organization**: Group styles by component/functionality
-- **Variables**: Use CSS variables for colors and common values
+- **Variables**: Use CSS variables for colors and common values. The `:root`
+  token block lives INSIDE the critical section (right after `critical-start`)
+  so tokens are inlined at first paint. Design tokens: `--radius` (3px, all
+  rectangular elements - buttons, cards, banner, .fab), `--shadow-sm/md/lg`,
+  `--shadow-banner`, `--focus-ring`, `--font-body`, `--font-display`, plus the
+  gray scale. `border-radius: 50%` only for icon-only circles (step number,
+  video placeholder icon). Monochrome only - no gradients, no non-palette hex
+  values (use the gray tokens instead of raw #333/#666/...). New shared
+  components (e.g. `.fab`) go in the critical section too, so JS-created
+  elements are styled at first paint.
 - **Responsive**: Mobile-first approach
 - **Breakpoints**: 480px (mobile), 768px (tablet), 1024px (desktop)
 - **Specificity**: Keep low, avoid `!important` (exception: the critical section of `styles.css`, inlined into `index.html` at build time, uses `!important` on video padding to override responsive media-query rules — this is the only justified use)

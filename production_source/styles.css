@@ -29,6 +29,29 @@
    finishes loading (the later rule then wins), which is intentional.
    ========================================================================== */
 /* critical-start */
+:root {
+  --highlight-color: #000;
+  --black: #000;
+  --white: #fff;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --radius: 3px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.1);
+  --shadow-md: 0 4px 6px rgba(0,0,0,.05);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,.1);
+  --shadow-banner: 0 -4px 20px rgba(0,0,0,.15);
+  --focus-ring: 0 0 0 3px rgba(0,0,0,.25);
+  --font-body: 'Lato','Helvetica Neue',Arial,sans-serif;
+  --font-display: 'Poppins','Poppins Fallback',sans-serif;
+}
 /* Critical above-the-fold CSS, inlined so first paint is not blocked by the
    async-loaded styles.min.css (the media="print" link below, swapped to "all"
    by script.js once loaded). The full stylesheet lives in styles.css - keep
@@ -39,7 +62,7 @@
   box-sizing: border-box
 }
 body {
-  font-family: 'Lato','Helvetica Neue',Arial,sans-serif;
+  font-family: var(--font-body);
   line-height: 1.6;
   color: #000;
   background: #fff;
@@ -55,7 +78,7 @@ body {
 }
 .main-header {
   background: #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,.1);
+  box-shadow: var(--shadow-sm);
   padding: 1.5rem 0;
   position: fixed;
   width: 100%;
@@ -84,7 +107,7 @@ body {
   cursor: pointer
 }
 .logo-text {
-  font-family: 'Poppins','Poppins Fallback',sans-serif;
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.5rem;
   color: var(--black);
@@ -114,18 +137,6 @@ body {
   margin: 0 0 2rem 0;
   line-height: 1.5
 }
-.hero-cta-button {
-  background: #000;
-  color: #fff;
-  padding: .9rem 1.8rem;
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  display: inline-block;
-  font-size: 1rem;
-  text-align: left
-}
 @media (max-width:768px) {
   .container {
     padding: 0 12px
@@ -139,8 +150,7 @@ body {
   .hero-subtitle {
     font-size: 1rem
   }
-  .cta-button,
-  .hero-cta-button {
+  .cta-button {
     width: 100%;
     padding: 1rem;
     font-size: 1rem
@@ -254,7 +264,7 @@ body {
   max-width: 60%
 }
 .section-title {
-  font-family: 'Poppins','Poppins Fallback',sans-serif;
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 2.2rem;
   color: #000;
@@ -263,7 +273,7 @@ body {
 }
 .section-subtitle {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--gray-600);
   max-width: 800px;
   margin: 0 0 2rem 0;
   line-height: 1.6;
@@ -284,15 +294,15 @@ body {
 .workflow-step {
   background: #fff;
   padding: 2rem;
-  border-radius: 6px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-  transition: all 0.3s ease;
-  border: 1px solid #e5e7eb;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  transition: all .3s ease;
+  border: 1px solid var(--gray-200);
   text-align: left
 }
 .workflow-step:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 15px rgba(0,0,0,0.1)
+  box-shadow: var(--shadow-lg)
 }
 .step-icon {
   display: flex;
@@ -315,18 +325,18 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold
+  font-weight: 700
 }
 .workflow-step h3 {
-  font-family: 'Poppins','Poppins Fallback',sans-serif;
+  font-family: var(--font-display);
   font-weight: 700;
-  color: #333;
+  color: var(--gray-800);
   font-size: 1.3rem;
   margin-bottom: 1rem;
   text-align: left
 }
 .workflow-step p {
-  color: #666;
+  color: var(--gray-600);
   line-height: 1.6;
   text-align: left
 }
@@ -365,7 +375,7 @@ body {
   z-index: 10001;
   background: var(--white);
   border-top: 1px solid var(--gray-200);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, .15);
+  box-shadow: var(--shadow-banner);
   padding: 1.25rem 0
 }
 .consent-content {
@@ -381,7 +391,7 @@ body {
   flex: 1 1 320px
 }
 .consent-text h2 {
-  font-family: Poppins, 'Poppins Fallback', sans-serif;
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.1rem;
   color: var(--black);
@@ -404,8 +414,8 @@ body {
   flex-wrap: wrap
 }
 .consent-button {
-  padding: .7rem 1.4rem;
-  border-radius: 3px;
+  padding: .85rem 1.5rem;
+  border-radius: var(--radius);
   border: 2px solid var(--black);
   font-weight: 700;
   font-size: .95rem;
@@ -444,9 +454,10 @@ body {
   display: inline-flex;
   align-items: center;
   gap: .5rem;
-  padding: .7rem 1.1rem;
+  padding: .85rem 1.5rem;
   border: none;
-  border-radius: 25px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
   background: var(--highlight-color);
   color: var(--white);
   font-size: .95rem;
@@ -457,7 +468,7 @@ body {
   transition: opacity .3s, transform .2s, background .2s
 }
 .fab:hover {
-  background: #333;
+  background: var(--gray-800);
   transform: translateY(-2px)
 }
 .fab:focus-visible {
@@ -480,21 +491,7 @@ body {
 
 
 /* ---- 1. Design tokens (monochrome palette) ---- */
-:root {
-  --highlight-color: #000;
-  --black: #000;
-  --white: #fff;
-  --gray-50: #f9fafb;
-  --gray-100: #f3f4f6;
-  --gray-200: #e5e7eb;
-  --gray-300: #d1d5db;
-  --gray-400: #9ca3af;
-  --gray-500: #6b7280;
-  --gray-600: #4b5563;
-  --gray-700: #374151;
-  --gray-800: #1f2937;
-  --gray-900: #111827
-}
+
 /* ---- 2. Base: reset, body, accessibility helpers, layout container ---- */
 html {
   scroll-behavior: smooth!important
@@ -535,7 +532,7 @@ body {
   border: 0
 }
 body {
-  font-family: 'Lato','Helvetica Neue',Arial,sans-serif;
+  font-family: var(--font-body);
   line-height: 1.6;
   color: #000;
   background: #fff;
@@ -547,14 +544,14 @@ body::-webkit-scrollbar {
   width: 10px
 }
 body::-webkit-scrollbar-track {
-  background: #f1f1f1
+  background: var(--gray-100)
 }
 body::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 5px
+  background: var(--gray-400);
+  border-radius: var(--radius)
 }
 body::-webkit-scrollbar-thumb:hover {
-  background: #555
+  background: var(--gray-500)
 }
 .container {
   width: 100%;
@@ -583,7 +580,7 @@ body::-webkit-scrollbar-thumb:hover {
   height: auto
 }
 .logo-text {
-  font-family: 'Poppins','Poppins Fallback',sans-serif;
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.5rem;
   color: var(--black);
@@ -600,12 +597,12 @@ body::-webkit-scrollbar-thumb:hover {
   transition: all .3s ease
 }
 .cta-button:hover {
-  background: #333;
+  background: var(--gray-800);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,.2)
+  box-shadow: var(--shadow-lg)
 }
 .cta-button:focus {
-  outline: 2px solid #333;
+  outline: 2px solid var(--gray-800);
   outline-offset: 2px
 }
 /* ---- 4. Hero section ---- */
@@ -626,7 +623,7 @@ body::-webkit-scrollbar-thumb:hover {
   width: 100%
 }
 .hero-content-right h3 {
-  font-family: 'Poppins','Poppins Fallback',sans-serif;
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.3rem;
   margin-bottom: 1rem;
@@ -654,7 +651,7 @@ body::-webkit-scrollbar-thumb:hover {
   }
 }
 .hero-title {
-  font-family: 'Poppins','Poppins Fallback',sans-serif;
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 3.5rem;
   margin-bottom: 1.2rem;
@@ -688,28 +685,7 @@ body::-webkit-scrollbar-thumb:hover {
     font-size: .95rem
   }
 }
-.hero-cta-button {
-  background: var(--highlight-color);
-  color: var(--white);
-  padding: .9rem 1.8rem;
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  display: inline-block;
-  font-size: 1rem;
-  transition: all .3s ease;
-  text-align: left
-}
-.hero-cta-button:hover {
-  background: #333;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,.3)
-}
-.hero-cta-button:focus {
-  outline: 2px solid #333;
-  outline-offset: 2px
-}
+
 /* ---- 5. Generic sections & headings ---- */
 section {
   padding: 4rem 0
@@ -725,9 +701,9 @@ section {
   }
 }
 .section-title {
-  font-family: 'Poppins','Poppins Fallback',sans-serif;
+  font-family: var(--font-display);
   font-weight: 700;
-  font-size: 2rem;
+  font-size: 2.2rem;
   margin-bottom: 1rem;
   color: var(--black);
   text-align: left
@@ -743,7 +719,7 @@ section {
   }
 }
 .section-subtitle {
-  font-family: 'Lato',sans-serif;
+  font-family: var(--font-body);
   text-align: left;
   color: var(--gray-600);
   max-width: 600px;
@@ -822,7 +798,16 @@ footer {
   transition: color .3s
 }
 .footer-section ul li a:hover {
-  color: var(--highlight-color)
+  color: var(--white)
+}
+/* Links outside the lists (e.g. the email icon in Contact Us) get the same
+   treatment - without this they render in the browser's default link blue. */
+.footer-section p a {
+  color: var(--gray-300);
+  transition: color .3s
+}
+.footer-section p a:hover {
+  color: var(--white)
 }
 .publications div {
   margin-bottom: 1rem
@@ -830,7 +815,7 @@ footer {
 .publications a {
   color: var(--white);
   text-decoration: none;
-  font-weight: 600
+  font-weight: 700
 }
 .publications span {
   color: var(--gray-400);
@@ -878,7 +863,7 @@ footer {
   left: 0;
   width: 60px;
   height: 3px;
-  background: linear-gradient(90deg,var(--highlight-color),#333);
+  background: linear-gradient(90deg,var(--highlight-color),var(--gray-800));
   border-radius: 3px
 }
 .contact-header .section-subtitle {
@@ -900,15 +885,15 @@ footer {
   transform: scale(1.05)
 }
 .benefits-title {
-  font-family: 'Poppins','Poppins Fallback',sans-serif;
+  font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.8rem;
+  font-size: 2.2rem;
   margin-bottom: .5rem;
   color: var(--black);
   text-align: left
 }
 .benefits-intro {
-  font-family: 'Lato',sans-serif;
+  font-family: var(--font-body);
   font-size: 1.1rem;
   line-height: 1.5;
   color: var(--gray-600);
@@ -951,7 +936,7 @@ footer {
   z-index: 2
 }
 .benefit-number {
-  font-family: 'Poppins','Poppins Fallback',sans-serif;
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.1rem;
   color: var(--gray-500);
@@ -962,7 +947,7 @@ footer {
   flex: 1
 }
 .benefit-text h3 {
-  font-family: 'Poppins','Poppins Fallback',sans-serif;
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.2rem;
   margin-bottom: 0.75rem;
@@ -1016,13 +1001,13 @@ footer {
   margin: 3rem auto;
   padding: 2rem;
   background: linear-gradient(135deg,rgba(0,0,0,.05) 0%,rgba(255,255,255,0) 100%);
-  border-radius: 6px;
+  border-radius: var(--radius);
   border: 1px solid var(--gray-100);
   max-width: 800px
 }
 .cta-intro {
-  font-family: 'Poppins','Poppins Fallback',sans-serif;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 700;
   font-size: 1.2rem;
   color: var(--black);
   margin-bottom: 2rem;
@@ -1041,27 +1026,27 @@ footer {
   justify-content: center;
   gap: .5rem;
   padding: 1rem 2rem;
-  border-radius: 4px;
+  border-radius: var(--radius);
   font-weight: 700;
   font-size: 1.05rem;
   text-decoration: none;
   transition: all .3s ease;
   min-width: 200px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,.1)
+  box-shadow: var(--shadow-md)
 }
 .contact-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0,0,0,.15)
+  box-shadow: var(--shadow-lg)
 }
 .contact-button.primary {
-  background: linear-gradient(135deg,var(--highlight-color) 0%,#333 100%);
+  background: linear-gradient(135deg,var(--highlight-color) 0%,var(--gray-800) 100%);
   color: var(--white);
   border: 2px solid var(--highlight-color)
 }
 .contact-button.primary:hover {
-  background: linear-gradient(135deg,#333 0%,var(--highlight-color) 100%);
-  box-shadow: 0 6px 20px rgba(0,0,0,.3)
+  background: linear-gradient(135deg,var(--gray-800) 0%,var(--highlight-color) 100%);
+  box-shadow: var(--shadow-lg)
 }
 .contact-button.demo-button {
   background-color: var(--white);
@@ -1074,7 +1059,7 @@ footer {
   box-shadow: 0 6px 20px rgba(0,0,0,.2)
 }
 .contact-button:focus {
-  outline: 2px solid #333;
+  outline: 2px solid var(--gray-800);
   outline-offset: 2px
 }
 .contact-button i,
@@ -1110,7 +1095,7 @@ footer {
   gap: .5rem
 }
 .direct-contact:hover {
-  color: #333;
+  color: var(--gray-800);
   text-decoration: underline
 }
 .direct-contact:before {
@@ -1162,16 +1147,16 @@ footer {
 }
 .experiment-step {
   background: #fff;
-  border-radius: 6px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-  transition: all 0.3s ease;
-  border: 1px solid #e5e7eb;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  transition: all .3s ease;
+  border: 1px solid var(--gray-200);
   display: flex;
   flex-direction: column
 }
 .experiment-step:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 15px rgba(0,0,0,0.1)
+  box-shadow: var(--shadow-lg)
 }
 .experiment-image-wrapper {
   width: 100%;
@@ -1182,7 +1167,7 @@ footer {
   height: auto;
   max-height: 250px;
   object-fit: cover;
-  border-radius: 6px 6px 0 0;
+  border-radius: var(--radius) var(--radius) 0 0;
   display: block
 }
 .experiment-content {
@@ -1190,15 +1175,15 @@ footer {
   padding: 1.5rem
 }
 .experiment-content h3 {
-  font-family: 'Poppins','Poppins Fallback',sans-serif;
+  font-family: var(--font-display);
   font-weight: 700;
-  color: #333;
+  color: var(--gray-800);
   font-size: 1.3rem;
   margin-bottom: 1rem;
   text-align: left
 }
 .experiment-content p {
-  color: #666;
+  color: var(--gray-600);
   line-height: 1.6;
   text-align: left;
   margin-bottom: 1.5rem
@@ -1214,7 +1199,7 @@ footer {
   display: inline-block
 }
 .experiment-button:hover {
-  background: #333
+  background: var(--gray-800)
 }
 @media (max-width:768px) {
   .experiment-steps {
@@ -1261,15 +1246,15 @@ footer {
   position: relative;
   width: 420px;
   height: 56px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  background: var(--gray-100);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
   overflow: hidden;
-  transition: all 0.3s ease
+  transition: all .3s ease
 }
 .toggle-switch:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1)
+  box-shadow: var(--shadow-lg)
 }
 .toggle-input {
   display: none
@@ -1281,10 +1266,10 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.9rem;
-  color: #666;
-  transition: all 0.3s ease;
+  color: var(--gray-600);
+  transition: all .3s ease;
   z-index: 3;
   cursor: pointer;
   pointer-events: auto
@@ -1303,13 +1288,13 @@ footer {
   position: absolute;
   width: 33.333%;
   height: 100%;
-  background: linear-gradient(135deg, #000 0%, #333 100%);
-  border-radius: 10px;
+  background: var(--black);
+  border-radius: var(--radius);
   top: 0;
   left: 0;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
   pointer-events: none
 }
 #toggle-students:checked ~ .toggle-slider {
@@ -1319,31 +1304,31 @@ footer {
   color: #fff
 }
 #toggle-students:checked ~ .toggle-teachers {
-  color: #666
+  color: var(--gray-600)
 }
 #toggle-students:checked ~ .toggle-organizations {
-  color: #666
+  color: var(--gray-600)
 }
 #toggle-teachers:checked ~ .toggle-slider {
   transform: translateX(100%)
 }
 #toggle-teachers:checked ~ .toggle-students {
-  color: #666
+  color: var(--gray-600)
 }
 #toggle-teachers:checked ~ .toggle-teachers {
   color: #fff
 }
 #toggle-teachers:checked ~ .toggle-organizations {
-  color: #666
+  color: var(--gray-600)
 }
 #toggle-organizations:checked ~ .toggle-slider {
   transform: translateX(200%)
 }
 #toggle-organizations:checked ~ .toggle-students {
-  color: #666
+  color: var(--gray-600)
 }
 #toggle-organizations:checked ~ .toggle-teachers {
-  color: #666
+  color: var(--gray-600)
 }
 #toggle-organizations:checked ~ .toggle-organizations {
   color: #fff
@@ -1367,7 +1352,7 @@ footer {
   max-width: 120px;
   object-fit: contain;
   filter: grayscale(100%) opacity(0.7);
-  transition: all 0.3s ease;
+  transition: all .3s ease;
   cursor: pointer
 }
 .partner-logos a {
@@ -1392,8 +1377,8 @@ footer {
   /* 16:10 aspect ratio (1920x1200) */
   height: 0;
   overflow: hidden;
-  border-radius: 6px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
   background: transparent
 }
 .video-wrapper.hero-video-wrapper {
@@ -1411,7 +1396,7 @@ body .video-container .workflow-video:not(.hero-video) {
   left: 0;
   width: 100% !important;
   height: 100% !important;
-  border-radius: 6px;
+  border-radius: var(--radius);
   object-fit: contain !important;
   background: #000; /* Restore black for smooth video transitions */
   
@@ -1427,7 +1412,7 @@ body .video-container .video-wrapper.hero-video-wrapper {
   left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 6px;
+  border-radius: var(--radius);
   object-fit: cover;
   background: transparent
 }
@@ -1451,7 +1436,7 @@ body .video-container .video-wrapper.hero-video-wrapper {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all .3s ease;
   font-size: 16px
 }
 .video-control-btn:hover {
@@ -1464,17 +1449,17 @@ body .video-container .video-wrapper.hero-video-wrapper {
 }
 .workflow-step {
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all .3s ease;
   position: relative
 }
 .workflow-step:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1)
+  box-shadow: var(--shadow-lg)
 }
 .workflow-step.active-step {
   border: 2px solid #000;
-  background: #f9fafb;
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2)
+  background: var(--gray-50);
+  box-shadow: var(--focus-ring)
 }
 .workflow-step.active-step::after {
   content: '';
@@ -1499,12 +1484,12 @@ body .video-container .video-wrapper.hero-video-wrapper {
   }
 }
 .workflow-step h3 {
-  font-family: 'Poppins','Poppins Fallback',sans-serif;
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.2rem;
   margin-bottom: 1rem;
   color: var(--black);
-  transition: color 0.3s ease
+  transition: color .3s ease
 }
 .workflow-step p {
   color: var(--gray-600);
@@ -1517,17 +1502,13 @@ body .video-container .video-wrapper.hero-video-wrapper {
 .workflow-step.active-step .step-number {
   background: white;
   color: #000;
-  box-shadow: 0 0 0 2px #000
-}
-#current-video-title {
-  font-size: 0.95rem;
-  font-weight: 500
+  box-shadow: var(--focus-ring)
 }
 /* Refined active step styling - Sleek & Subtle */
 .workflow-step.active-step {
   border: 1px solid #000;
   background: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08)
+  box-shadow: var(--shadow-md)
 }
 /* Mobile-specific optimizations */
 @media (max-width: 480px) {
@@ -1555,8 +1536,7 @@ body .video-container .video-wrapper.hero-video-wrapper {
     justify-content: center
   }
   /* Optimize touch targets */
-  .cta-button,
-  .hero-cta-button {
+  .cta-button {
     min-height: 48px;
     padding: 12px 16px
   }
@@ -1585,7 +1565,7 @@ body .video-container .video-wrapper.hero-video-wrapper {
   /* Widescreen video on mobile */
   .video-wrapper {
     padding-bottom: 56.25%;
-    border-radius: 6px;
+    border-radius: var(--radius);
     overflow: hidden;
     margin-bottom: 1.5rem
   }
@@ -1641,7 +1621,7 @@ body .video-container .video-wrapper.hero-video-wrapper {
   position: relative;
   overflow: hidden;
   background: var(--gray-100);
-  border-radius: 6px
+  border-radius: var(--radius)
 }
 .placeholder-loading::after {
   content: '';
@@ -1682,7 +1662,7 @@ img.media-error {
   justify-content: center;
   background: var(--gray-900);
   color: var(--white);
-  border-radius: 6px
+  border-radius: var(--radius)
 }
 .video-placeholder .icon {
   width: 4rem;
