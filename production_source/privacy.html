@@ -19,17 +19,17 @@
 
     <!-- Preload the minified CSS; the stylesheet link below is
          render-blocking (same reasoning as index.html) -->
-    <link rel="preload" href="styles.min.css?v=2.1.34" as="style">
-    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.34" as="style">
-    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.34" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.34" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="styles.min.css?v=2.1.35" as="style">
+    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.35" as="style">
+    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.35" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.35" as="font" type="font/woff2" crossorigin>
     <!-- Main stylesheet is render-blocking on purpose: it is small
          (styles.min.css, preloaded above) and the old async media="print"
          swap caused layout shifts when it landed after first paint. -->
-    <link rel="stylesheet" href="styles.min.css?v=2.1.34" id="main-stylesheet">
+    <link rel="stylesheet" href="styles.min.css?v=2.1.35" id="main-stylesheet">
 
     <!-- Self-hosted fonts (no external CDN dependency) -->
-    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.34">
+    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.35">
 
     <style>
         /* Clean standalone page: no site header/footer, only a back button
@@ -116,7 +116,9 @@
                 It collects page URL, referrer, browser and operating system, device type, and country
                 (derived from your IP address, which is not stored). The Umami tracker does not use
                 cookies, no personally identifiable information is collected, and users are not tracked
-                across websites.</p>
+                across websites. The tracker script itself is served from remote-labs.eu (self-hosted),
+                so ad blockers do not block it; only the analytics data is sent to Umami's EU cloud,
+                and only after you accept.</p>
             </div>
 
             <div class="privacy-section">
@@ -239,7 +241,7 @@
     </main>
 
     <!-- Load minified JavaScript -->
-    <script src="script.min.js?v=2.1.34" defer></script>
+    <script src="script.min.js?v=2.1.35" defer></script>
 
 </body>
 </html>

@@ -1,11 +1,12 @@
 // Remote Labs - consent-gated analytics (GDPR / ePrivacy Art. 5(3)).
 //
-// The site sets NO cookies. The only third-party script is Umami analytics
-// (cloud.umami.is, cookieless), and it is loaded ONLY after the visitor
-// explicitly accepts in the banner below - never before. The Umami <script>
-// tag therefore no longer lives in index.html; this file injects it (plus
-// the preconnect hints) at runtime, so nothing contacts cloud.umami.is
-// without consent.
+// The site sets NO cookies. The only third-party contact is the Umami
+// analytics collection endpoint (cloud.umami.is, cookieless, EU region), and
+// it is contacted ONLY after the visitor explicitly accepts in the banner
+// below - never before. The tracker script itself is self-hosted
+// (umami-tracker.js, served from this site so ad blockers cannot block it -
+// https://docs.umami.is/docs/bypass-ad-blockers) and does not live in
+// index.html; this file injects it (plus the preconnect hint) at runtime.
 //
 // Behaviour:
 //   - Consent choice is stored in localStorage ('rl-consent', 12-month TTL).
@@ -25,10 +26,27 @@
 
   var CONSENT_KEY = 'rl-consent';
   var CONSENT_TTL = 31536000000; // 12 months, in ms
-  var UMAMI_SRC = 'https://cloud.umami.is/script.js';
+  // Self-hosted tracker: byte-exact copy of cloud.umami.is/script.js (see
+  // umami-tracker.js). Served from this site and versioned with the same ?v=
+  // as this script's own URL, so the service worker's cache-first ?v=
+  // handling cache-busts it on every release.
+  var UMAMI_TRACKER = 'umami-tracker.js';
+  // Collection endpoint: Umami Cloud (EU region) - the only third-party host
+  // contacted, and only after consent.
+  var UMAMI_HOST_URL = 'https://cloud.umami.is';
   var UMAMI_WEBSITE_ID = '8d0377d8-c1de-4001-b844-27ec489392ce';
-  // SRI hash of the Umami script - keep in sync with index.html comments.
+  // SRI hash of umami-tracker.js (sha384 of the file bytes). test.js asserts
+  // the source and deploy/ copies match this value - when refreshing the
+  // vendored tracker, update the file and this constant together.
   var UMAMI_INTEGRITY = 'sha384-Kl9WoD7/D7ZGlOvsI8CDV5klPo4Mc7WzV80E+05bdd6tZs+koxB0MmImAFo/8r7M';
+
+  // Capture this script's own ?v= now: document.currentScript is only
+  // available during the initial synchronous execution, but loadAnalytics()
+  // can also run later from a banner click.
+  var VERSION_PARAM = (function () {
+    var m = document.currentScript && document.currentScript.src.match(/[?&]v=([^&]+)/);
+    return m ? '?v=' + m[1] : '';
+  })();
 
   function dntEnabled() {
     return navigator.doNotTrack === '1' ||
@@ -66,25 +84,22 @@
 
   var analyticsLoaded = false;
 
-  // Inject the preconnect hints and the SRI-pinned Umami script. Allowed by
-  // the CSP: script-src contains https://cloud.umami.is, and Umami's own
-  // injected inline script is covered by its hash in script-src.
+  // Inject the preconnect hint and the SRI-pinned, self-hosted Umami tracker.
+  // Allowed by the CSP: the tracker loads from 'self' (script-src), its data
+  // POST goes to cloud.umami.is (connect-src), and Umami's own injected
+  // inline script is covered by its hash in script-src.
   function loadAnalytics() {
     analyticsLoaded = true;
-    var pre1 = document.createElement('link');
-    pre1.rel = 'preconnect';
-    pre1.href = 'https://cloud.umami.is';
-    var pre2 = document.createElement('link');
-    pre2.rel = 'preconnect';
-    pre2.href = 'https://gateway.umami.is';
-    pre2.crossOrigin = 'anonymous';
-    document.head.appendChild(pre1);
-    document.head.appendChild(pre2);
+    var pre = document.createElement('link');
+    pre.rel = 'preconnect';
+    pre.href = UMAMI_HOST_URL;
+    document.head.appendChild(pre);
 
     var s = document.createElement('script');
     s.defer = true;
-    s.src = UMAMI_SRC;
+    s.src = UMAMI_TRACKER + VERSION_PARAM;
     s.setAttribute('data-website-id', UMAMI_WEBSITE_ID);
+    s.setAttribute('data-host-url', UMAMI_HOST_URL);
     s.integrity = UMAMI_INTEGRITY;
     s.crossOrigin = 'anonymous';
     document.body.appendChild(s);

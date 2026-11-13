@@ -37,7 +37,11 @@ const VERSION_PATH = path.join(SOURCE_DIR, '..', 'VERSION');
 const filesToSync = ['index.html', 'privacy.html', 'assets/fonts/fonts.css'];
 
 // Files copied verbatim from production_source/ into deploy/.
-const filesToCopy = ['index.html', 'privacy.html', 'sw.js', 'robots.txt', 'sitemap.xml', '.htaccess'];
+// umami-tracker.js is the byte-exact Umami Cloud tracker (self-hosted so ad
+// blockers cannot block it - see https://docs.umami.is/docs/bypass-ad-blockers).
+// It must stay byte-identical to the pinned copy: its sha384 is UMAMI_INTEGRITY
+// in consent.js (asserted by test.js), so never edit or re-minify it here.
+const filesToCopy = ['index.html', 'privacy.html', 'sw.js', 'robots.txt', 'sitemap.xml', '.htaccess', 'umami-tracker.js'];
 
 const iconFiles = ['icon-192x192.svg', 'icon-512x512.svg'];
 
@@ -267,6 +271,7 @@ function main() {
   console.log('  - deploy/styles.min.css');
   console.log('  - deploy/script.min.js');
   console.log('  - deploy/consent.min.js');
+  console.log('  - deploy/umami-tracker.js');
   console.log('  - deploy/index.html');
   console.log('  - deploy/privacy.html');
   console.log('  - deploy/sw.js');

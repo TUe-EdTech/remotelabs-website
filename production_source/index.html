@@ -7,16 +7,18 @@
       Content-Security-Policy is only honoured when delivered via <meta> inside <head>.
       Inline scripts and onclick handlers have been removed, so script-src no
       longer needs 'unsafe-inline'. Analytics (Umami Cloud) is consent-gated:
-      consent.min.js loads cloud.umami.is/script.js only after the visitor
-      accepts in the consent banner, so no analytics request is made before
-      consent. The one inline script that Umami then injects is whitelisted by
+      consent.min.js loads the self-hosted tracker umami-tracker.js (served
+      from this site, so ad blockers do not block it) only after the visitor
+      accepts in the consent banner; the tracker then sends its data to
+      cloud.umami.is (EU), so no analytics request is made before consent.
+      The one inline script that Umami then injects is whitelisted by
       hash in script-src below (without re-adding 'unsafe-inline', an XSS
       vector). The headers that browsers ignore as meta tags (X-Frame-Options,
       X-Content-Type-Options, Referrer-Policy, Strict-Transport-Security,
       Permissions-Policy) MUST be sent as real HTTP response headers - see
       deploy/.htaccess (or the TU/e web server / proxy).
     -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cloud.umami.is 'sha256-ZswfTY7H35rbv8WC7NXBoiC7WNu86vSzCDChNWwZZDM='; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://img.shields.io; media-src 'self'; font-src 'self'; connect-src 'self' https://status.remote-labs.eu https://cloud.umami.is https://gateway.umami.is; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ZswfTY7H35rbv8WC7NXBoiC7WNu86vSzCDChNWwZZDM='; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://img.shields.io; media-src 'self'; font-src 'self'; connect-src 'self' https://status.remote-labs.eu https://cloud.umami.is https://gateway.umami.is; object-src 'none'; base-uri 'self'; form-action 'self'">
     <meta name="description" content="Remote Labs - 24/7 Access to Physical Lab Experiments at Eindhoven University of Technology">
     <meta name="theme-color" content="#000">
     <meta name="robots" content="index, follow">
@@ -28,12 +30,12 @@
     <meta property="og:title" content="Remote Labs - 24/7 Access to Physical Lab Experiments">
     <meta property="og:description" content="Enabling students and professionals to conduct real physical lab experiments remotely, 24/7, at Eindhoven University of Technology.">
     <meta property="og:url" content="https://remote-labs.eu/">
-    <meta property="og:image" content="https://remote-labs.eu/assets/videos/posterimagevideo-og.jpg?v=2.1.34">
+    <meta property="og:image" content="https://remote-labs.eu/assets/videos/posterimagevideo-og.jpg?v=2.1.35">
     <meta property="og:locale" content="en_US">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Remote Labs - 24/7 Access to Physical Lab Experiments">
     <meta name="twitter:description" content="Enabling students and professionals to conduct real physical lab experiments remotely, 24/7, at Eindhoven University of Technology.">
-    <meta name="twitter:image" content="https://remote-labs.eu/assets/videos/posterimagevideo-og.jpg?v=2.1.34">
+    <meta name="twitter:image" content="https://remote-labs.eu/assets/videos/posterimagevideo-og.jpg?v=2.1.35">
 
     <!-- Structured data -->
     <script type="application/ld+json">
@@ -68,18 +70,18 @@
     <link rel="icon" type="image/svg+xml" sizes="192x192" href="icon-192x192.svg">
     <link rel="icon" type="image/svg+xml" sizes="512x512" href="icon-512x512.svg">
     <title>Remote Labs - 24/7 Access to Physical Lab Experiments</title>
-    <link rel="preload" href="styles.min.css?v=2.1.34" as="style">
-    <link rel="preload" href="script.min.js?v=2.1.34" as="script">
-    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.34" as="style">
-    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.34" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.34" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="styles.min.css?v=2.1.35" as="style">
+    <link rel="preload" href="script.min.js?v=2.1.35" as="script">
+    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.35" as="style">
+    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.35" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.35" as="font" type="font/woff2" crossorigin>
     <!-- Preload the LCP hero poster (AVIF, 18 KB vs 107 KB JPG) on the critical path.
          The responsive variants are declared via imagesrcset/imagesizes so the
          browser fetches the right size for the viewport. -->
     <link rel="preload" as="image" fetchpriority="high"
-          imagesrcset="assets/videos/posterimagevideo-651.avif?v=2.1.34 651w, assets/videos/posterimagevideo-1302.avif?v=2.1.34 1302w"
+          imagesrcset="assets/videos/posterimagevideo-651.avif?v=2.1.35 651w, assets/videos/posterimagevideo-1302.avif?v=2.1.35 1302w"
           imagesizes="(max-width: 768px) 100vw, 651px"
-          href="assets/videos/posterimagevideo-651.avif?v=2.1.34">
+          href="assets/videos/posterimagevideo-651.avif?v=2.1.35">
     <!-- No preconnect to the analytics origins here on purpose: connecting
          before consent would already disclose the visitor's IP to the
          analytics host. consent.min.js adds the preconnects only after the
@@ -89,10 +91,10 @@
          (styles.min.css, preloaded above) and loading it async via a
          media="print" swap caused layout shifts whenever the swap landed
          after first paint. Keep it a plain blocking link. -->
-    <link rel="stylesheet" href="styles.min.css?v=2.1.34" id="main-stylesheet">
+    <link rel="stylesheet" href="styles.min.css?v=2.1.35" id="main-stylesheet">
     
     <!-- Self-hosted fonts (no external CDN dependency) -->
-    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.34">
+    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.35">
     <style>
 @font-face{font-family:'Poppins Fallback';src:local('Arial Black'),local('Impact'),local('sans-serif');font-weight:700}
     </style>
@@ -158,8 +160,8 @@
                     <!-- No fetchpriority here on purpose: the poster (preloaded with
              fetchpriority="high" in <head>) is the LCP candidate, and the
              8.9 MB video must not compete with critical resources. -->
-                    <video class="hero-video" playsinline loop autoplay muted poster="assets/videos/posterimagevideo-651.avif?v=2.1.34" preload="metadata" id="hero-video-player">
-                        <source src="assets/videos/hero-loop.mp4?v=2.1.34" type="video/mp4">
+                    <video class="hero-video" playsinline loop autoplay muted poster="assets/videos/posterimagevideo-651.avif?v=2.1.35" preload="metadata" id="hero-video-player">
+                        <source src="assets/videos/hero-loop.mp4?v=2.1.35" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                     <!-- Video Controls - Play/Pause and Mute/Unmute -->
@@ -247,7 +249,7 @@
                              approaches the viewport (see
                              setupWorkflowVideoLazyPlay). -->
                         <video id="workflow-video" class="workflow-video" playsinline muted loop preload="none">
-                            <source src="assets/videos/book-experiment.mp4?v=2.1.34" type="video/mp4">
+                            <source src="assets/videos/book-experiment.mp4?v=2.1.35" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
                     </div>
@@ -374,7 +376,7 @@
                         <div class="experiment-steps">
                             <div class="experiment-step">
                                 <div class="experiment-image-wrapper">
-                                    <img src="assets/images/experiments/flexible-axle.jpg?v=2.1.34" alt="Flexible Axle Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
+                                    <img src="assets/images/experiments/flexible-axle.jpg?v=2.1.35" alt="Flexible Axle Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
                                 </div>
                                 <div class="experiment-content">
                                     <h3>Flexible Axle</h3>
@@ -384,7 +386,7 @@
                             
                             <div class="experiment-step">
                                 <div class="experiment-image-wrapper">
-                                    <img src="assets/images/experiments/three-tank.jpg?v=2.1.34" alt="Three-tank System Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
+                                    <img src="assets/images/experiments/three-tank.jpg?v=2.1.35" alt="Three-tank System Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
                                 </div>
                                 <div class="experiment-content">
                                     <h3>Three-tank System</h3>
@@ -394,7 +396,7 @@
                             
                             <div class="experiment-step">
                                 <div class="experiment-image-wrapper">
-                                    <img src="assets/images/experiments/magnetic-levitation.jpg?v=2.1.34" alt="Magnetic Levitation Setup Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
+                                    <img src="assets/images/experiments/magnetic-levitation.jpg?v=2.1.35" alt="Magnetic Levitation Setup Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
                                 </div>
                                 <div class="experiment-content">
                                     <h3>Magnetic Levitation Setup</h3>
@@ -463,7 +465,7 @@
                     <h2>Publications</h2>
                     <div class="publications">
                         <div class="publication-item">
-                            <a href="assets/Publications/Magazine_AMVELC_2026_digitaal.pdf?v=2.1.34#page=13" class="publication-title" target="_blank" rel="noopener noreferrer">Slimme Remote Labs klaar voor de toekomst</a>
+                            <a href="assets/Publications/Magazine_AMVELC_2026_digitaal.pdf?v=2.1.35#page=13" class="publication-title" target="_blank" rel="noopener noreferrer">Slimme Remote Labs klaar voor de toekomst</a>
                             <div class="publication-meta">
                                 <span class="publication-journal">AMV Energy Learning Community</span>
                                 <span class="publication-year">• 2026</span>
@@ -516,7 +518,7 @@
                     <p style="margin-top: 1rem;">
                         Part of<br>
                         <a href="https://www.tue.nl/en/" target="_blank" rel="noopener noreferrer" aria-label="Visit Eindhoven University of Technology">
-                            <img src="assets/images/logos/partner-logos/TUe.png?v=2.1.34" alt="TU/e - Eindhoven University of Technology" style="width: 150px; height: auto; margin-top: 0.5rem;" loading="lazy" width="235" height="64">
+                            <img src="assets/images/logos/partner-logos/TUe.png?v=2.1.35" alt="TU/e - Eindhoven University of Technology" style="width: 150px; height: auto; margin-top: 0.5rem;" loading="lazy" width="235" height="64">
                         </a>
                     </p>
                 </div>
@@ -525,12 +527,12 @@
     </footer>
 
     <!-- Consent gate first: shows the GDPR/ePrivacy banner and loads the
-         SRI-pinned Umami analytics script ONLY after explicit consent.
-         No cookies are set; the choice is kept in localStorage. -->
-    <script src="consent.min.js?v=2.1.34" defer></script>
+         SRI-pinned, self-hosted Umami tracker (umami-tracker.js) ONLY after
+         explicit consent. No cookies are set; the choice is kept in localStorage. -->
+    <script src="consent.min.js?v=2.1.35" defer></script>
 
     <!-- Load minified JavaScript with defer for better performance -->
-    <script src="script.min.js?v=2.1.34" defer></script>
+    <script src="script.min.js?v=2.1.35" defer></script>
 
 </body>
 </html>

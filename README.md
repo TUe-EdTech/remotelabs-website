@@ -20,8 +20,9 @@ experiments.
 - Loading placeholders for lazy media (shimmer behind images, poster panel
   on the workflow video) so below-the-fold content never shows as a blank box
 - Accessibility and performance budgets enforced in CI (Lighthouse)
-- Strict Content-Security-Policy (no inline scripts), SRI-pinned analytics
-  loaded only after consent, full security header set via `.htaccess`
+- Strict Content-Security-Policy (no inline scripts), SRI-pinned self-hosted
+  analytics tracker (ad-blocker resistant) loaded only after consent, full
+  security header set via `.htaccess`
 - Privacy policy page (GDPR); cookieless Umami analytics is consent-gated
   (banner in `consent.js`), never loaded before consent, DNT honoured
 - Custom error pages, sitemap, robots.txt, web app manifest

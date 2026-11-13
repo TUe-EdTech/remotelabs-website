@@ -39,8 +39,10 @@ This guide provides comprehensive documentation for the Remote Labs website at E
   `setupMediaPlaceholders`, styles.css section 13)
 - Security headers (CSP, X-Frame-Options, HSTS, etc.)
 - Consent-gated analytics (GDPR/ePrivacy): `consent.js` shows a banner and
-  loads Umami (cloud.umami.is) only after explicit consent; no cookies are
-  ever set and Do Not Track is honoured
+  loads the self-hosted Umami tracker (`umami-tracker.js`, served from this
+  site so ad blockers cannot block it) only after explicit consent; the data
+  then goes to Umami Cloud EU (cloud.umami.is). No cookies are ever set and
+  Do Not Track is honoured
 - Service worker for offline support (registered by script.js on page load over http/https)
 
 **Domain**: remote-labs.eu (site; the Remote Labs platform app lives at remotelabs.tue.nl)
@@ -499,9 +501,22 @@ Note: the deprecated `X-XSS-Protection` and `Expect-CT` headers are not used.
 ### Security Considerations
 - All external resources loaded via HTTPS
 - Service worker only registers on HTTP/HTTPS (not file://)
-- The Umami analytics hashes are fragile — if Umami changes their snippet, both
-  the script-src hash in the CSP (`sha256-...`) and the SRI hash in
-  `consent.js` (`UMAMI_INTEGRITY`) must be updated or analytics will break
+- The analytics tracker is self-hosted: `production_source/umami-tracker.js` is a
+  byte-exact copy of `https://cloud.umami.is/script.js` (the no-server-access method
+  from https://docs.umami.is/docs/bypass-ad-blockers), copied verbatim to
+  `deploy/umami-tracker.js` by the build and pinned by `UMAMI_INTEGRITY` in
+  `consent.js` (test.js asserts the source and deploy/ sha384 match that value).
+  To update the tracker: download the new `script.js` over `umami-tracker.js`,
+  recompute its sha384 into `UMAMI_INTEGRITY`, and re-check that the `sha256-...`
+  inline-script hash in index.html's CSP still matches what the new script injects —
+  otherwise analytics breaks silently. `consent.js` loads it with
+  `data-host-url=https://cloud.umami.is`, so collection still goes to Umami Cloud EU.
+  To exclude your own visits from the stats, follow
+  https://docs.umami.is/docs/exclude-my-own-visits: run
+  `localStorage.setItem('umami.disabled', 1)` in the devtools console on
+  remote-labs.eu in each browser you test with (the tracker honours that flag).
+  Making the collection endpoint first-party too (proxying `/api/send`) needs a
+  server-side reverse proxy - tracked in the root `TODO.md`.
 - No user input processed on client side
 - No forms that could be vulnerable to CSRF
 

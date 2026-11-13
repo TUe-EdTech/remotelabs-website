@@ -52,7 +52,39 @@ function assertSyntax(file) {
 }
 
 console.log('\nJS syntax checks:');
-['script.js', 'consent.js', 'sw.js', 'build.js', 'test.js', 'check-render.js'].forEach(assertSyntax);
+['script.js', 'consent.js', 'sw.js', 'umami-tracker.js', 'build.js', 'test.js', 'check-render.js'].forEach(assertSyntax);
+
+// ---------------------------------------------------------------------------
+// Analytics tracker SRI consistency
+// ---------------------------------------------------------------------------
+
+// The self-hosted Umami tracker (umami-tracker.js, a byte-exact copy of
+// https://cloud.umami.is/script.js) is pinned by sha384 in consent.js
+// (UMAMI_INTEGRITY). Source and deploy/ copies must hash to that value -
+// a drifted tracker would fail SRI at runtime and silently disable analytics.
+console.log('\nAnalytics tracker SRI checks:');
+{
+  const crypto = require('crypto');
+  const consentSrc = fs.readFileSync(path.join(ROOT, 'consent.js'), 'utf8');
+  const integrityMatch = consentSrc.match(/UMAMI_INTEGRITY = '(sha384-[^']+)'/);
+  if (!integrityMatch) {
+    fail('consent.js', 'UMAMI_INTEGRITY not found');
+  } else {
+    for (const rel of ['umami-tracker.js', path.join('..', 'deploy', 'umami-tracker.js')]) {
+      const filePath = path.join(ROOT, rel);
+      if (!fs.existsSync(filePath)) {
+        fail(rel, 'missing');
+        continue;
+      }
+      const hash = 'sha384-' + crypto.createHash('sha384').update(fs.readFileSync(filePath)).digest('base64');
+      if (hash === integrityMatch[1]) {
+        ok(`${rel} sha384 matches UMAMI_INTEGRITY`);
+      } else {
+        fail(rel, `sha384 ${hash} != UMAMI_INTEGRITY ${integrityMatch[1]}`);
+      }
+    }
+  }
+}
 
 // ---------------------------------------------------------------------------
 // HTML page checks
