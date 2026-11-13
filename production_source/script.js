@@ -373,7 +373,24 @@
   }
 
   // -----------------------------------------------------------------------
-  // 6. Smooth scrolling for in-page anchor links
+  // 6. Back button (privacy page): history.back() when possible, otherwise
+  //    the plain href="/" fallback of the link.
+  // -----------------------------------------------------------------------
+
+  function setupBackButton() {
+    const btn = document.getElementById('back-button');
+    if (!btn) return;
+    btn.addEventListener('click', (e) => {
+      if (window.history.length > 1) {
+        e.preventDefault();
+        window.history.back();
+      }
+      // else: let the href="/" navigation happen
+    });
+  }
+
+  // -----------------------------------------------------------------------
+  // 7. Smooth scrolling for in-page anchor links
   // -----------------------------------------------------------------------
 
   function setupSmoothScroll() {
@@ -408,6 +425,7 @@
     setupVideoSwitching();
     setupHeroVideoDataSaver();
     setupHeroVideoControls();
+    setupBackButton();
     setupSmoothScroll();
     setupToggleSwitch();
     setupWorkflowVideoLazyPlay();

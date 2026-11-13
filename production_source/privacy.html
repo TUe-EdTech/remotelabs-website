@@ -19,10 +19,10 @@
 
     <!-- Preload and load minified CSS (async pattern: media="print" swapped
          to "all" by script.js to avoid render-blocking) -->
-    <link rel="preload" href="styles.min.css?v=2.1.26" as="style">
-    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.26" as="style">
-    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.26" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.26" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="styles.min.css?v=2.1.27" as="style">
+    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.27" as="style">
+    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.27" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.27" as="font" type="font/woff2" crossorigin>
     <!-- Critical above-the-fold CSS, injected by build.js from the marked
          critical section of styles.css (same placeholder as index.html - see
          the warning there about not quoting the tag inside a comment). This
@@ -30,16 +30,49 @@
          unstyled and the media="print" swap causes a large layout shift. -->
     <style id="critical-css"></style>
 
-    <link rel="stylesheet" href="styles.min.css?v=2.1.26" media="print" id="async-stylesheet">
+    <link rel="stylesheet" href="styles.min.css?v=2.1.27" media="print" id="async-stylesheet">
     <!-- Fallback if CSS fails to load or JS is disabled -->
-    <noscript><link rel="stylesheet" href="styles.min.css?v=2.1.26"></noscript>
+    <noscript><link rel="stylesheet" href="styles.min.css?v=2.1.27"></noscript>
 
     <!-- Self-hosted fonts (no external CDN dependency) -->
-    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.26">
+    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.27">
 
     <style>
+        /* Clean standalone page: no site header/footer, only a back button
+           (top left). Without JS the link goes to the home page; script.js
+           upgrades it to history.back() when there is a page to return to. */
+        .back-button {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1000;
+            display: inline-flex;
+            align-items: center;
+            gap: .45rem;
+            padding: .55rem .95rem;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 3px;
+            color: #000;
+            font-weight: 700;
+            font-size: .9rem;
+            text-decoration: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .08)
+        }
+        .back-button:hover {
+            background: #f3f4f6
+        }
+        .back-button:focus-visible {
+            outline: 3px solid #000;
+            outline-offset: 2px
+        }
+        .back-button .icon {
+            width: 1em;
+            height: 1em
+        }
+
         .privacy-container {
-            padding: 4rem 0;
+            padding: 5.5rem 1.25rem 4rem;
             max-width: 800px;
             margin: 0 auto;
         }
@@ -74,21 +107,12 @@
 </head>
 <body>
 
-
-    <!-- Skip to content link -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-
-    <!-- Header - Same as main site -->
-    <header role="banner">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <span class="logo-text">Remote Labs</span>
-                </div>
-                <a href="https://remotelabs.tue.nl" class="cta-button" aria-label="Go to Remote Labs platform">Go to Remote Labs</a>
-            </div>
-        </div>
-    </header>
+    <!-- Back button, top left. Falls back to the home page without JS;
+         script.js (setupBackButton) turns it into history.back(). -->
+    <a href="/" id="back-button" class="back-button" aria-label="Back to previous page">
+        <svg class="icon" viewBox="0 0 448 512" aria-hidden="true" focusable="false"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+        Back
+    </a>
 
     <main id="main-content" role="main" tabindex="-1">
         <section class="privacy-container">
@@ -239,84 +263,8 @@
         </section>
     </main>
 
-    <!-- Footer - Same as main site -->
-    <footer role="contentinfo">
-        <div class="footer-wrapper">
-            <div class="footer-main">
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/#benefits">Benefits</a></li>
-                        <li><a href="/#contact">Contact</a></li>
-                        <li><a href="/privacy.html">Privacy Policy</a></li>
-                        <li><a href="https://remotelabs.tue.nl">Go to Remote Labs</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h3>Publications</h3>
-                    <div class="publications">
-                        <div class="publication-item">
-                            <a href="assets/Publications/Magazine_AMVELC_2026_digitaal.pdf?v=2.1.26#page=13" class="publication-title" target="_blank" rel="noopener noreferrer">Slimme Remote Labs klaar voor de toekomst</a>
-                            <div class="publication-meta">
-                                <span class="publication-journal">AMV Energy Learning Community</span>
-                                <span class="publication-year">• 2026</span>
-                            </div>
-                        </div>
-                        <div class="publication-item">
-                            <a href="https://www.tue.nl/en/news-and-events/news-overview/08-04-2026-scaling-education-through-smart-remote-labs" class="publication-title" target="_blank" rel="noopener noreferrer">Scaling education through smart remote labs</a>
-                            <div class="publication-meta">
-                                <span class="publication-journal">TU/e</span>
-                                <span class="publication-year">• 2026</span>
-                            </div>
-                        </div>
-                        <div class="publication-item">
-                            <a href="https://interregvlaned.eu/nieuws/lab-vol-energie-een-kijkje-bij-avans-met-energiek-onderwijs" class="publication-title" target="_blank" rel="noopener noreferrer">Lab vol energie: een kijkje bij Avans met Energie(k) Onderwijs</a>
-                            <div class="publication-meta">
-                                <span class="publication-journal">Interreg Vlaanderen-Nederland</span>
-                                <span class="publication-year">• 2025</span>
-                            </div>
-                        </div>
-                        <div class="publication-item">
-                            <a href="https://agdb.nl/nieuws/vrij-inpluggen-voor-elk-niveau/" class="publication-title" target="_blank" rel="noopener noreferrer">Vrij inpluggen voor elk niveau</a>
-                            <div class="publication-meta">
-                                <span class="publication-journal">AGDB</span>
-                                <span class="publication-year">• 2025</span>
-                            </div>
-                        </div>
-                        <div class="publication-item">
-                            <a href="https://doi.org/10.1007/s12528-022-09331-4" class="publication-title" target="_blank" rel="noopener noreferrer">Remote Labs in Higher Education</a>
-                            <div class="publication-meta">
-                                <span class="publication-journal">Journal of Engineering Education</span>
-                                <span class="publication-year">• 2022</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="footer-section">
-                    <h3>Contact Us</h3>
-                    <div>
-                        <p>Eindhoven University of Technology</p>
-                        <p>Den Dolech 2, 5612 AZ Eindhoven</p>
-                        <p><a href="mailto:k.m.a.aarts@tue.nl?subject=Remote%20Labs%20Inquiry" style="color: #000;">k.m.a.aarts@tue.nl</a></p>
-                        <p>+31 (0)40 247 9111</p>
-                    </div>
-                </div>
-
-                <div class="footer-section">
-                    <h3>Remote Labs</h3>
-                    <p>24/7 Access to Physical Lab Experiments, Anywhere</p>
-                    <p>&copy; 2026 Remote Labs. All rights reserved.</p>
-                    <p>Part of Eindhoven University of Technology</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
     <!-- Load minified JavaScript -->
-    <script src="script.min.js?v=2.1.26" defer></script>
+    <script src="script.min.js?v=2.1.27" defer></script>
 
 </body>
 </html>
