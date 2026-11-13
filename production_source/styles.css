@@ -434,25 +434,23 @@ body {
 
 /* ---- Reusable floating action button (.fab) ----
    One component for every floating page button: the back-to-top button on
-   the home page (.fab--bottom-right) and the back button on the privacy
-   page (.fab--top-left). Kept INSIDE the critical section so both pages
-   style it at first paint (the buttons are created by JS before the async
-   stylesheet may have loaded). ---- */
+   the home page (.fab--bottom-right, "Top") and the back button on the
+   privacy page (.fab--top-left, "Back"). Same pill with icon + label.
+   Kept INSIDE the critical section so both pages style it at first paint
+   (the buttons are created by JS before the async stylesheet may load). ---- */
 .fab {
   position: fixed;
   z-index: 10000;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: .45rem;
-  width: 50px;
-  height: 50px;
-  padding: 0;
+  gap: .5rem;
+  padding: .7rem 1.1rem;
   border: none;
-  border-radius: 50%;
+  border-radius: 25px;
   background: var(--highlight-color);
   color: var(--white);
-  font-size: 1.5rem;
+  font-size: .95rem;
+  font-weight: 700;
   line-height: 1;
   cursor: pointer;
   text-decoration: none;

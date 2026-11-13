@@ -19,10 +19,10 @@
 
     <!-- Preload and load minified CSS (async pattern: media="print" swapped
          to "all" by script.js to avoid render-blocking) -->
-    <link rel="preload" href="styles.min.css?v=2.1.28" as="style">
-    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.28" as="style">
-    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.28" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.28" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="styles.min.css?v=2.1.29" as="style">
+    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.29" as="style">
+    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.29" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.29" as="font" type="font/woff2" crossorigin>
     <!-- Critical above-the-fold CSS, injected by build.js from the marked
          critical section of styles.css (same placeholder as index.html - see
          the warning there about not quoting the tag inside a comment). This
@@ -30,12 +30,12 @@
          unstyled and the media="print" swap causes a large layout shift. -->
     <style id="critical-css"></style>
 
-    <link rel="stylesheet" href="styles.min.css?v=2.1.28" media="print" id="async-stylesheet">
+    <link rel="stylesheet" href="styles.min.css?v=2.1.29" media="print" id="async-stylesheet">
     <!-- Fallback if CSS fails to load or JS is disabled -->
-    <noscript><link rel="stylesheet" href="styles.min.css?v=2.1.28"></noscript>
+    <noscript><link rel="stylesheet" href="styles.min.css?v=2.1.29"></noscript>
 
     <!-- Self-hosted fonts (no external CDN dependency) -->
-    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.28">
+    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.29">
 
     <style>
         /* Clean standalone page: no site header/footer, only a back button
@@ -84,6 +84,7 @@
          history.back(). -->
     <a href="/" id="back-button" class="fab fab--top-left" aria-label="Back to previous page">
         <svg class="icon" viewBox="0 0 448 512" aria-hidden="true" focusable="false"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+        <span>Back</span>
     </a>
 
     <main id="main-content" role="main" tabindex="-1">
@@ -236,7 +237,7 @@
     </main>
 
     <!-- Load minified JavaScript -->
-    <script src="script.min.js?v=2.1.28" defer></script>
+    <script src="script.min.js?v=2.1.29" defer></script>
 
 </body>
 </html>
