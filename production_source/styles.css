@@ -17,6 +17,7 @@
                                                    with their component or at the end
                                                  13. Loading placeholders (lazy media,
                                                    video poster panel)
+     14. Consent banner (kept INSIDE the critical section - see below)
    ========================================================================== */
 /* ==========================================================================
    CRITICAL (above-the-fold) CSS - marked section.
@@ -362,6 +363,87 @@ body {
   }
   .workflow-steps {
     grid-template-columns: 1fr
+  }
+}
+
+/* ---- 14. Consent banner (GDPR / ePrivacy; built by consent.js) ----
+   Lives INSIDE the critical section on purpose: the banner is appended to
+   the DOM by JS before the async stylesheet may have loaded, and an unstyled
+   (in-flow) banner caused a large layout shift when styles.min.css applied.
+   With these rules inlined at first paint the banner is position:fixed from
+   the start, so showing it never shifts the page. ---- */
+.consent-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10001;
+  background: var(--white);
+  border-top: 1px solid var(--gray-200);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, .15);
+  padding: 1.25rem 0
+}
+.consent-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem
+}
+.consent-text {
+  flex: 1 1 320px
+}
+.consent-text h2 {
+  font-family: Poppins, 'Poppins Fallback', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--black);
+  margin: 0 0 .25rem
+}
+.consent-text p {
+  margin: 0 0 .35rem;
+  color: var(--gray-600);
+  font-size: .95rem;
+  line-height: 1.5
+}
+.consent-link {
+  color: var(--black);
+  text-decoration: underline;
+  font-size: .9rem
+}
+.consent-actions {
+  display: flex;
+  gap: .75rem;
+  flex-wrap: wrap
+}
+.consent-button {
+  padding: .7rem 1.4rem;
+  border-radius: 3px;
+  border: 2px solid var(--black);
+  font-weight: 700;
+  font-size: .95rem;
+  cursor: pointer
+}
+.consent-button.primary {
+  background: var(--black);
+  color: var(--white)
+}
+.consent-button.secondary {
+  background: var(--white);
+  color: var(--black)
+}
+.consent-button:focus-visible {
+  outline: 3px solid var(--black);
+  outline-offset: 2px
+}
+@media (max-width: 768px) {
+  .consent-actions {
+    width: 100%
+  }
+  .consent-button {
+    flex: 1
   }
 }
 /* critical-end */
@@ -1605,80 +1687,4 @@ img.media-error {
    itself is preloaded in <head>) */
 .hero-video-wrapper {
   background: var(--gray-900)
-}
-
-/* ---- 14. Consent banner (GDPR / ePrivacy; built by consent.js) ---- */
-.consent-banner {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 10001;
-  background: var(--white);
-  border-top: 1px solid var(--gray-200);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, .15);
-  padding: 1.25rem 0
-}
-.consent-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem
-}
-.consent-text {
-  flex: 1 1 320px
-}
-.consent-text h2 {
-  font-family: Poppins, 'Poppins Fallback', sans-serif;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--black);
-  margin: 0 0 .25rem
-}
-.consent-text p {
-  margin: 0 0 .35rem;
-  color: var(--gray-600);
-  font-size: .95rem;
-  line-height: 1.5
-}
-.consent-link {
-  color: var(--black);
-  text-decoration: underline;
-  font-size: .9rem
-}
-.consent-actions {
-  display: flex;
-  gap: .75rem;
-  flex-wrap: wrap
-}
-.consent-button {
-  padding: .7rem 1.4rem;
-  border-radius: 3px;
-  border: 2px solid var(--black);
-  font-weight: 700;
-  font-size: .95rem;
-  cursor: pointer
-}
-.consent-button.primary {
-  background: var(--black);
-  color: var(--white)
-}
-.consent-button.secondary {
-  background: var(--white);
-  color: var(--black)
-}
-.consent-button:focus-visible {
-  outline: 3px solid var(--black);
-  outline-offset: 2px
-}
-@media (max-width: 768px) {
-  .consent-actions {
-    width: 100%
-  }
-  .consent-button {
-    flex: 1
-  }
 }
