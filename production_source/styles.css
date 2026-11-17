@@ -44,7 +44,6 @@
   --accent: #BE0000;
   --font-body: 'Lato','Helvetica Neue',Arial,sans-serif;
   --font-display: 'Poppins','Poppins Fallback',sans-serif;
-  --font-mono: ui-monospace,'SF Mono',Menlo,Consolas,monospace;
   /* Vertical rhythm scale: --section-pad between top-level sections,
      --block-gap between blocks inside a section */
   --section-pad: 5rem;
@@ -153,14 +152,9 @@ body {
   text-align: left;
   margin-bottom: 0
 }
-/* How it works: an "experiment console" - sticky viewfinder video panel on
-   the left, scroll-driven stepper on the right. Desktop two-column layout,
-   single column (video first) below 992px. */
-.how-it-works .section-subtitle {
-  font-family: var(--font-mono);
-  font-size: .8rem;
-  color: var(--gray-500)
-}
+/* How it works: sticky video panel on the left, scroll-driven stepper on
+   the right. Desktop two-column layout, single column (video first) below
+   992px. Type stays on the site-wide Poppins/Lato pair - no mono here. */
 .how-grid {
   margin-top: var(--block-gap)
 }
@@ -176,65 +170,14 @@ body {
     top: 90px
   }
 }
-/* Viewfinder frame around the workflow video (same language as the
-   experimental hero): hairline frame + corner ticks + mono caption chip */
-.viewfinder {
-  position: relative;
-  padding: 10px;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  background: #fff
-}
-.tick {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  border: 2px solid #000;
-  animation: tick-in .45s ease-out both
-}
-.tick-tl { top: -2px; left: -2px; border-right: none; border-bottom: none }
-.tick-tr { top: -2px; right: -2px; border-left: none; border-bottom: none; animation-delay: .08s }
-.tick-bl { bottom: -2px; left: -2px; border-right: none; border-top: none; animation-delay: .16s }
-.tick-br { bottom: -2px; right: -2px; border-left: none; border-top: none; animation-delay: .24s }
-@keyframes tick-in {
-  from { opacity: 0; transform: scale(.5) }
-  to { opacity: 1; transform: none }
-}
 .video-panel .video-container {
   max-width: none;
   margin: 0;
   padding: 0
 }
-.viewfinder-caption {
-  position: absolute;
-  left: 22px;
-  bottom: 22px;
-  z-index: 11;
-  display: inline-flex;
-  align-items: center;
-  gap: .5rem;
-  font-family: var(--font-mono);
-  font-size: .72rem;
-  color: #fff;
-  background: rgba(0, 0, 0, .65);
-  padding: 3px 8px;
-  border-radius: 2px;
-  pointer-events: none
-}
-/* Live/status dot: the one place --accent is spent besides focus rings */
-.live-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-  animation: pulse-dot 2s ease-in-out infinite
-}
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1 }
-  50% { opacity: .35 }
-}
 /* Vertical stepper. The ::before track is a static hairline; the
-   .progress-line on top draws itself (scaleY via --progress) on scroll.
+   .progress-line on top draws itself (scaleY via --progress) on scroll,
+   eased slightly so it trails the scroll smoothly.
    Step nodes are 44px circles centered on the rail (rail center = 22px). */
 .workflow-steps {
   position: relative;
@@ -265,7 +208,8 @@ body {
   width: 2px;
   background: #000;
   transform-origin: top;
-  transform: scaleY(var(--progress, 0))
+  transform: scaleY(var(--progress, 0));
+  transition: transform .15s ease-out
 }
 .workflow-step {
   position: relative;
@@ -291,7 +235,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
+  font-weight: 700;
   font-size: 1rem;
   transition: background .3s ease, color .3s ease, border-color .3s ease
 }
@@ -434,7 +379,9 @@ body {
 
 /* ---- 2. Base: reset, body, accessibility helpers, layout container ---- */
 html {
-  scroll-behavior: smooth!important
+  scroll-behavior: smooth!important;
+  /* anchor jumps land below the sticky header instead of under it */
+  scroll-padding-top: 5rem
 }
 body {
   overscroll-behavior: contain;
@@ -1174,15 +1121,6 @@ body .video-container .video-wrapper.hero-video-wrapper {
   background: var(--accent);
   border-radius: 50%;
   animation: playing-pulse 2s infinite
-}
-/* Subtle scale-up of the pinned panel when the step changes */
-.video-panel.pulse .viewfinder {
-  animation: panel-pulse .5s ease
-}
-@keyframes panel-pulse {
-  0% { transform: scale(1) }
-  40% { transform: scale(1.015) }
-  100% { transform: scale(1) }
 }
 @keyframes playing-pulse {
   0%,

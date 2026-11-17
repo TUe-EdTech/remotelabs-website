@@ -30,12 +30,12 @@
     <meta property="og:title" content="Remote Labs - 24/7 Access to Physical Lab Experiments">
     <meta property="og:description" content="Enabling students and professionals to conduct real physical lab experiments remotely, 24/7, at Eindhoven University of Technology.">
     <meta property="og:url" content="https://remote-labs.eu/">
-    <meta property="og:image" content="https://remote-labs.eu/assets/videos/posterimagevideo-og.jpg?v=2.1.47">
+    <meta property="og:image" content="https://remote-labs.eu/assets/videos/posterimagevideo-og.jpg?v=2.1.48">
     <meta property="og:locale" content="en_US">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Remote Labs - 24/7 Access to Physical Lab Experiments">
     <meta name="twitter:description" content="Enabling students and professionals to conduct real physical lab experiments remotely, 24/7, at Eindhoven University of Technology.">
-    <meta name="twitter:image" content="https://remote-labs.eu/assets/videos/posterimagevideo-og.jpg?v=2.1.47">
+    <meta name="twitter:image" content="https://remote-labs.eu/assets/videos/posterimagevideo-og.jpg?v=2.1.48">
 
     <!-- Structured data -->
     <script type="application/ld+json">
@@ -70,18 +70,18 @@
     <link rel="icon" type="image/svg+xml" sizes="192x192" href="icon-192x192.svg">
     <link rel="icon" type="image/svg+xml" sizes="512x512" href="icon-512x512.svg">
     <title>Remote Labs - 24/7 Access to Physical Lab Experiments</title>
-    <link rel="preload" href="styles.min.css?v=2.1.47" as="style">
-    <link rel="preload" href="script.min.js?v=2.1.47" as="script">
-    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.47" as="style">
-    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.47" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.47" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="styles.min.css?v=2.1.48" as="style">
+    <link rel="preload" href="script.min.js?v=2.1.48" as="script">
+    <link rel="preload" href="assets/fonts/fonts.css?v=2.1.48" as="style">
+    <link rel="preload" href="assets/fonts/lato-400-latin.woff2?v=2.1.48" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/poppins-700-latin.woff2?v=2.1.48" as="font" type="font/woff2" crossorigin>
     <!-- Preload the LCP hero poster (AVIF, 18 KB vs 107 KB JPG) on the critical path.
          The responsive variants are declared via imagesrcset/imagesizes so the
          browser fetches the right size for the viewport. -->
     <link rel="preload" as="image" fetchpriority="high"
-          imagesrcset="assets/videos/posterimagevideo-651.avif?v=2.1.47 651w, assets/videos/posterimagevideo-1302.avif?v=2.1.47 1302w"
+          imagesrcset="assets/videos/posterimagevideo-651.avif?v=2.1.48 651w, assets/videos/posterimagevideo-1302.avif?v=2.1.48 1302w"
           imagesizes="(max-width: 768px) 100vw, 651px"
-          href="assets/videos/posterimagevideo-651.avif?v=2.1.47">
+          href="assets/videos/posterimagevideo-651.avif?v=2.1.48">
     <!-- No preconnect to the analytics origins here on purpose: connecting
          before consent would already disclose the visitor's IP to the
          analytics host. consent.min.js adds the preconnects only after the
@@ -91,10 +91,10 @@
          (styles.min.css, preloaded above) and loading it async via a
          media="print" swap caused layout shifts whenever the swap landed
          after first paint. Keep it a plain blocking link. -->
-    <link rel="stylesheet" href="styles.min.css?v=2.1.47" id="main-stylesheet">
+    <link rel="stylesheet" href="styles.min.css?v=2.1.48" id="main-stylesheet">
     
     <!-- Self-hosted fonts (no external CDN dependency) -->
-    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.47">
+    <link rel="stylesheet" href="assets/fonts/fonts.css?v=2.1.48">
     <style>
 @font-face{font-family:'Poppins Fallback';src:local('Arial Black'),local('Impact'),local('sans-serif');font-weight:700}
     </style>
@@ -160,8 +160,8 @@
                     <!-- No fetchpriority here on purpose: the poster (preloaded with
              fetchpriority="high" in <head>) is the LCP candidate, and the
              8.9 MB video must not compete with critical resources. -->
-                    <video class="hero-video" playsinline loop autoplay muted poster="assets/videos/posterimagevideo-651.avif?v=2.1.47" preload="metadata" id="hero-video-player">
-                        <source src="assets/videos/hero-loop.mp4?v=2.1.47" type="video/mp4">
+                    <video class="hero-video" playsinline loop autoplay muted poster="assets/videos/posterimagevideo-651.avif?v=2.1.48" preload="metadata" id="hero-video-player">
+                        <source src="assets/videos/hero-loop.mp4?v=2.1.48" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                     <!-- Video Controls - Play/Pause and Mute/Unmute -->
@@ -183,51 +183,41 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">How it works</h2>
-                <p class="section-subtitle">Student workflow — scroll to preview each step, or click one to load its video</p>
+                <p class="section-subtitle">A simple 3-step process to run real experiments remotely, at your own pace</p>
             </div>
 
             <div class="how-grid">
-                <!-- Sticky instrument panel: viewfinder frame around the rig
-                     footage, mono caption naming the active step -->
+                <!-- Sticky video panel: the step nearest the viewport centre
+                     loads its recording here while the steps scroll past -->
                 <div class="video-panel reveal">
-                    <div class="viewfinder">
-                        <span class="tick tick-tl" aria-hidden="true"></span>
-                        <span class="tick tick-tr" aria-hidden="true"></span>
-                        <span class="tick tick-bl" aria-hidden="true"></span>
-                        <span class="tick tick-br" aria-hidden="true"></span>
-                        <div class="video-container">
-                            <div class="video-wrapper">
-                                <div class="video-placeholder" aria-hidden="true">
-                                    <svg class="icon"><use href="#icon-play"/></svg>
-                                </div>
-                                <video id="workflow-video" class="workflow-video" playsinline muted loop preload="none">
-                                    <source src="assets/videos/book-experiment.mp4?v=2.1.47" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
+                    <div class="video-container">
+                        <div class="video-wrapper">
+                            <div class="video-placeholder" aria-hidden="true">
+                                <svg class="icon"><use href="#icon-play"/></svg>
                             </div>
-                        </div>
-                        <div class="viewfinder-caption">
-                            <span class="live-dot" aria-hidden="true"></span>
-                            <span id="workflow-caption-text">step 01/03 — book experiment timeslot</span>
+                            <video id="workflow-video" class="workflow-video" playsinline muted loop preload="none">
+                                <source src="assets/videos/book-experiment.mp4?v=2.1.48" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
                         </div>
                     </div>
                 </div>
 
                 <div class="workflow-steps">
                     <span class="progress-line" aria-hidden="true"></span>
-                    <div class="workflow-step reveal active-step" data-video="book-experiment" data-label="step 01/03 — book experiment timeslot" tabindex="0" role="button" aria-current="step">
+                    <div class="workflow-step reveal active-step" data-video="book-experiment" tabindex="0" role="button" aria-current="step">
                         <span class="step-number">1</span>
                         <h3>Book experiment timeslot</h3>
                         <p>Browse available experiments and reserve your preferred time slot through our intuitive scheduling system</p>
                     </div>
 
-                    <div class="workflow-step reveal" data-video="conduct-experiment" data-label="step 02/03 — conduct experiment" tabindex="0" role="button">
+                    <div class="workflow-step reveal" data-video="conduct-experiment" tabindex="0" role="button">
                         <span class="step-number">2</span>
                         <h3>Conduct experiment</h3>
                         <p>Access your reserved experiment and perform the lab work remotely using our interactive interface</p>
                     </div>
 
-                    <div class="workflow-step reveal" data-video="review-results" data-label="step 03/03 — review results" tabindex="0" role="button">
+                    <div class="workflow-step reveal" data-video="review-results" tabindex="0" role="button">
                         <span class="step-number">3</span>
                         <h3>Review results</h3>
                         <p>Analyze your experiment data and results at your own pace, in your own time</p>
@@ -292,7 +282,7 @@
                         <div class="experiment-steps">
                             <div class="experiment-step">
                                 <div class="experiment-image-wrapper">
-                                    <img src="assets/images/experiments/flexible-axle.jpg?v=2.1.47" alt="Flexible Axle Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
+                                    <img src="assets/images/experiments/flexible-axle.jpg?v=2.1.48" alt="Flexible Axle Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
                                 </div>
                                 <div class="experiment-content">
                                     <h3>Flexible Axle</h3>
@@ -302,7 +292,7 @@
                             
                             <div class="experiment-step">
                                 <div class="experiment-image-wrapper">
-                                    <img src="assets/images/experiments/three-tank.jpg?v=2.1.47" alt="Three-tank System Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
+                                    <img src="assets/images/experiments/three-tank.jpg?v=2.1.48" alt="Three-tank System Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
                                 </div>
                                 <div class="experiment-content">
                                     <h3>Three-tank System</h3>
@@ -312,7 +302,7 @@
                             
                             <div class="experiment-step">
                                 <div class="experiment-image-wrapper">
-                                    <img src="assets/images/experiments/magnetic-levitation.jpg?v=2.1.47" alt="Magnetic Levitation Setup Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
+                                    <img src="assets/images/experiments/magnetic-levitation.jpg?v=2.1.48" alt="Magnetic Levitation Setup Experiment" class="experiment-image" loading="lazy" decoding="async" width="773" height="498">
                                 </div>
                                 <div class="experiment-content">
                                     <h3>Magnetic Levitation Setup</h3>
@@ -381,7 +371,7 @@
                     <h2>Publications</h2>
                     <div class="publications">
                         <div class="publication-item">
-                            <a href="assets/Publications/Magazine_AMVELC_2026_digitaal.pdf?v=2.1.47#page=13" class="publication-title" target="_blank" rel="noopener noreferrer">Slimme Remote Labs klaar voor de toekomst</a>
+                            <a href="assets/Publications/Magazine_AMVELC_2026_digitaal.pdf?v=2.1.48#page=13" class="publication-title" target="_blank" rel="noopener noreferrer">Slimme Remote Labs klaar voor de toekomst</a>
                             <div class="publication-meta">
                                 <span class="publication-journal">AMV Energy Learning Community</span>
                                 <span class="publication-year">• 2026</span>
@@ -434,7 +424,7 @@
                     <p style="margin-top: 1rem;">
                         Part of<br>
                         <a href="https://www.tue.nl/en/" target="_blank" rel="noopener noreferrer" aria-label="Visit Eindhoven University of Technology">
-                            <img src="assets/images/logos/partner-logos/TUe.png?v=2.1.47" alt="TU/e - Eindhoven University of Technology" style="width: 150px; height: auto; margin-top: 0.5rem;" loading="lazy" width="235" height="64">
+                            <img src="assets/images/logos/partner-logos/TUe.png?v=2.1.48" alt="TU/e - Eindhoven University of Technology" style="width: 150px; height: auto; margin-top: 0.5rem;" loading="lazy" width="235" height="64">
                         </a>
                     </p>
                 </div>
@@ -445,10 +435,10 @@
     <!-- Consent gate first: shows the GDPR/ePrivacy banner and loads the
          SRI-pinned, self-hosted Umami tracker (umami-tracker.js) ONLY after
          explicit consent. No cookies are set; the choice is kept in localStorage. -->
-    <script src="consent.min.js?v=2.1.47" defer></script>
+    <script src="consent.min.js?v=2.1.48" defer></script>
 
     <!-- Load minified JavaScript with defer for better performance -->
-    <script src="script.min.js?v=2.1.47" defer></script>
+    <script src="script.min.js?v=2.1.48" defer></script>
 
 </body>
 </html>

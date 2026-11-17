@@ -5,7 +5,7 @@
 //   1. Tag touch devices and read the reduced-motion preference (used below)
 //   2. Back-to-top button + one rAF-throttled scroll handler (header hide/show)
 //   3. Hero video controls (play/pause, mute) + data-saver gating
-//   4. How it works: scroll-spy stepper drives a sticky viewfinder video panel
+//   4. How it works: scroll-spy stepper drives a sticky video panel
 //   5. Loading placeholders for lazy media (image shimmer, video poster panel)
 //   6. Smooth scrolling for in-page anchors
 //   7. Service worker registration (after page load, http/https only)
@@ -181,7 +181,7 @@
   }
 
   // -----------------------------------------------------------------------
-  // 4. How it works: scroll-spy stepper + progress line + viewfinder panel
+  // 4. How it works: scroll-spy stepper + progress line + sticky video panel
   // -----------------------------------------------------------------------
 
   // #workflow-video ships with preload="none" and no autoplay, so
@@ -210,13 +210,12 @@
 
   // How-it-works stepper: the step nearest the middle of the viewport (or a
   // clicked/tapped step) becomes active - its recording loads into the
-  // viewfinder panel and the mono caption names it. Video swaps are deferred
-  // while the panel is off-screen so a fast scroll never downloads all clips.
+  // sticky video panel. Video swaps are deferred while the panel is
+  // off-screen so a fast scroll never downloads all clips.
   function setupStepper() {
     const section = document.querySelector('.how-it-works');
     const steps = Array.from(document.querySelectorAll('.workflow-step[data-video]'));
     const video = document.getElementById('workflow-video');
-    const caption = document.getElementById('workflow-caption-text');
     const panel = document.querySelector('.how-it-works .video-panel');
     if (!section || !steps.length || !video) return;
 
@@ -261,12 +260,6 @@
         else s.removeAttribute('aria-current');
       });
       section.classList.add('has-active');
-      if (caption && step.dataset.label) caption.textContent = step.dataset.label;
-      if (panel) {
-        panel.classList.remove('pulse');
-        void panel.offsetWidth;
-        panel.classList.add('pulse');
-      }
       pendingId = step.dataset.video;
       maybeSwap();
     }
@@ -290,7 +283,7 @@
         entries.forEach((entry) => {
           if (entry.isIntersecting) activate(entry.target);
         });
-      }, { rootMargin: '-40% 0px -55% 0px' });
+      }, { rootMargin: '-45% 0px -45% 0px' });
       steps.forEach((s) => spy.observe(s));
     }
 
@@ -309,8 +302,12 @@
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
-          observer.unobserve(entry.target);
+          const el = entry.target;
+          el.classList.add('in-view');
+          // The stagger delay is only for the entrance; clear it afterwards
+          // so later state transitions (e.g. the active-step dim) are instant.
+          el.addEventListener('transitionend', () => { el.style.transitionDelay = ''; }, { once: true });
+          observer.unobserve(el);
         }
       });
     }, { rootMargin: '0px 0px -15% 0px' });
