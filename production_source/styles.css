@@ -1155,8 +1155,11 @@ img.media-error {
 }
 /* Continuous odometer: the numeral glides with raw scroll progress --p
    (no transition - rAF already drives it at display rate) */
+/* Odometer: 3 spans at line-height 1 = 3em tall track; shifting by -2em
+   at --p=1 lands span 03 exactly in the 1em frame (translateY % would be
+   relative to the 3em track, so use em, not %) */
 .proto-ready .runway-num-track {
-  transform: translateY(calc(var(--p, 0) * -200%));
+  transform: translateY(calc(var(--p, 0) * -2em));
   will-change: transform
 }
 .runway-body {
