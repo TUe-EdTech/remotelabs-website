@@ -38,8 +38,3 @@ Lighthouse performance budget stays at 0.7. See production_source/AGENTS.md.
    band is ~3.2:1 (passes 3:1, but marginal) and weak on video controls.
    Use a white focus outline inside `.cta-section` and on
    `.video-control-btn`; keep scarlet on light surfaces.
-
-5. **Header: hairline instead of shadow** - `.main-header` still has
-   `box-shadow: var(--shadow-sm)`; replace with
-   `border-bottom: 1px solid var(--gray-200)` to match the flat
-   hairline language of v2.1.37.

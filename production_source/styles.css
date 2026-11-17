@@ -10,16 +10,13 @@
      1. Design tokens (monochrome palette)      7. Footer
      2. Base: reset, body, a11y helpers,        8. Contact / benefits / CTA
         layout container                         9. Featured experiments
-     3. Header, logo & CTA buttons             10. Device & motion preferences
-     4. Hero section                           11. Stepper (how it works), partner
-     5. Generic sections & headings               logos, videos, workflow steps
-     6. Back-to-top button                     12. Responsive overrides are grouped
-                                                   with their component or at the end
-                                                 13. Loading placeholders (lazy media,
-                                                   video poster panel)
-     14. Consent banner                        15. Workflow prototypes
-                                                 (evaluation builds)
-   ========================================================================== */
+     3. Hero section                           10. Device & motion preferences
+     4. Generic sections & headings            11. Partner logos, videos
+     5. Back-to-top button                     12. Responsive overrides are grouped
+                                                  with their component or at the end
+                                               13. Loading placeholders (lazy media)
+     6. Consent banner                          14. How it works: chapter runway
+      ========================================================================== */
 :root {
   --highlight-color: #000;
   --black: #000;
@@ -91,41 +88,9 @@ body {
   vertical-align: -.125em;
   display: inline-block
 }
-.main-header {
-  background: #fff;
-  box-shadow: var(--shadow-sm);
-  padding: 1.5rem 0;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 1000;
-  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
-  transform: translateY(0)
-}
-/* While the how-it-works runway is locked (stage pinned), keep the site
-   header hidden so it never covers the section heading inside the stage */
-body.runway-locked .main-header {
-  transform: translateY(-100%)
-}
-.main-header.hidden {
-  transform: translateY(-100%)
-}
-.logo-link {
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer
-}
 @media (max-width:768px) {
-  .cta-button {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1rem
-  }
 }
 @media (max-width:480px) {
-  .logo-text {
-    font-size: 1rem
-  }
   .footer-section {
     margin-bottom: 2rem
   }
@@ -290,8 +255,6 @@ body.runway-locked .main-header {
 /* ---- 2. Base: reset, body, accessibility helpers, layout container ---- */
 html {
   scroll-behavior: smooth!important;
-  /* anchor jumps land below the sticky header instead of under it */
-  scroll-padding-top: 5rem;
   /* gentle snap: after a long pinned run (the how-it-works track), the
      page settles onto the next section instead of flying past it.
      proximity only - never traps, and disabled under reduced motion */
@@ -378,42 +341,9 @@ body::-webkit-scrollbar-thumb:hover {
     padding: 0 10px
   }
 }
-/* ---- 3. Header, logo & CTA buttons ---- */
-.logo {
-  display: flex;
-  align-items: center;
-  gap: .75rem
-}
-.logo-text {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.5rem;
-  color: var(--black);
-  text-decoration: none
-}
-.cta-button {
-  background: var(--black);
-  color: var(--white);
-  padding: .85rem 1.5rem;
-  border-radius: 3px;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: .95rem;
-  transition: all .3s ease
-}
-.cta-button:hover {
-  background: var(--gray-800);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg)
-}
-.cta-button:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px
-}
 /* ---- 4. Hero section ---- */
 .hero {
-  /* extra top offset clears the fixed header */
-  padding: calc(var(--section-pad) + 4.5rem) 0 var(--section-pad);
+  padding: var(--section-pad) 0;
   text-align: left
 }
 .hero-display {
@@ -822,11 +752,6 @@ footer {
     min-width: 180px
   }
 }
-.header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center
-}
 /* ---- 9. Featured experiments ---- */
 /* Featured Experiments - New Styles */
 .experiment-steps {
@@ -1041,22 +966,6 @@ body .video-container .video-wrapper.hero-video-wrapper {
   }
   .partner-logo {
     height: 30px
-  }
-  /* Header CTA button fix */
-  .header-cta {
-    width: auto;
-    min-width: 140px;
-    padding: 0.5rem 0.8rem;
-    font-size: 0.8rem;
-    height: 36px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center
-  }
-  /* Optimize touch targets */
-  .cta-button {
-    min-height: 48px;
-    padding: 12px 16px
   }
   /* Improve readability */
   body {

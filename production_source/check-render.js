@@ -130,12 +130,11 @@ async function main() {
       }
 
       // 2. After load, the render-blocking main stylesheet must be in effect
-      //    (sheet parsed with rules, header fixed).
+      //    (sheet parsed with rules).
       let after = null;
       for (let i = 0; i < 100; i++) {
         after = await evaluate(client, `(() => {
           const link = document.getElementById('main-stylesheet');
-          const header = document.querySelector('.main-header');
           const links = [...document.querySelectorAll('link[rel="stylesheet"]')].map((l) => ({
             href: l.getAttribute('href'),
             media: l.media,
@@ -145,7 +144,6 @@ async function main() {
             readyState: document.readyState,
             mainMedia: link ? link.media : null,
             mainRules: link && link.sheet ? link.sheet.cssRules.length : 0,
-            headerPos: header ? getComputedStyle(header).position : null,
             links
           };
         })()`);
@@ -156,9 +154,6 @@ async function main() {
         fail(page, `main stylesheet not applied after load (media=${after.mainMedia}, rules=${after.mainRules})`);
       } else {
         ok(`${page} styles.min.css applied (${after.mainRules} rules, media=${after.mainMedia || 'all'})`);
-      }
-      if (after.headerPos && after.headerPos !== 'fixed') {
-        fail(page, `.main-header position is '${after.headerPos}', expected 'fixed' - full stylesheet not in effect`);
       }
       for (const l of after.links) {
         if (/^https?:/.test(l.href || '')) continue; // external (none expected, but skip)

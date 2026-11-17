@@ -3,7 +3,7 @@
 //
 // What this file does, in order:
 //   1. Tag touch devices and read the reduced-motion preference (used below)
-//   2. Back-to-top button + one rAF-throttled scroll handler (header hide/show)
+//   2. Back-to-top button + one rAF-throttled scroll handler
 //   3. Hero video controls (play/pause, mute) + data-saver gating
 //   4. How it works: "chapter runway" scroll-driven sticky stage + crossfading
 //      per-step videos
@@ -53,7 +53,7 @@
   tagTouchDevice();
 
   // -----------------------------------------------------------------------
-  // 2. Back-to-top button + scroll-aware header
+  // 2. Back-to-top button
   // -----------------------------------------------------------------------
 
   const backToTop = document.createElement('button');
@@ -65,37 +65,16 @@
   });
   document.body.appendChild(backToTop);
 
-  // Single, rAF-throttled scroll handler: consolidates header hide/show
-  // (direction-aware) and back-to-top visibility.
-  const mainHeader = document.querySelector('.main-header');
-  let lastScrollY = window.pageYOffset;
-  let isScrollingDown = false;
+  // Single, rAF-throttled scroll handler: back-to-top visibility.
   let ticking = false;
 
   function onScroll() {
-    const currentY = window.pageYOffset;
-
-    if (mainHeader) {
-      if (currentY > lastScrollY && currentY > 100) {
-        if (!isScrollingDown) {
-          mainHeader.classList.add('hidden');
-          isScrollingDown = true;
-        }
-      } else if (currentY < lastScrollY) {
-        if (isScrollingDown) {
-          mainHeader.classList.remove('hidden');
-          isScrollingDown = false;
-        }
-      }
-    }
-
-    if (currentY > 50) {
+    if (window.pageYOffset > 50) {
       backToTop.classList.add('visible');
     } else {
       backToTop.classList.remove('visible');
     }
 
-    lastScrollY = currentY;
     ticking = false;
   }
 
@@ -298,9 +277,6 @@
         // holds on arrival) and chapter 3 is reached before the track ends.
         const raw = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
         target = rawToAnimP(raw, SLACK);
-        // Scroll lock: while the stage is pinned, keep the site header out
-        // of the way so the how-it-works heading stays fully in view.
-        document.body.classList.toggle('runway-locked', rect.top <= 0 && rect.bottom >= window.innerHeight);
         if (!rafId) rafId = window.requestAnimationFrame(tick);
       };
       window.addEventListener('scroll', onScroll, { passive: true });

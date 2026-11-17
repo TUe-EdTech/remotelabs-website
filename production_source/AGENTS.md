@@ -26,12 +26,11 @@
 
 ## 🎯 Project Overview
 
-This guide provides comprehensive documentation for the Remote Labs website at Eindhoven University of Technology. The website has been optimized for performance, accessibility, and user experience with modern features including scroll-based navigation hiding, a scroll-driven "chapter runway" workflow section, responsive design, and security headers.
+This guide provides comprehensive documentation for the Remote Labs website at Eindhoven University of Technology. The website has been optimized for performance, accessibility, and user experience with modern features including a scroll-driven "chapter runway" workflow section, responsive design, and security headers.
 
 **Key Features**:
-- Scroll-based header hiding (desktop & mobile)
 - "How it works" is a "chapter runway" scrollytelling section (styles.css
-  section 15, driven by `setupPrototypes` in script.js): a 400vh track with
+  section 14, driven by `setupPrototypes` in script.js): a 400vh track with
   a sticky 100vh stage — numeral counts 01→03 continuously with scroll
   (`--p`), chapter text crossfades below it (`--ch`), a rail fills with
   progress, and the video panel in the right half crossfades to the active
