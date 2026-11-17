@@ -1046,25 +1046,23 @@ img.media-error {
   overflow: hidden;
   contain: layout paint
 }
-/* the stage content fills the pinned viewport: header at the top, the
-   runway takes all remaining height and spreads its rows (numeral top,
-   chapter text bottom, video centered right), so the panel reads full
-   screen with no dead band at the bottom */
+/* header and runway travel as one compact block, centered in the pinned
+   viewport; the runway elements are sized to fill most of the screen, so
+   the block reads full-screen without spreading its parts apart */
 .proto-stage > .container {
   height: 100%;
   display: flex;
-  flex-direction: column
+  flex-direction: column;
+  justify-content: safe center
 }
 .runway {
   margin-top: clamp(1.5rem, 4vh, 3rem);
-  flex: 1;
   display: grid;
-  align-content: space-between;
   /* numeral top-left, chapter text below it, video spanning both rows on
      the right so it lines up with the numeral and the text */
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   grid-template-areas: "num video" "body video";
-  gap: clamp(1rem, 2vw, 1.5rem) clamp(1.5rem, 4vw, 3rem);
+  gap: clamp(1.5rem, 3.5vh, 2.5rem) clamp(1.5rem, 4vw, 3rem);
   align-items: start;
   width: 100%
 }
@@ -1072,7 +1070,7 @@ img.media-error {
   grid-area: num;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(4rem, 9vw, 6.5rem);
+  font-size: clamp(5rem, 12vw, 9rem);
   line-height: 1;
   color: #000
 }
@@ -1157,15 +1155,15 @@ img.media-error {
 .runway-step h3 {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
   margin-bottom: .75rem;
   color: var(--black)
 }
 .runway-step p {
   color: var(--gray-600);
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   line-height: 1.6;
-  max-width: 46ch
+  max-width: 44ch
 }
 /* Video panel: right half of the stage, kept modest (max 480px) */
 .proto-video {
@@ -1173,7 +1171,7 @@ img.media-error {
   align-self: center;
   margin: 0;
   padding: 0;
-  max-width: 480px;
+  max-width: 540px;
   width: 100%;
   justify-self: center
 }
