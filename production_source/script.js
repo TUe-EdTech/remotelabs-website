@@ -5,11 +5,11 @@
 //   1. Tag touch devices and read the reduced-motion preference (used below)
 //   2. Back-to-top button + one rAF-throttled scroll handler (header hide/show)
 //   3. Hero video controls (play/pause, mute) + data-saver gating
-//   4. How it works: scroll-spy stepper drives a sticky video panel
-//   5. Loading placeholders for lazy media (image shimmer, video poster panel)
+//   4. How it works: "chapter runway" scroll-driven sticky stage + crossfading
+//      per-step videos
+//   5. Loading placeholders for lazy media (image shimmer)
 //   6. Smooth scrolling for in-page anchors
 //   7. Service worker registration (after page load, http/https only)
-//   8. Workflow prototypes #proto-1/1a/1b: scroll-driven sticky stages
 (function () {
   'use strict';
 
@@ -182,32 +182,8 @@
   }
 
   // -----------------------------------------------------------------------
-  // 4. How it works: scroll-spy stepper + progress line + sticky video panel
+  // 4. How it works: "chapter runway" scrollytelling + crossfading step videos
   // -----------------------------------------------------------------------
-
-  // #workflow-video ships with preload="none" and no autoplay, so
-  // nothing downloads until the section approaches the viewport; then
-  // it loads and plays exactly as it did with eager autoplay.
-  function setupWorkflowVideoLazyPlay() {
-    const video = document.getElementById('workflow-video');
-    if (!video) return;
-
-    if (!('IntersectionObserver' in window)) {
-      // No observer support: restore the old eager behaviour.
-      video.play().catch(() => {});
-      return;
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          observer.disconnect();
-          video.play().catch(() => {});
-        }
-      });
-    }, { rootMargin: '600px 0px' });
-    observer.observe(video);
-  }
 
   // Two stacked video players crossfade on swap: the incoming clip fades in
   // over the outgoing one (0.6s opacity, see .workflow-video in styles.css).
@@ -241,115 +217,10 @@
     };
   }
 
-  // How-it-works stepper: the step nearest the middle of the viewport (or a
-  // clicked/tapped step) becomes active - its recording loads into the
-  // sticky video panel. Video swaps are deferred while the panel is
-  // off-screen so a fast scroll never downloads all clips.
-  function setupStepper() {
-    const section = document.querySelector('.how-it-works');
-    const steps = Array.from(document.querySelectorAll('.workflow-step[data-video]'));
-    const video = document.getElementById('workflow-video');
-    const panel = document.querySelector('.how-it-works .video-panel');
-    if (!section || !steps.length || !video) return;
-
-    const srcEl = video.querySelector('source');
-    const initialId = srcEl ? (srcEl.getAttribute('src').match(/videos\/([a-z0-9_-]+)\.mp4/) || [])[1] : null;
-    let active = null;
-    let currentId = initialId;
-    let pendingId = null;
-    // Two stacked players; a step change loads the back one and crossfades.
-    const back = document.getElementById('workflow-video-b');
-    const swapTo = makeCrossfader(video, back || video);
-
-    function swapVideo(videoId) {
-      if (!/^[a-zA-Z0-9_-]+$/.test(videoId || '')) return;
-      swapTo(videoId);
-      currentId = videoId;
-    }
-
-    function maybeSwap() {
-      if (!pendingId || pendingId === currentId) return;
-      if (panel) {
-        const rect = panel.getBoundingClientRect();
-        if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-      }
-      swapVideo(pendingId);
-      pendingId = null;
-    }
-
-    function activate(step) {
-      if (step === active) return;
-      active = step;
-      steps.forEach((s) => {
-        const on = s === step;
-        s.classList.toggle('active-step', on);
-        if (on) s.setAttribute('aria-current', 'step');
-        else s.removeAttribute('aria-current');
-      });
-      section.classList.add('has-active');
-      pendingId = step.dataset.video;
-      maybeSwap();
-    }
-
-    steps.forEach((step) => {
-      step.addEventListener('click', () => activate(step));
-      // The steps are focusable (tabindex="0" role="button"); make Enter
-      // and Space activate them like a native button.
-      step.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-          e.preventDefault();
-          activate(step);
-        }
-      });
-    });
-
-    // Scroll-spy: whichever step crosses the viewport's middle band drives
-    // the panel, so scrolling alone tells the workflow.
-    if ('IntersectionObserver' in window) {
-      const spy = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) activate(entry.target);
-        });
-      }, { rootMargin: '-45% 0px -45% 0px' });
-      steps.forEach((s) => spy.observe(s));
-    }
-
-    window.addEventListener('scroll', maybeSwap, { passive: true });
-    activate(steps[0]);
-  }
-
-  // Scroll-driven reveal of the workflow steps and video. .anim-ready is
-  // only added when IntersectionObserver exists, so without JS (or with
-  // reduced motion handled by CSS) everything simply renders visible.
-  function setupScrollReveal() {
-    const section = document.querySelector('.how-it-works');
-    if (!section || !('IntersectionObserver' in window)) return;
-    section.classList.add('anim-ready');
-    const items = section.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const el = entry.target;
-          el.classList.add('in-view');
-          // The stagger delay is only for the entrance; clear it afterwards
-          // so later state transitions (e.g. the active-step dim) are instant.
-          el.addEventListener('transitionend', () => { el.style.transitionDelay = ''; }, { once: true });
-          observer.unobserve(el);
-        }
-      });
-    }, { rootMargin: '0px 0px -15% 0px' });
-    items.forEach((el, i) => {
-      el.style.transitionDelay = (i * 0.12) + 's';
-      observer.observe(el);
-    });
-  }
-
-  // Evaluation prototypes for the workflow scrollytelling (#proto-1 base,
-  // #proto-1a with detail, #proto-1b with video). Each .proto-track is tall;
-  // a sticky stage reacts to the scroll progress --p (and chapter --ch) set
-  // here. In the video variant the chapter change crossfades the clip (only
-  // while the stage is on screen). .proto-ready gates the animated states,
-  // so without JS the prototypes render as static stacks.
+  // How it works: the .proto-track is tall; a sticky stage reacts to scroll
+  // progress --p (and chapter --ch) set here. A chapter change crossfades the
+  // clip in the video panel (only while the stage is on screen). .proto-ready
+  // gates the animated states, so without JS the chapters render statically.
   function setupPrototypes() {
     document.querySelectorAll('.proto').forEach((section) => {
       const track = section.querySelector('.proto-track');
@@ -359,6 +230,18 @@
       if (!steps.length) return;
       const players = section.querySelectorAll('.proto-video .workflow-video');
       const swapFn = players.length === 2 ? makeCrossfader(players[0], players[1]) : null;
+      // Start the first clip once the stage approaches the viewport.
+      if (players.length && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((en) => {
+            if (en.isIntersecting) {
+              players[0].play().catch(() => {});
+              io.disconnect();
+            }
+          });
+        }, { rootMargin: '600px 0px' });
+        io.observe(track);
+      }
       let lastVid = steps[0].dataset.video || null;
       let ticking = false;
       const update = () => {
@@ -393,42 +276,6 @@
     });
   }
 
-  // Draws the stepper's progress line as it scrolls through the viewport
-  // (--progress 0..1, consumed by .progress-line's scaleY in styles.css) and
-  // ignites each rail node (.lit) the moment the line reaches it.
-  function setupProgressLine() {
-    const steps = document.querySelector('.workflow-steps');
-    if (!steps) return;
-    const nodes = Array.from(steps.querySelectorAll('.workflow-step')).map((s) => {
-      const n = s.querySelector('.step-number');
-      return n ? { el: n, at: 0 } : null;
-    }).filter(Boolean);
-    const measure = () => {
-      nodes.forEach((n) => {
-        const s = n.el.closest('.workflow-step');
-        n.at = s.offsetTop + n.el.offsetTop + n.el.offsetHeight / 2;
-      });
-    };
-    measure();
-    window.addEventListener('resize', measure, { passive: true });
-    let ticking = false;
-    const update = () => {
-      ticking = false;
-      const rect = steps.getBoundingClientRect();
-      const progress = Math.min(1, Math.max(0, (window.innerHeight * 0.8 - rect.top) / rect.height));
-      steps.style.setProperty('--progress', progress.toFixed(3));
-      const reached = progress * rect.height;
-      nodes.forEach((n) => n.el.classList.toggle('lit', reached >= n.at));
-    };
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        window.requestAnimationFrame(update);
-        ticking = true;
-      }
-    }, { passive: true });
-    update();
-  }
-
   // -----------------------------------------------------------------------
   // 5. Loading placeholders for lazy media
   // -----------------------------------------------------------------------
@@ -459,18 +306,6 @@
       img.addEventListener('error', () => settle('error'), { once: true });
     });
 
-    // Workflow video: keep the poster-style placeholder panel up until the
-    // video actually starts playing (lazy-played by setupWorkflowVideoLazyPlay
-    // or by the stepper).
-    const video = document.getElementById('workflow-video');
-    if (video) {
-      const wrapper = video.closest('.video-wrapper');
-      if (wrapper) {
-        video.addEventListener('playing', () => {
-          wrapper.classList.add('video-playing');
-        }, { once: true });
-      }
-    }
   }
 
   // -----------------------------------------------------------------------
@@ -523,15 +358,11 @@
   // -----------------------------------------------------------------------
 
   function init() {
-    setupStepper();
-    setupScrollReveal();
-    setupProgressLine();
     setupPrototypes();
     setupHeroVideoDataSaver();
     setupHeroVideoControls();
     setupBackButton();
     setupSmoothScroll();
-    setupWorkflowVideoLazyPlay();
     setupMediaPlaceholders();
   }
 

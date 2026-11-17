@@ -153,117 +153,6 @@ body {
   text-align: left;
   margin-bottom: 0
 }
-/* How it works: scroll-driven stepper rail on the left; title + sticky video
-   panel in the right column. Below 992px it stacks title+video first, steps
-   below. Type stays on the site-wide Poppins/Lato pair - no mono here. */
-.how-side .section-header {
-  margin-bottom: var(--block-gap)
-}
-@media (max-width: 991px) {
-  .how-side {
-    order: -1
-  }
-}
-@media (min-width: 992px) {
-  .how-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-    gap: var(--block-gap);
-    align-items: start
-  }
-  .how-side {
-    position: sticky;
-    top: 90px
-  }
-}
-.video-panel .video-container {
-  max-width: none;
-  margin: 0;
-  padding: 0
-}
-/* Vertical stepper. The ::before track is a static hairline; the
-   .progress-line on top draws itself (scaleY via --progress) on scroll,
-   eased slightly so it trails the scroll smoothly.
-   Step nodes are 44px circles centered on the rail (rail center = 22px). */
-.workflow-steps {
-  position: relative;
-  margin-top: var(--block-gap);
-  padding-left: 3.5rem;
-  display: grid;
-  gap: 0
-}
-@media (min-width: 992px) {
-  .workflow-steps {
-    margin-top: 0
-  }
-}
-.workflow-steps::before {
-  content: '';
-  position: absolute;
-  left: 21px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--gray-200)
-}
-.progress-line {
-  position: absolute;
-  left: 21px;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: #000;
-  transform-origin: top;
-  transform: scaleY(var(--progress, 0));
-  transition: transform .15s ease-out
-}
-.workflow-step {
-  position: relative;
-  padding: 1.75rem 0;
-  border-top: 1px solid var(--gray-200);
-  cursor: pointer;
-  text-align: left;
-  touch-action: manipulation
-}
-.workflow-step:first-of-type {
-  border-top: none
-}
-.step-number {
-  position: absolute;
-  left: -3.5rem;
-  top: 1.45rem;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1px solid var(--gray-200);
-  background: #fff;
-  color: var(--gray-400);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1rem;
-  transition: background .3s ease, color .3s ease, border-color .3s ease
-}
-/* Node ignites when the progress line physically reaches it (JS sets .lit) */
-.step-number.lit {
-  background: #000;
-  border-color: #000;
-  color: #fff
-}
-/* Scroll reveal: JS adds .anim-ready only when IntersectionObserver
-   exists, so without JS the steps simply render visible. */
-.anim-ready .reveal {
-  opacity: 0;
-  transform: translateY(14px)
-}
-.anim-ready .reveal.in-view {
-  opacity: 1;
-  transform: none;
-  transition: opacity .5s ease, transform .5s ease
-}
-
 /* ---- 14. Consent banner (GDPR / ePrivacy; built by consent.js) ----
    position:fixed, so appending the banner to the DOM never shifts the
    page. ---- */
@@ -739,7 +628,7 @@ footer {
 .experiments-showcase {
   margin-top: var(--section-pad)
 }
-/* Same bordered-block component as .workflow-step / .experiment-step */
+/* Same bordered-block component as .experiment-step */
 .benefit-item {
   display: flex;
   gap: 1.25rem;
@@ -1038,7 +927,8 @@ footer {
   margin: var(--block-gap) auto 0;
   padding: 0 15px
 }
-/* Workflow video lives inside the sticky .video-panel (see stepper block).
+/* Workflow video: two stacked players crossfade on chapter change in the
+   how-it-works runway (see section 15).
    Two stacked players crossfade on step change (.is-hidden = opacity 0). */
 .workflow-video {
   transition: opacity .6s ease
@@ -1122,59 +1012,6 @@ body .video-container .video-wrapper.hero-video-wrapper {
   outline: 2px solid var(--accent);
   outline-offset: 2px
 }
-/* Active step: black hairline + scarlet live dot (its video is loaded).
-   Siblings dim once a step is active, so the current step is the focus. */
-.workflow-step.active-step {
-  border-top-color: #000
-}
-.how-it-works.has-active .workflow-step.in-view:not(.active-step) {
-  opacity: .38
-}
-.workflow-step.active-step::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 2.1rem;
-  width: 12px;
-  height: 12px;
-  background: var(--accent);
-  border-radius: 50%;
-  animation: playing-pulse 2s infinite
-}
-@keyframes playing-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 0.7
-  }
-}
-.workflow-step h3 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.35rem;
-  margin-bottom: .5rem;
-  color: var(--black);
-  transform-origin: left center;
-  transition: transform .45s ease
-}
-.workflow-step.active-step h3 {
-  transform: scale(1.06)
-}
-.workflow-step p {
-  color: var(--gray-600);
-  line-height: 1.6;
-  font-size: 1rem;
-  max-width: 56ch
-}
-.workflow-step.active-step .step-number {
-  background: #000;
-  border-color: #000;
-  color: #fff
-}
 /* Mobile-specific optimizations */
 @media (max-width: 480px) {
   /* Partner logos mobile */
@@ -1218,30 +1055,6 @@ body .video-container .video-wrapper.hero-video-wrapper {
     margin-bottom: 1.5rem
   }
 }
-/* Slightly smaller step type and rail for tablets */
-@media (max-width: 768px) {
-  .workflow-steps {
-    padding-left: 3rem
-  }
-  .workflow-steps::before,
-  .progress-line {
-    left: 14px
-  }
-  .step-number {
-    left: -3rem;
-    top: 1.6rem;
-    width: 30px;
-    height: 30px;
-    font-size: .8rem
-  }
-  .workflow-step h3 {
-    font-size: 1.1rem
-  }
-  .workflow-step p {
-    font-size: 0.95rem
-  }
-}
-
 /* ---- 13. Loading placeholders ----
    script.js (setupMediaPlaceholders) puts .placeholder-loading on the
    element holding each lazy image and .media-loading on the image itself,
@@ -1284,46 +1097,17 @@ img.media-error {
   border: 1px dashed var(--gray-300)
 }
 
-/* Workflow video: poster-style panel until the video starts playing.
-   .video-playing is added to the wrapper on the video's 'playing' event. */
-.video-placeholder {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--gray-900);
-  color: var(--white);
-  border-radius: var(--radius)
-}
-.video-placeholder .icon {
-  width: 4rem;
-  height: 4rem;
-  padding: 1.1rem;
-  border: 2px solid currentColor;
-  border-radius: 50%;
-  box-sizing: border-box
-}
-.video-wrapper.video-playing .video-placeholder {
-  display: none
-}
-
 /* Hero video: dark backdrop while the poster/video loads (the poster
    itself is preloaded in <head>) */
 .hero-video-wrapper {
   background: var(--gray-900)
 }
-/* ---- 15. Workflow prototypes (evaluation builds, 2026-11): the "chapter
-   runway" scrollytelling in three variants - #proto-1 base, #proto-1a with
-   per-chapter detail, #proto-1b with a crossfading per-chapter video. Pick
-   one, fold it into "How it works", delete the others. Each .proto-track is
-   400vh with a sticky 100vh stage; JS sets --p (0..1 scroll progress) and
-   --ch (current chapter) on the section, plus .proto-ready to enable the
-   animated states - without JS everything renders as a plain static stack. ---- */
+/* ---- 15. How it works: the "chapter runway" scrollytelling ----
+   A 400vh .proto-track drives a sticky 100vh stage (class .proto is kept for
+   the scroll driver). JS sets --p (0..1 scroll progress) and --ch (current
+   chapter) on the section, plus .proto-ready to enable the animated states -
+   without JS the chapters render as a plain static stack. Layout: numeral on
+   top-left, chapter text below it, video panel in the right half of the page. */
 .proto-track {
   height: 400vh
 }
@@ -1336,27 +1120,9 @@ img.media-error {
   overflow: hidden;
   contain: layout paint
 }
-.proto-label {
-  position: absolute;
-  top: 84px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 20;
-  font-size: .8rem;
-  font-weight: 700;
-  color: var(--gray-600);
-  background: #fff;
-  border: 1px solid var(--gray-300);
-  border-radius: 999px;
-  padding: .3rem .9rem;
-  white-space: nowrap
-}
-
-/* Prototype 1: chapter runway - numeral on top (smaller), chapter text
-   below it; variant 1B adds the video as a right-hand column */
 .runway {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: clamp(2rem, 6vw, 5rem);
   align-items: center;
   width: 100%
@@ -1447,67 +1213,17 @@ img.media-error {
   line-height: 1.6;
   max-width: 46ch
 }
-
-/* Variant 1A: per-chapter detail - hairline bullet list + time meta chip,
-   children stagger in when the chapter activates */
-.proto-depth .runway-steps {
-  min-height: 24rem
-}
-.runway-list {
-  list-style: none;
-  margin-top: 1.25rem
-}
-.runway-list li {
-  border-top: 1px solid var(--gray-200);
-  padding: .5rem 0;
-  color: var(--gray-600);
-  font-size: .95rem
-}
-.runway-meta {
-  display: inline-block;
-  margin-top: 1.25rem;
-  font-size: .8rem;
-  font-weight: 700;
-  color: var(--gray-600);
-  border: 1px solid var(--gray-300);
-  border-radius: 999px;
-  padding: .2rem .7rem
-}
-.proto-ready .proto-depth .runway-step > * {
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity .45s ease, transform .45s ease
-}
-.proto-ready .proto-depth .runway-step.on > * {
-  opacity: 1;
-  transform: none
-}
-.proto-ready .proto-depth .runway-step.on > *:nth-child(2) {
-  transition-delay: .1s
-}
-.proto-ready .proto-depth .runway-step.on > *:nth-child(3) {
-  transition-delay: .18s
-}
-.proto-ready .proto-depth .runway-step.on > *:nth-child(4) {
-  transition-delay: .26s
-}
-
-/* Variant 1B: right-hand column carries the crossfading video panel */
-.runway.with-video {
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 34%)
-}
+/* Video panel: right half of the stage, kept modest (max 480px) */
 .proto-video {
   margin: 0;
   padding: 0;
-  max-width: none
+  max-width: 480px;
+  width: 100%;
+  justify-self: center
 }
 
 @media (max-width: 768px) {
-  .proto-label {
-    top: 70px
-  }
-  .runway,
-  .runway.with-video {
+  .runway {
     grid-template-columns: 1fr;
     gap: 1.5rem
   }
@@ -1517,16 +1233,13 @@ img.media-error {
   .runway-body {
     padding-left: 2rem
   }
-  .proto-depth .runway-steps {
-    min-height: 30rem
-  }
   /* video column drops out on small screens - the text carries the chapter */
   .proto-video {
     display: none
   }
 }
 
-/* Reduced motion: collapse the tall tracks into plain stacked content */
+/* Reduced motion: collapse the tall track into plain stacked content */
 @media (prefers-reduced-motion: reduce) {
   .proto-track {
     height: auto
@@ -1535,12 +1248,6 @@ img.media-error {
     position: static;
     height: auto;
     padding: 5rem 0
-  }
-  .proto-label {
-    position: static;
-    display: inline-block;
-    transform: none;
-    margin: 0 0 2rem 15px
   }
   .proto-ready .runway-num {
     height: auto
@@ -1555,13 +1262,6 @@ img.media-error {
     margin-top: 2rem
   }
   .runway-fill {
-    transform: none
-  }
-  .proto-depth .runway-steps {
-    min-height: 0
-  }
-  .proto-ready .proto-depth .runway-step > * {
-    opacity: 1;
     transform: none
   }
 }

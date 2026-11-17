@@ -26,26 +26,23 @@
 
 ## 🎯 Project Overview
 
-This guide provides comprehensive documentation for the Remote Labs website at Eindhoven University of Technology. The website has been optimized for performance, accessibility, and user experience with modern features including scroll-based navigation hiding, scroll-animated workflow stepper, responsive design, and security headers.
+This guide provides comprehensive documentation for the Remote Labs website at Eindhoven University of Technology. The website has been optimized for performance, accessibility, and user experience with modern features including scroll-based navigation hiding, a scroll-driven "chapter runway" workflow section, responsive design, and security headers.
 
 **Key Features**:
 - Scroll-based header hiding (desktop & mobile)
-- "How it works": scroll-spy stepper rail on the left, title + sticky video
-  panel on the right — the step nearest the viewport center dims its
-  siblings and loads its video (two stacked players crossfade on swap);
-  a progress line draws down the rail on scroll and each rail node ignites
-  (.lit) when the line reaches it
-- Evaluation prototypes sit after the how-it-works section: the chapter
-  runway in three variants — `#proto-1` base, `#proto-1a` with per-chapter
-  detail lists, `#proto-1b` with a crossfading per-chapter video in the
-  pinned stage. 400vh tracks, sticky stages, scroll-driven via `--p`/`--ch`.
-  When one is picked, fold it into the how-it-works section and delete the
-  other prototype blocks (styles.css section 15) in the same commit.
+- "How it works" is a "chapter runway" scrollytelling section (styles.css
+  section 15, driven by `setupPrototypes` in script.js): a 400vh track with
+  a sticky 100vh stage — numeral counts 01→03 continuously with scroll
+  (`--p`), chapter text crossfades below it (`--ch`), a rail fills with
+  progress, and the video panel in the right half crossfades to the active
+  step's clip (two stacked players, `makeCrossfader`). The `.proto` class
+  names are historical; the section is `#how-it-works`. Video column is
+  hidden on mobile; no-JS renders a static stack; reduced-motion collapses
+  the track.
 - Optimized mobile experience
 - Performance-focused design
 - Accessible components
-- Loading placeholders for lazy media: shimmer behind images, poster panel
-  on the workflow video until it starts playing (script.js
+- Loading placeholders for lazy media: shimmer behind images (script.js
   `setupMediaPlaceholders`, styles.css section 13)
 - Security headers (CSP, X-Frame-Options, HSTS, etc.)
 - Consent-gated analytics (GDPR/ePrivacy): `consent.js` shows a banner and
@@ -373,7 +370,7 @@ The GitHub Actions workflow (`.github/workflows/build-and-deploy.yml`) runs thes
 - [ ] Responsive design (320px to 1920px+)
 - [ ] All links work
 - [ ] All images load
-- [ ] Videos play correctly (hero autoplays on normal connections; the workflow video loads/plays when scrolled near — see `setupWorkflowVideoLazyPlay` in script.js; on Save-Data/2G the hero video shows the poster until Play)
+- [ ] Videos play correctly (hero autoplays on normal connections; the how-it-works runway video lazy-plays when its stage nears the viewport and crossfades per chapter — see `setupPrototypes` in script.js; on Save-Data/2G the hero video shows the poster until Play)
 - [ ] Forms submit (if any)
 - [ ] Accessibility (keyboard navigation, screen readers)
 - [ ] **Incognito mode test** (verifies no caching issues)
