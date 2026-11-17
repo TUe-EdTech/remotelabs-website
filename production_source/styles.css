@@ -1115,15 +1115,15 @@ img.media-error {
   position: sticky;
   top: 0;
   height: 100vh;
-  display: flex;
-  /* top-aligned with a header-sized offset: the runway sits right under
-     the site header when pinned instead of floating mid-viewport */
-  align-items: flex-start;
-  padding-top: clamp(5rem, 12vh, 8rem);
+  display: block;
+  /* the section header lives inside the pinned stage, so title and runway
+     travel together with no dead space above or below */
+  padding-top: clamp(4.5rem, 9vh, 6.5rem);
   overflow: hidden;
   contain: layout paint
 }
 .runway {
+  margin-top: clamp(2rem, 6vh, 4rem);
   display: grid;
   /* numeral top-left, chapter text below it, video spanning both rows on
      the right so it lines up with the numeral and the text */
