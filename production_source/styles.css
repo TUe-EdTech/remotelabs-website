@@ -1175,11 +1175,13 @@ img.media-error {
 }
 /* Continuous odometer: the numeral glides with raw scroll progress --p
    (no transition - rAF already drives it at display rate) */
-/* Odometer: 3 spans at line-height 1 = 3em tall track; shifting by -2em
-   at --p=1 lands span 03 exactly in the 1em frame (translateY % would be
-   relative to the 3em track, so use em, not %) */
+/* Odometer snaps to whole numbers: --ch is the discrete chapter (0..2),
+   each span is 1em (line-height 1), so -1em per chapter lands exactly in
+   the 1em frame. Eased transition = the snap. (Percentages would resolve
+   against the 3em track - use em. The rail fill stays continuous via --p.) */
 .proto-ready .runway-num-track {
-  transform: translateY(calc(var(--p, 0) * -2em));
+  transform: translateY(calc(var(--ch, 0) * -1em));
+  transition: transform .45s ease;
   will-change: transform
 }
 .runway-body {

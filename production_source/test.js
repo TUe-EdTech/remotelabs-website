@@ -271,10 +271,10 @@ console.log('\nRunway scroll math checks:');
     }
   }
   const css = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
-  if (css.includes('calc(var(--p, 0) * -2em)')) {
-    ok('odometer shifts by -2em (not -200% - v2.1.63 regression guard)');
+  if (css.includes('calc(var(--ch, 0) * -1em)')) {
+    ok('odometer snaps per chapter via --ch * -1em (em, not % - v2.1.63 regression guard)');
   } else {
-    fail('styles.css', 'odometer translateY must use -2em; percentages resolve against the 3em track and push 03 out of frame');
+    fail('styles.css', 'odometer translateY must use calc(var(--ch, 0) * -1em); percentages resolve against the 3em track and push 03 out of frame');
   }
 }
 
