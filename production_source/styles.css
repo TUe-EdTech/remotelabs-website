@@ -1038,25 +1038,22 @@ img.media-error {
   display: flex;
   flex-direction: column;
   padding-bottom: 1rem;
-  /* the section header lives inside the pinned stage, so title and runway
-     travel together with no dead space above or below */
-  padding-top: clamp(4.5rem, 9vh, 6.5rem);
+  padding-top: clamp(1rem, 3vh, 2rem);
   overflow: hidden;
   contain: layout paint
 }
-/* the stage content fills the pinned viewport, and the runway centers in
-   the leftover height - no blank band below the runway before the next
-   section scrolls in */
+/* header and runway travel together as one block, centered in the pinned
+   viewport: leftover height splits evenly above and below instead of
+   pooling between the header and the runway or under the runway */
 .proto-stage > .container {
   height: 100%;
   display: flex;
-  flex-direction: column
+  flex-direction: column;
+  justify-content: safe center
 }
 .runway {
   margin-top: clamp(1.5rem, 4vh, 3rem);
-  flex: 1;
   display: grid;
-  align-content: safe center;
   /* numeral top-left, chapter text below it, video spanning both rows on
      the right so it lines up with the numeral and the text */
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -1200,7 +1197,7 @@ img.media-error {
    stage content so nothing is clipped by the stage overflow: hidden */
 @media (max-height: 700px) and (min-width: 769px) {
   .proto-stage {
-    padding-top: 4.5rem;
+    padding-top: 1rem;
     padding-bottom: 1.5rem
   }
   .runway-num {
