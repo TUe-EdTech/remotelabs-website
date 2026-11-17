@@ -280,13 +280,13 @@
         }
         apply(current);
       };
+      const SLACK = 0.12; // dead zone at both track ends (see onScroll)
       const onScroll = () => {
         const rect = track.getBoundingClientRect();
         const total = rect.height - window.innerHeight;
         // Slack: the first/last SLACK of the track is a dead zone, so the
         // runway does not start advancing the moment it pins (chapter 1
         // holds on arrival) and chapter 3 is reached before the track ends.
-        const SLACK = 0.12;
         const raw = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
         target = Math.min(1, Math.max(0, (raw - SLACK) / (1 - SLACK * 2)));
         // Scroll lock: while the stage is pinned, keep the site header out
@@ -297,6 +297,33 @@
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', onScroll, { passive: true });
       onScroll();
+
+      // Detent: when scrolling pauses while the stage is pinned, ease the page
+      // to the nearest chapter center so each step - including the middle
+      // one - snaps into place. Skipped near the track ends so arriving and
+      // exiting are never yanked, and skipped for big flicks (diff threshold).
+      let snapTimer = 0;
+      const detent = () => {
+        const rect = track.getBoundingClientRect();
+        if (!(rect.top <= 0 && rect.bottom >= window.innerHeight)) return;
+        const total = rect.height - window.innerHeight;
+        if (total <= 0) return;
+        const raw = Math.min(1, Math.max(0, -rect.top / total));
+        if (raw < 0.08 || raw > 0.92) return;
+        const n = steps.length;
+        const animP = (raw - SLACK) / (1 - SLACK * 2);
+        const k = Math.max(0, Math.min(n - 1, Math.round(animP * n - 0.5)));
+        const targetRaw = SLACK + ((k + 0.5) / n) * (1 - SLACK * 2);
+        const targetY = rect.top + window.scrollY + targetRaw * total;
+        const diff = targetY - window.scrollY;
+        if (Math.abs(diff) > 2 && Math.abs(diff) < total * 0.15) {
+          window.scrollTo({ top: targetY, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+        }
+      };
+      window.addEventListener('scroll', () => {
+        window.clearTimeout(snapTimer);
+        snapTimer = window.setTimeout(detent, 140);
+      }, { passive: true });
     });
   }
 
