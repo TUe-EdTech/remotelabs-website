@@ -10,3 +10,23 @@
 
 /* Featured Experiments - New Styles */
 .experiment-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:2rem;margin:2rem 0}.experiment-step{background:#fff;border-radius:6px;box-shadow:0 4px 6px rgba(0,0,0,0.05);transition:all 0.3s ease;border:1px solid #e5e7eb;display:flex;flex-direction:column}.experiment-step:hover{transform:translateY(-5px);box-shadow:0 10px 15px rgba(0,0,0,0.1)}.experiment-image-wrapper{width:100%;order:-1}.experiment-image{width:100%;height:auto;max-height:250px;object-fit:cover;border-radius:6px 6px 0 0;display:block}.experiment-content{text-align:left;padding:1.5rem}.experiment-content h3{font-family:'Poppins','Poppins Fallback',sans-serif;font-weight:700;color:#333;font-size:1.3rem;margin-bottom:1rem;text-align:left}.experiment-content p{color:#666;line-height:1.6;text-align:left;margin-bottom:1.5rem}.experiment-button{background:#000;color:#fff;padding:.85rem 1.5rem;border-radius:3px;text-decoration:none;font-weight:700;font-size:.95rem;display:inline-block}.experiment-button:hover{background:#333}@media (max-width:768px){.experiment-steps{grid-template-columns:1fr}}
+
+/* --- Design prototype 2026-11: instrument-panel hero (viewfinder + readout) --- */
+:root{--accent:#BE0000;--hairline:#e4e4e7;--font-mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
+.readout-bar{border-bottom:1px solid var(--hairline);background:#fff}
+.readout-inner{display:flex;align-items:center;gap:.6rem;padding-top:.45rem;padding-bottom:.45rem}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse-dot 2s ease-in-out infinite}
+.readout-text{font-family:var(--font-mono);font-size:.72rem;color:var(--gray-600);letter-spacing:.02em}
+.readout-status{margin-left:auto;font-family:var(--font-mono);font-size:.72rem;color:var(--gray-600);text-decoration:none}
+.readout-status:hover{color:#000;text-decoration:underline}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.35}}
+.hero-title .mono-num{font-family:var(--font-mono);font-weight:400;font-size:.82em;letter-spacing:-.03em}
+.viewfinder{position:relative;padding:10px;border:1px solid var(--hairline);border-radius:3px;background:#fff}
+.tick{position:absolute;width:14px;height:14px;border:2px solid #000;animation:tick-in .45s ease-out both}
+.tick-tl{top:-2px;left:-2px;border-right:none;border-bottom:none}
+.tick-tr{top:-2px;right:-2px;border-left:none;border-bottom:none;animation-delay:.08s}
+.tick-bl{bottom:-2px;left:-2px;border-right:none;border-top:none;animation-delay:.16s}
+.tick-br{bottom:-2px;right:-2px;border-left:none;border-top:none;animation-delay:.24s}
+@keyframes tick-in{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:none}}
+.viewfinder-caption{position:absolute;left:22px;bottom:22px;z-index:11;font-family:var(--font-mono);font-size:.72rem;color:#fff;background:rgba(0,0,0,.65);padding:2px 8px;border-radius:2px;pointer-events:none}
+@media (prefers-reduced-motion:reduce){.live-dot,.tick{animation:none}}

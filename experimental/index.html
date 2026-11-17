@@ -553,6 +553,14 @@
     
     <!-- Header Section - Scroll-aware -->
     <header role="banner" class="main-header">
+        <!-- Instrument readout strip: live dot + mono status line -->
+        <div class="readout-bar">
+            <div class="container readout-inner">
+                <span class="live-dot" aria-hidden="true"></span>
+                <span class="readout-text">remote labs platform — 24/7</span>
+                <a class="readout-status" href="https://status.remote-labs.eu" target="_blank" rel="noopener noreferrer">status</a>
+            </div>
+        </div>
         <div class="container">
             <div class="header-content">
                 <div class="logo">
@@ -573,7 +581,7 @@
         <div class="container">
             <div class="hero-display">
                 <div class="hero-content-left">
-                    <h1 class="hero-title">24/7 Access to Physical Lab Experiments, Anywhere</h1>
+                    <h1 class="hero-title"><span class="mono-num">24/7</span> Access to Physical Lab Experiments, Anywhere</h1>
                     <p class="hero-subtitle">Enabling students and professionals to conduct real lab experiments remotely</p>
                 </div>
                 <div class="hero-content-right">
@@ -581,22 +589,29 @@
                 </div>
             </div>
             
-            <!-- Hero Video Container - 16:9 aspect ratio with controls -->
+            <!-- Hero Video Container - live viewfinder frame around the rig footage -->
             <div class="video-container">
-                <div class="video-wrapper hero-video-wrapper">
-                    <video class="hero-video" playsinline loop autoplay muted fetchpriority="high" poster="assets/videos/posterimagevideo-og.jpg" preload="metadata" id="hero-video-player">
-                        <source src="assets/videos/hero-loop.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <!-- Video Controls - Play/Pause and Mute/Unmute -->
-                    <div class="video-controls">
-                        <button class="video-control-btn" id="play-pause-btn" aria-label="Pause">
-                            <i class="fas fa-pause"></i>
-                        </button>
-                        <button class="video-control-btn" id="mute-btn" aria-label="Unmute">
-                            <i class="fas fa-volume-mute"></i>
-                        </button>
+                <div class="viewfinder">
+                    <span class="tick tick-tl" aria-hidden="true"></span>
+                    <span class="tick tick-tr" aria-hidden="true"></span>
+                    <span class="tick tick-bl" aria-hidden="true"></span>
+                    <span class="tick tick-br" aria-hidden="true"></span>
+                    <div class="video-wrapper hero-video-wrapper">
+                        <video class="hero-video" playsinline loop autoplay muted fetchpriority="high" poster="assets/videos/posterimagevideo-og.jpg" preload="metadata" id="hero-video-player">
+                            <source src="assets/videos/hero-loop.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <!-- Video Controls - Play/Pause and Mute/Unmute -->
+                        <div class="video-controls">
+                            <button class="video-control-btn" id="play-pause-btn" aria-label="Pause">
+                                <i class="fas fa-pause"></i>
+                            </button>
+                            <button class="video-control-btn" id="mute-btn" aria-label="Unmute">
+                                <i class="fas fa-volume-mute"></i>
+                            </button>
+                        </div>
                     </div>
+                    <div class="viewfinder-caption" aria-hidden="true">live — rig cam · tu/e campus</div>
                 </div>
             </div>
 
@@ -911,15 +926,6 @@
                         </div>
                         
                         <!-- Add more publications here by copying the pattern above -->
-                        <!-- 
-                        <div class="publication-item">
-                            <a href="URL_HERE" class="publication-title">TITLE_HERE</a>
-                            <div class="publication-meta">
-                                <span class="publication-journal">JOURNAL_HERE</span>
-                                <span class="publication-year">• YEAR_HERE</span>
-                            </div>
-                        </div>
-                        -->
                     </div>
                 </div>
                 
@@ -939,7 +945,7 @@
                     <p style="margin-top: 1rem;">
                         Part of<br>
                         <a href="https://www.tue.nl/en/" target="_blank" rel="noopener noreferrer" aria-label="Visit Eindhoven University of Technology">
-                            <img src="assets/images/logos/TUe-logo-descriptor-line-scarlet-S.png" alt="TU/e - Eindhoven University of Technology" style="width: 150px; height: auto; margin-top: 0.5rem;">
+                            <img src="assets/images/logos/partner-logos/TUe.png" alt="TU/e - Eindhoven University of Technology" style="width: 150px; height: auto; margin-top: 0.5rem;" width="235" height="64" loading="lazy">
                         </a>
                     </p>
                 </div>

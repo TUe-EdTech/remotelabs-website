@@ -114,6 +114,10 @@ remotelabs-website/
 The design is monochrome: black, white, and a gray scale. There is no
 branded accent color — `--highlight-color` resolves to `#000`, so buttons,
 borders, icons, and active states are all black.
+- **Accent** (`--accent`): `#BE0000` (signal scarlet, from the TU/e scarlet
+  logo) — approved exception to the monochrome rule (2026-11 design pass),
+  spent only on focus rings and a live/status dot; never on buttons,
+  headings or text.
 - **Highlight** (`--highlight-color`): `#000` (black)
 - **Black**: `#000`
 - **White**: `#fff`
