@@ -1109,7 +1109,7 @@ img.media-error {
    without JS the chapters render as a plain static stack. Layout: numeral on
    top-left, chapter text below it, video panel in the right half of the page. */
 .proto-track {
-  height: 400vh
+  height: 320vh
 }
 .proto-stage {
   position: sticky;
@@ -1123,13 +1123,13 @@ img.media-error {
 .runway {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(2rem, 6vw, 5rem);
+  gap: clamp(1.5rem, 4vw, 3rem);
   align-items: center;
   width: 100%
 }
 .runway-left {
   display: grid;
-  gap: clamp(1.25rem, 3vw, 2.5rem)
+  gap: clamp(1rem, 2vw, 1.5rem)
 }
 .runway-num {
   font-family: var(--font-display);
@@ -1153,7 +1153,7 @@ img.media-error {
 }
 .runway-body {
   position: relative;
-  padding-left: 2.5rem
+  padding-left: 2rem
 }
 .runway-rail {
   position: absolute;
@@ -1176,7 +1176,7 @@ img.media-error {
 }
 .runway-steps {
   position: relative;
-  min-height: 12rem
+  min-height: 10rem
 }
 .runway-step {
   transition: opacity .5s ease, transform .5s ease;
@@ -1231,7 +1231,7 @@ img.media-error {
     font-size: clamp(3rem, 16vw, 4.5rem)
   }
   .runway-body {
-    padding-left: 2rem
+    padding-left: 1.75rem
   }
   /* video column drops out on small screens - the text carries the chapter */
   .proto-video {
