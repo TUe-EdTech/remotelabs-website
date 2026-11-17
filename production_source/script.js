@@ -327,10 +327,11 @@
         });
       });
 
-      // Detent: when scrolling pauses while the stage is pinned, ease the page
-      // to the nearest chapter center so each step - including the middle
-      // one - snaps into place. Skipped near the track ends so arriving and
-      // exiting are never yanked, and skipped for big flicks (diff threshold).
+      // Detent: whenever scrolling pauses while the stage is pinned (any
+      // pointer type), ease the page to the nearest chapter center, so you
+      // can never stop between two numbers. Only skipped within the end
+      // slack zones (arriving/exiting) - the nearest chapter is always within
+      // the diff threshold, so no flick is fought.
       let snapTimer = 0;
       const detent = () => {
         const rect = track.getBoundingClientRect();
@@ -338,7 +339,7 @@
         const total = rect.height - window.innerHeight;
         if (total <= 0) return;
         const raw = Math.min(1, Math.max(0, -rect.top / total));
-        if (raw < 0.08 || raw > 0.92) return;
+        if (raw < 0.05 || raw > 0.95) return;
         const n = steps.length;
         const animP = rawToAnimP(raw, SLACK);
         const k = Math.max(0, Math.min(n - 1, Math.round(animP * n - 0.5)));
@@ -349,13 +350,9 @@
           window.scrollTo({ top: targetY, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
         }
       };
-      // Detent only for mouse/trackpad: after a touch swipe the page moving
-      // on its own feels broken, so touch devices skip it.
-      const finePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
       window.addEventListener('scroll', () => {
-        if (!finePointer) return;
         window.clearTimeout(snapTimer);
-        snapTimer = window.setTimeout(detent, 140);
+        snapTimer = window.setTimeout(detent, 100);
       }, { passive: true });
     });
   }
