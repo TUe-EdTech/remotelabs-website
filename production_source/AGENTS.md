@@ -30,9 +30,10 @@ This guide provides comprehensive documentation for the Remote Labs website at E
 
 **Key Features**:
 - Scroll-based header hiding (desktop & mobile)
-- "How it works": sticky video panel driven by a scroll-spy stepper — the
-  step nearest the viewport center dims its siblings, fills its rail node
-  and loads its video; a progress line draws down the rail on scroll
+- "How it works": scroll-spy stepper rail on the left, title + sticky video
+  panel on the right — the step nearest the viewport center dims its
+  siblings, fills its rail node and loads its video; a progress line draws
+  down the rail on scroll
 - Optimized mobile experience
 - Performance-focused design
 - Accessible components

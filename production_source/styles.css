@@ -152,20 +152,25 @@ body {
   text-align: left;
   margin-bottom: 0
 }
-/* How it works: sticky video panel on the left, scroll-driven stepper on
-   the right. Desktop two-column layout, single column (video first) below
-   992px. Type stays on the site-wide Poppins/Lato pair - no mono here. */
-.how-grid {
-  margin-top: var(--block-gap)
+/* How it works: scroll-driven stepper rail on the left; title + sticky video
+   panel in the right column. Below 992px it stacks title+video first, steps
+   below. Type stays on the site-wide Poppins/Lato pair - no mono here. */
+.how-side .section-header {
+  margin-bottom: var(--block-gap)
+}
+@media (max-width: 991px) {
+  .how-side {
+    order: -1
+  }
 }
 @media (min-width: 992px) {
   .how-grid {
     display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
     gap: var(--block-gap);
     align-items: start
   }
-  .video-panel {
+  .how-side {
     position: sticky;
     top: 90px
   }
