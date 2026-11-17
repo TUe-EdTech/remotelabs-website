@@ -70,7 +70,7 @@ body {
 }
 /* the section right after the pinned runway sits closer to it */
 .how-it-works + .section {
-  padding-top: 2rem
+  padding-top: 0
 }
 @media (max-width:768px) {
   :root {
@@ -1130,7 +1130,7 @@ img.media-error {
    without JS the chapters render as a plain static stack. Layout: numeral on
    top-left, chapter text below it, video panel in the right half of the page. */
 .proto-track {
-  height: 320vh
+  height: 300vh
 }
 .proto-stage {
   position: sticky;
