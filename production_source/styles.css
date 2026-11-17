@@ -1122,16 +1122,16 @@ img.media-error {
 }
 .runway {
   display: grid;
+  /* numeral top-left, chapter text below it, video spanning both rows on
+     the right so it lines up with the numeral and the text */
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(1.5rem, 4vw, 3rem);
-  align-items: center;
+  grid-template-areas: "num video" "body video";
+  gap: clamp(1rem, 2vw, 1.5rem) clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
   width: 100%
 }
-.runway-left {
-  display: grid;
-  gap: clamp(1rem, 2vw, 1.5rem)
-}
 .runway-num {
+  grid-area: num;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: clamp(4rem, 9vw, 6.5rem);
@@ -1152,6 +1152,8 @@ img.media-error {
   will-change: transform
 }
 .runway-body {
+  grid-area: body;
+  align-self: center;
   position: relative;
   padding-left: 2rem
 }
@@ -1215,6 +1217,8 @@ img.media-error {
 }
 /* Video panel: right half of the stage, kept modest (max 480px) */
 .proto-video {
+  grid-area: video;
+  align-self: center;
   margin: 0;
   padding: 0;
   max-width: 480px;
@@ -1225,7 +1229,8 @@ img.media-error {
 @media (max-width: 768px) {
   .runway {
     grid-template-columns: 1fr;
-    gap: 1.5rem
+    grid-template-areas: "num" "body";
+    gap: 1rem
   }
   .runway-num {
     font-size: clamp(3rem, 16vw, 4.5rem)
