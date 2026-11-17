@@ -283,7 +283,12 @@
       const onScroll = () => {
         const rect = track.getBoundingClientRect();
         const total = rect.height - window.innerHeight;
-        target = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
+        // Slack: the first/last SLACK of the track is a dead zone, so the
+        // runway does not start advancing the moment it pins (chapter 1
+        // holds on arrival) and chapter 3 is reached before the track ends.
+        const SLACK = 0.12;
+        const raw = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
+        target = Math.min(1, Math.max(0, (raw - SLACK) / (1 - SLACK * 2)));
         // Scroll lock: while the stage is pinned, keep the site header out
         // of the way so the how-it-works heading stays fully in view.
         document.body.classList.toggle('runway-locked', rect.top <= 0 && rect.bottom >= window.innerHeight);

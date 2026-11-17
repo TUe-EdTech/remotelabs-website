@@ -1209,9 +1209,12 @@ img.media-error {
   opacity: 1;
   transform: none
 }
+/* done steps leave fully - a faint ghost of the previous chapter would
+   sit on top of the active one (they are stacked in the same spot) */
 .proto-ready .runway-step.done {
-  opacity: .3;
-  transform: translateY(-16px)
+  opacity: 0;
+  transform: translateY(-24px);
+  pointer-events: none
 }
 .runway-step h3 {
   font-family: var(--font-display);
