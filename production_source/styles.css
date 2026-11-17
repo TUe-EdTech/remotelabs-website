@@ -67,7 +67,11 @@ body {
 .section {
   padding: var(--section-pad) 0
 }
-/* the section right after the pinned runway sits closer to it */
+/* the pinned runway hugs the sections around it - no padding gap
+   between the previous section and the runway, nor after it */
+.section + .how-it-works {
+  padding-bottom: 0
+}
 .how-it-works + .section {
   padding-top: 0
 }
@@ -1042,18 +1046,20 @@ img.media-error {
   overflow: hidden;
   contain: layout paint
 }
-/* header and runway travel together as one block, centered in the pinned
-   viewport: leftover height splits evenly above and below instead of
-   pooling between the header and the runway or under the runway */
+/* the stage content fills the pinned viewport: header at the top, the
+   runway takes all remaining height and spreads its rows (numeral top,
+   chapter text bottom, video centered right), so the panel reads full
+   screen with no dead band at the bottom */
 .proto-stage > .container {
   height: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: safe center
+  flex-direction: column
 }
 .runway {
   margin-top: clamp(1.5rem, 4vh, 3rem);
+  flex: 1;
   display: grid;
+  align-content: space-between;
   /* numeral top-left, chapter text below it, video spanning both rows on
      the right so it lines up with the numeral and the text */
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
