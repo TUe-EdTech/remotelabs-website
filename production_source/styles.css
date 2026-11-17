@@ -1333,7 +1333,8 @@ img.media-error {
   height: 100vh;
   display: flex;
   align-items: center;
-  overflow: hidden
+  overflow: hidden;
+  contain: layout paint
 }
 .proto-label {
   position: absolute;
@@ -1351,18 +1352,23 @@ img.media-error {
   white-space: nowrap
 }
 
-/* Prototype 1: chapter runway - giant numeral left, chapters right */
+/* Prototype 1: chapter runway - numeral on top (smaller), chapter text
+   below it; variant 1B adds the video as a right-hand column */
 .runway {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(2rem, 6vw, 5rem);
   align-items: center;
   width: 100%
 }
+.runway-left {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2.5rem)
+}
 .runway-num {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(6rem, 18vw, 12rem);
+  font-size: clamp(4rem, 9vw, 6.5rem);
   line-height: 1;
   color: #000
 }
@@ -1373,9 +1379,11 @@ img.media-error {
   height: 1em;
   overflow: hidden
 }
+/* Continuous odometer: the numeral glides with raw scroll progress --p
+   (no transition - rAF already drives it at display rate) */
 .proto-ready .runway-num-track {
-  transform: translateY(calc(var(--ch, 0) / 3 * -100%));
-  transition: transform .5s ease
+  transform: translateY(calc(var(--p, 0) * -200%));
+  will-change: transform
 }
 .runway-body {
   position: relative;
@@ -1398,14 +1406,15 @@ img.media-error {
   background: #000;
   transform-origin: top;
   transform: scaleY(var(--p, 0));
-  transition: transform .15s ease-out
+  will-change: transform
 }
 .runway-steps {
   position: relative;
   min-height: 12rem
 }
 .runway-step {
-  transition: opacity .5s ease, transform .5s ease
+  transition: opacity .5s ease, transform .5s ease;
+  will-change: transform, opacity
 }
 .runway-step + .runway-step {
   margin-top: 2rem
@@ -1483,9 +1492,9 @@ img.media-error {
   transition-delay: .26s
 }
 
-/* Variant 1B: third grid column carries the crossfading video panel */
+/* Variant 1B: right-hand column carries the crossfading video panel */
 .runway.with-video {
-  grid-template-columns: auto minmax(0, 1fr) minmax(240px, 32%)
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 34%)
 }
 .proto-video {
   margin: 0;
@@ -1503,7 +1512,7 @@ img.media-error {
     gap: 1.5rem
   }
   .runway-num {
-    font-size: clamp(4rem, 22vw, 6rem)
+    font-size: clamp(3rem, 16vw, 4.5rem)
   }
   .runway-body {
     padding-left: 2rem
