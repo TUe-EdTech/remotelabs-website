@@ -24,3 +24,26 @@ it from this file in the same commit that finishes it.
 Note: the 8.9 MB hero video is NOT a TODO - re-encoding/trimming it was
 evaluated and declined (commit `5d785a50`); the original stays and the
 Lighthouse performance budget stays at 0.7. See production_source/AGENTS.md.
+
+## Design follow-ups 2026-11 (after the v2.1.37 pass) - PROPOSED, awaiting approval
+
+3. **Sync the hero concept from experimental/ to production** - viewfinder
+   frame around the hero rig video (corner ticks + mono caption), header
+   readout strip with the pulsing live dot + status link, mono `24/7` in
+   the H1. Prototype is built and green in `experimental_deploy/`
+   (check-links 41/41); sync = copy the markup + CSS into
+   `production_source/`, then `sync-experimental.js --dry-run` to review.
+
+4. **Focus ring on dark surfaces** - `--accent` #BE0000 on the black CTA
+   band is ~3.2:1 (passes 3:1, but marginal) and weak on video controls.
+   Use a white focus outline inside `.cta-section` and on
+   `.video-control-btn`; keep scarlet on light surfaces.
+
+5. **Header: hairline instead of shadow** - `.main-header` still has
+   `box-shadow: var(--shadow-sm)`; replace with
+   `border-bottom: 1px solid var(--gray-200)` to match the flat
+   hairline language of v2.1.37.
+
+6. **Viewfinder frame on the workflow video too** - apply the same frame
+   + mono caption to `#workflow-video` so both rig videos share the
+   visual language (needs the placeholder panel repositioned inside it).
