@@ -673,10 +673,16 @@ footer {
   position: relative;
   margin-top: 1rem
 }
-.value-prop {
-  text-align: left;
-  margin-bottom: 2rem;
-  overflow-x: hidden
+/* Benefits: split layout - sticky heading left, rows right */
+.benefits-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 4rem;
+  align-items: start
+}
+.benefits-head {
+  position: sticky;
+  top: 120px
 }
 .benefits-title {
   font-family: var(--font-display);
@@ -695,19 +701,36 @@ footer {
   margin: 0 0 0 0
 }
 .benefits-container {
-  margin: 2.5rem 0 2rem 0
+  margin: 0 0 2rem 0
 }
 .benefit-item {
   display: flex;
-  gap: 1.5rem;
-  padding: 1.5rem 0;
+  gap: 1.25rem;
+  padding: 1.75rem 0;
   border-top: 1px solid var(--gray-200)
 }
 .benefit-item:last-child {
   border-bottom: 1px solid var(--gray-200)
 }
+.benefit-icon {
+  flex: none;
+  margin-top: .2rem
+}
+.benefit-icon .icon {
+  width: 1.5rem;
+  height: 1.5rem
+}
 .benefit-text {
   flex: 1
+}
+@media (max-width:768px) {
+  .benefits-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem
+  }
+  .benefits-head {
+    position: static
+  }
 }
 .benefit-text h3 {
   font-family: var(--font-display);
@@ -738,8 +761,12 @@ footer {
 .trust-text .icon {
   color: var(--highlight-color)
 }
-/* Black CTA band - left-aligned like the rest of the page */
+/* Black CTA band - statement left, actions right */
 .cta-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  align-items: center;
   text-align: left;
   margin: 3rem 0;
   padding: 3rem;
@@ -747,13 +774,18 @@ footer {
   color: var(--white);
   border-radius: var(--radius)
 }
-.cta-intro {
+.cta-title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.8rem;
+  line-height: 1.2;
   color: var(--white);
-  margin-bottom: 2rem;
-  text-align: left
+  margin-bottom: .75rem
+}
+.cta-sub {
+  color: var(--gray-300);
+  font-size: 1rem;
+  max-width: 46ch
 }
 .contact-actions {
   display: flex;
@@ -761,6 +793,21 @@ footer {
   gap: 1.5rem;
   margin: 2rem 0;
   flex-wrap: wrap
+}
+.cta-section .contact-actions {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+  margin: 0
+}
+.cta-section .contact-button {
+  width: 100%;
+  max-width: none
+}
+@media (max-width:768px) {
+  .cta-section {
+    grid-template-columns: 1fr
+  }
 }
 .contact-button {
   display: inline-flex;
@@ -812,8 +859,8 @@ footer {
     max-width: 300px;
     padding: .9rem 1.5rem
   }
-  .cta-intro {
-    font-size: 1.1rem
+  .cta-title {
+    font-size: 1.5rem
   }
 }
 @media (max-width:480px) {
