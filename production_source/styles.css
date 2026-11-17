@@ -168,32 +168,23 @@ body {
 .workflow-section.active {
   display: block
 }
-/* Split view, shared by all workflow tabs: video left (sticky), steps right */
+/* Workflow, shared by all tabs: steps grid on top, full-width video below */
 .workflow-split {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: var(--block-gap);
-  align-items: start;
   margin-top: var(--block-gap)
 }
+.workflow-split .workflow-sections {
+  order: 1
+}
 .workflow-split .video-container {
+  order: 2;
   margin: 0;
-  padding: 0;
-  position: sticky;
-  top: 120px
+  padding: 0
 }
 .workflow-split .workflow-steps {
-  grid-template-columns: 1fr;
   margin-top: 0
-}
-@media (max-width:768px) {
-  .workflow-split {
-    grid-template-columns: 1fr
-  }
-  .workflow-split .video-container {
-    order: 2;
-    position: static
-  }
 }
 .workflow-steps {
   display: grid;
