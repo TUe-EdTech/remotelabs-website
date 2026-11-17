@@ -1225,16 +1225,23 @@ img.media-error {
   opacity: 0;
   transform: translateY(24px)
 }
+.proto-ready .runway-step:not(.on) {
+  pointer-events: none
+}
 .proto-ready .runway-step.on {
   opacity: 1;
-  transform: none
+  transform: none;
+  cursor: pointer
+}
+.proto-ready .runway-step:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px
 }
 /* done steps leave fully - a faint ghost of the previous chapter would
    sit on top of the active one (they are stacked in the same spot) */
 .proto-ready .runway-step.done {
   opacity: 0;
-  transform: translateY(-24px);
-  pointer-events: none
+  transform: translateY(-24px)
 }
 .runway-step h3 {
   font-family: var(--font-display);
@@ -1261,6 +1268,9 @@ img.media-error {
 }
 
 @media (max-width: 768px) {
+  .proto-track {
+    height: 240vh
+  }
   .runway {
     grid-template-columns: 1fr;
     grid-template-areas: "num" "body";

@@ -307,6 +307,26 @@
       window.addEventListener('resize', onScroll, { passive: true });
       onScroll();
 
+      // Chapters are directly reachable: click / Enter on a step scrolls the
+      // page to that chapter's detent position (keyboard can Tab to hidden
+      // steps too - opacity does not remove them from the tab order).
+      steps.forEach((s, i) => {
+        const go = () => {
+          const rect = track.getBoundingClientRect();
+          const total = rect.height - window.innerHeight;
+          if (total <= 0) return;
+          const y = rect.top + window.scrollY + chapterCenterRaw(i, steps.length, SLACK) * total;
+          window.scrollTo({ top: y, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+        };
+        s.addEventListener('click', go);
+        s.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            go();
+          }
+        });
+      });
+
       // Detent: when scrolling pauses while the stage is pinned, ease the page
       // to the nearest chapter center so each step - including the middle
       // one - snaps into place. Skipped near the track ends so arriving and
@@ -329,7 +349,11 @@
           window.scrollTo({ top: targetY, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
         }
       };
+      // Detent only for mouse/trackpad: after a touch swipe the page moving
+      // on its own feels broken, so touch devices skip it.
+      const finePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
       window.addEventListener('scroll', () => {
+        if (!finePointer) return;
         window.clearTimeout(snapTimer);
         snapTimer = window.setTimeout(detent, 140);
       }, { passive: true });
