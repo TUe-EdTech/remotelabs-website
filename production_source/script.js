@@ -9,6 +9,7 @@
 //   5. Loading placeholders for lazy media (image shimmer, video poster panel)
 //   6. Smooth scrolling for in-page anchors
 //   7. Service worker registration (after page load, http/https only)
+//   8. Workflow prototypes #proto-1/#proto-2: scroll-driven sticky stages
 (function () {
   'use strict';
 
@@ -334,6 +335,48 @@
     });
   }
 
+  // Evaluation prototypes for the workflow scrollytelling (#proto-1 runway,
+  // #proto-2 deck). Each .proto-track is tall; a sticky stage reacts to the
+  // scroll progress --p (and chapter --ch) set here. .proto-ready gates the
+  // animated states, so without JS the prototypes render as static stacks.
+  function setupPrototypes() {
+    document.querySelectorAll('.proto').forEach((section) => {
+      const track = section.querySelector('.proto-track');
+      if (!track) return;
+      section.classList.add('proto-ready');
+      const steps = Array.from(section.querySelectorAll('.runway-step'));
+      const cards = Array.from(section.querySelectorAll('.deck-card'));
+      const ghost = section.querySelector('.deck-ghost');
+      const count = Math.max(steps.length, cards.length, 1);
+      let ticking = false;
+      const update = () => {
+        ticking = false;
+        const rect = track.getBoundingClientRect();
+        const total = rect.height - window.innerHeight;
+        const p = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
+        section.style.setProperty('--p', p.toFixed(4));
+        const ch = Math.min(count - 1, Math.floor(p * count));
+        if (steps.length) {
+          section.style.setProperty('--ch', ch);
+          steps.forEach((s, i) => {
+            s.classList.toggle('on', i === ch);
+            s.classList.toggle('done', i < ch);
+          });
+        }
+        cards.forEach((c, i) => c.classList.toggle('covered', p * count > i + 1));
+        if (ghost) ghost.style.transform = 'translateY(' + ((p - 0.5) * -30).toFixed(2) + 'vh)';
+      };
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(update);
+          ticking = true;
+        }
+      }, { passive: true });
+      window.addEventListener('resize', update, { passive: true });
+      update();
+    });
+  }
+
   // Draws the stepper's progress line as it scrolls through the viewport
   // (--progress 0..1, consumed by .progress-line's scaleY in styles.css) and
   // ignites each rail node (.lit) the moment the line reaches it.
@@ -467,6 +510,7 @@
     setupStepper();
     setupScrollReveal();
     setupProgressLine();
+    setupPrototypes();
     setupHeroVideoDataSaver();
     setupHeroVideoControls();
     setupBackButton();

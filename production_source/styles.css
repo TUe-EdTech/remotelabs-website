@@ -17,7 +17,8 @@
                                                    with their component or at the end
                                                  13. Loading placeholders (lazy media,
                                                    video poster panel)
-     14. Consent banner
+     14. Consent banner                        15. Workflow prototypes
+                                                 (evaluation builds)
    ========================================================================== */
 :root {
   --highlight-color: #000;
@@ -1315,4 +1316,255 @@ img.media-error {
    itself is preloaded in <head>) */
 .hero-video-wrapper {
   background: var(--gray-900)
+}
+/* ---- 15. Workflow prototypes (evaluation builds, 2026-11): two candidate
+   scrollytelling treatments for the student workflow. Pick one, fold it into
+   "How it works", delete the other. Each .proto-track is 400vh with a sticky
+   100vh stage; JS sets --p (0..1 scroll progress through the track) and --ch
+   (current chapter) on the section, plus .proto-ready to enable the animated
+   states - without JS everything renders as a plain static stack. ---- */
+.proto-track {
+  height: 400vh
+}
+.proto-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden
+}
+.proto-label {
+  position: absolute;
+  top: 84px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--gray-600);
+  background: #fff;
+  border: 1px solid var(--gray-300);
+  border-radius: 999px;
+  padding: .3rem .9rem;
+  white-space: nowrap
+}
+
+/* Prototype 1: chapter runway - giant numeral left, chapters right */
+.runway {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: center;
+  width: 100%
+}
+.runway-num {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(6rem, 18vw, 12rem);
+  line-height: 1;
+  color: #000
+}
+.runway-num-track span {
+  display: block
+}
+.proto-ready .runway-num {
+  height: 1em;
+  overflow: hidden
+}
+.proto-ready .runway-num-track {
+  transform: translateY(calc(var(--ch, 0) / 3 * -100%));
+  transition: transform .5s ease
+}
+.runway-body {
+  position: relative;
+  padding-left: 2.5rem
+}
+.runway-rail {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--gray-200)
+}
+.runway-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #000;
+  transform-origin: top;
+  transform: scaleY(var(--p, 0));
+  transition: transform .15s ease-out
+}
+.runway-steps {
+  position: relative;
+  min-height: 12rem
+}
+.runway-step {
+  transition: opacity .5s ease, transform .5s ease
+}
+.runway-step + .runway-step {
+  margin-top: 2rem
+}
+.proto-ready .runway-step {
+  position: absolute;
+  inset: 0;
+  margin-top: 0;
+  opacity: 0;
+  transform: translateY(24px)
+}
+.proto-ready .runway-step.on {
+  opacity: 1;
+  transform: none
+}
+.proto-ready .runway-step.done {
+  opacity: .3;
+  transform: translateY(-16px)
+}
+.runway-step h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  margin-bottom: .75rem;
+  color: var(--black)
+}
+.runway-step p {
+  color: var(--gray-600);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 46ch
+}
+
+/* Prototype 2: card deck - sticky cards pile over each other, ghost word
+   parallaxes behind (JS sets its translateY from --p) */
+.proto-deck .proto-stage {
+  display: block;
+  padding-top: 110px
+}
+.deck-ghost {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(6rem, 22vw, 20rem);
+  color: var(--gray-100);
+  user-select: none;
+  pointer-events: none
+}
+.deck {
+  position: relative;
+  z-index: 1
+}
+.deck-card {
+  position: sticky;
+  top: calc(120px + var(--i) * 28px);
+  background: #fff;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  min-height: 52vh;
+  transition: transform .3s ease, opacity .3s ease
+}
+.deck-card + .deck-card {
+  margin-top: 45vh
+}
+.proto-ready .deck-card.covered {
+  transform: scale(.96);
+  opacity: .55
+}
+.deck-num {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  line-height: 1;
+  color: var(--gray-200)
+}
+.deck-card h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  margin: 1rem 0 .75rem;
+  color: var(--black)
+}
+.deck-card p {
+  color: var(--gray-600);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 52ch
+}
+
+@media (max-width: 768px) {
+  .proto-label {
+    top: 70px
+  }
+  .runway {
+    grid-template-columns: 1fr;
+    gap: 1.5rem
+  }
+  .runway-num {
+    font-size: clamp(4rem, 22vw, 6rem)
+  }
+  .runway-body {
+    padding-left: 2rem
+  }
+  .deck-card {
+    min-height: 0
+  }
+  .deck-card + .deck-card {
+    margin-top: 60vh
+  }
+}
+
+/* Reduced motion: collapse the tall tracks into plain stacked content */
+@media (prefers-reduced-motion: reduce) {
+  .proto-track {
+    height: auto
+  }
+  .proto-stage {
+    position: static;
+    height: auto;
+    padding: 5rem 0
+  }
+  .proto-label {
+    position: static;
+    display: inline-block;
+    transform: none;
+    margin: 0 0 2rem 15px
+  }
+  .proto-ready .runway-num {
+    height: auto
+  }
+  .proto-ready .runway-num-track {
+    transform: none
+  }
+  .proto-ready .runway-step {
+    position: static;
+    opacity: 1;
+    transform: none;
+    margin-top: 2rem
+  }
+  .runway-fill {
+    transform: none
+  }
+  .deck-card {
+    position: static;
+    margin-top: 0;
+    transform: none !important;
+    opacity: 1 !important
+  }
+  .deck-card + .deck-card {
+    margin-top: 1.5rem
+  }
+  .deck-ghost {
+    display: none
+  }
 }

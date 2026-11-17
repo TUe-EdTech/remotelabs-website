@@ -35,6 +35,11 @@ This guide provides comprehensive documentation for the Remote Labs website at E
   siblings and loads its video (two stacked players crossfade on swap);
   a progress line draws down the rail on scroll and each rail node ignites
   (.lit) when the line reaches it
+- Evaluation prototypes `#proto-1` (chapter runway) and `#proto-2` (card
+  deck) sit after the how-it-works section: 400vh tracks with sticky stages,
+  scroll-driven via `--p`/`--ch`, no video. When one is picked, fold it into
+  the how-it-works section and delete the other prototype block (styles.css
+  section 15) in the same commit.
 - Optimized mobile experience
 - Performance-focused design
 - Accessible components
