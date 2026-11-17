@@ -74,7 +74,7 @@ remotelabs-website/
 │   ├── assets/                   # Images, videos, logos, fonts, publications
 │   └── 400-500.shtml             # Custom error pages
 ├── production_source/            # Development source of truth (edit here, never in deploy/)
-│   ├── index.html / privacy.html / styles.css / script.js / sw.js
+│   ├── index.html / privacy.html / styles.css / script.js / sw.js / 400-500.shtml (error pages)
 │   ├── build.js                  # Canonical build
 │   ├── test.js                   # Consistency tests (npm test)
 │   ├── check-render.js           # Render smoke test (npm run test:render, headless Chrome)

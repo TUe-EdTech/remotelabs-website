@@ -162,9 +162,9 @@ function main() {
     copyDirectory(fontawesomeSrc, path.join(EXPERIMENTAL_DEPLOY_DIR, 'assets', 'fontawesome'));
   }
 
-  // Icons live at the repo root.
+  // Icons live in production_source/.
   for (const icon of ICON_FILES) {
-    const src = path.join(REPO_ROOT, icon);
+    const src = path.join(PRODUCTION_DIR, icon);
     if (fs.existsSync(src)) {
       copyFile(src, path.join(EXPERIMENTAL_DEPLOY_DIR, icon));
     }

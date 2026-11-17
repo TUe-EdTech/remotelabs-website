@@ -2,7 +2,7 @@
 
 /**
  * Post-upload verification: every file in the built site directory must be
- * served by the live web server with the same byte count as on disk.
+ * served by the live web server with identical content (sha256) as on disk.
  *
  * Why this exists: the v2.1.33 upload wrote 0-byte styles.min.css and
  * script.min.js to the server (every other file landed intact), so the
@@ -17,7 +17,7 @@
  *   node scripts/verify-live.js [baseUrl] [siteDir]
  *
  * Defaults: baseUrl = https://remote-labs.eu, siteDir = deploy.
- * Run from the repo root. Exits non-zero on any non-200 or size mismatch.
+ * Run from the repo root. Exits non-zero on any non-200 or content mismatch.
  */
 
 'use strict';
@@ -26,6 +26,7 @@ const fs = require('fs');
 const path = require('path');
 const http = require('http');
 const https = require('https');
+const crypto = require('crypto');
 
 const BASE_URL = (process.argv[2] || 'https://remote-labs.eu').replace(/\/+$/, '');
 const SITE_DIR = path.resolve(process.argv[3] || 'deploy');
@@ -59,8 +60,9 @@ function fetchSize(url, redirectsLeft) {
         return;
       }
       let bytes = 0;
-      res.on('data', (chunk) => { bytes += chunk.length; });
-      res.on('end', () => resolve({ status, bytes, headers: res.headers }));
+      const hash = crypto.createHash('sha256');
+      res.on('data', (chunk) => { bytes += chunk.length; hash.update(chunk); });
+      res.on('end', () => resolve({ status, bytes, hash: hash.digest('hex'), headers: res.headers }));
       res.on('error', reject);
     });
     req.setTimeout(30000, () => req.destroy(new Error('request timed out')));
@@ -94,6 +96,7 @@ async function main() {
   for (const file of files) {
     const rel = path.relative(SITE_DIR, file).replace(/\\/g, '/');
     const expected = fs.statSync(file).size;
+    const expectedHash = crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
     checkedFiles++;
 
     let result;
@@ -109,12 +112,12 @@ async function main() {
     if (result.status !== 200) {
       console.error(`  FAIL ${rel}: HTTP ${result.status} (expected 200, ${expected} bytes)`);
       failures++;
-    } else if (result.bytes !== expected) {
-      const note = result.bytes === 0 ? ' - served as 0 bytes, the upload truncated this file' : '';
-      console.error(`  FAIL ${rel}: served ${result.bytes} bytes, expected ${expected}${note}`);
+    } else if (result.hash !== expectedHash) {
+      const note = result.bytes === 0 ? ' - served as 0 bytes, the upload truncated this file' : ` - served ${result.bytes} bytes, expected ${expected}`;
+      console.error(`  FAIL ${rel}: served content differs from deploy/${rel} (sha256 mismatch)${note}`);
       failures++;
     } else {
-      console.log(`  ok   ${rel} (${expected} bytes)`);
+      console.log(`  ok   ${rel} (${expected} bytes, sha256 match)`);
     }
   }
 

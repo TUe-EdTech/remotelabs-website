@@ -105,6 +105,7 @@ remotelabs-website/
     ├── script.js                  # Source JavaScript
     ├── consent.js                 # Consent banner + consent-gated Umami load (minified to deploy/consent.min.js)
     ├── sw.js                      # Source Service Worker
+    ├── 400-500.shtml             # Custom error pages (copied to deploy/ by the build)
     ├── package.json              # Node.js package configuration
     └── package-lock.json          # Dependency lock file (node_modules/ is gitignored, not tracked)
 ```

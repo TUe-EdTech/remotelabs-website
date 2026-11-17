@@ -2,6 +2,10 @@
 
 **For:** Little brother in Mistral Vibe
 **Date:** 2026-10-12
+**Status (v2.1.36):** HIGH 1-2 fixed - experimental/ JS is fully external
+(`script.js`), onclick handlers replaced with plain mailto links, stylesheet
+is render-blocking; SRI (3) was already in place via the self-hosted tracker
+in `consent.js`; items 4-7 were already applied.
 **Site:** remote-labs.eu
 **Repo:** `remotelabs-website`
 

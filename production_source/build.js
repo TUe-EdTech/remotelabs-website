@@ -41,7 +41,7 @@ const filesToSync = ['index.html', 'privacy.html', 'assets/fonts/fonts.css'];
 // blockers cannot block it - see https://docs.umami.is/docs/bypass-ad-blockers).
 // It must stay byte-identical to the pinned copy: its sha384 is UMAMI_INTEGRITY
 // in consent.js (asserted by test.js), so never edit or re-minify it here.
-const filesToCopy = ['index.html', 'privacy.html', 'sw.js', 'robots.txt', 'sitemap.xml', '.htaccess', 'umami-tracker.js'];
+const filesToCopy = ['index.html', 'privacy.html', 'sw.js', 'robots.txt', 'sitemap.xml', '.htaccess', 'manifest.json', 'umami-tracker.js', '400.shtml', '401.shtml', '403.shtml', '404.shtml', '500.shtml'];
 
 const iconFiles = ['icon-192x192.svg', 'icon-512x512.svg'];
 
@@ -148,7 +148,7 @@ function copyFiles(files, label) {
       }
       console.log(`  copied ${file}`);
     } else {
-      console.warn(`  warning: source file ${file} not found, skipping`);
+      throw new Error(`source file ${file} not found - a partial deploy/ must never ship`);
     }
   }
   if (label) console.log(`  (${label})`);
