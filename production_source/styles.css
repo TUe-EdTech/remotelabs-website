@@ -168,6 +168,33 @@ body {
 .workflow-section.active {
   display: block
 }
+/* Split view (students): video left, steps stacked right */
+.workflow-section.active.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--block-gap);
+  align-items: start
+}
+.workflow-section.split .video-container {
+  order: -1;
+  margin: 0;
+  padding: 0;
+  position: sticky;
+  top: 120px
+}
+.workflow-section.split .workflow-steps {
+  grid-template-columns: 1fr;
+  margin-top: 0
+}
+@media (max-width:768px) {
+  .workflow-section.active.split {
+    grid-template-columns: 1fr
+  }
+  .workflow-section.split .video-container {
+    order: 0;
+    position: static
+  }
+}
 .workflow-steps {
   display: grid;
   grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
