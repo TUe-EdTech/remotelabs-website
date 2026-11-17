@@ -354,6 +354,43 @@
         window.clearTimeout(snapTimer);
         snapTimer = window.setTimeout(detent, 100);
       }, { passive: true });
+
+      // Exit gate: input that would scroll past the end of the track while
+      // the stage is pinned is swallowed unless it is a fresh gesture (no
+      // input for GATE_MS). Momentum keeps refreshing lastInput, so a hard
+      // flick can never carry you out of the runway - leaving always takes a
+      // second, deliberate scroll. Programmatic scrolls (anchors, detent,
+      // chapter clicks) are not wheel/touch/key events and pass freely.
+      const GATE_MS = 400;
+      let lastInput = 0;
+      let lastTouchY = null;
+      const gate = (deltaY, e) => {
+        const now = Date.now();
+        const fresh = now - lastInput > GATE_MS;
+        lastInput = now;
+        const rect = track.getBoundingClientRect();
+        if (rect.top > 0 || rect.bottom < window.innerHeight) return;
+        const maxY = rect.bottom + window.scrollY - window.innerHeight;
+        if (window.scrollY + deltaY <= maxY + 1) return;
+        if (!fresh) e.preventDefault();
+      };
+      window.addEventListener('wheel', (e) => {
+        gate(e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY, e);
+      }, { passive: false });
+      window.addEventListener('touchstart', (e) => {
+        lastTouchY = e.touches[0].clientY;
+      }, { passive: true });
+      window.addEventListener('touchmove', (e) => {
+        if (lastTouchY === null) return;
+        const y = e.touches[0].clientY;
+        gate(lastTouchY - y, e);
+        lastTouchY = y;
+      }, { passive: false });
+      window.addEventListener('keydown', (e) => {
+        if (!['ArrowDown', 'PageDown', ' ', 'End'].includes(e.key)) return;
+        if (e.target && e.target.closest && e.target.closest('button, a, [role="button"], input, textarea, select')) return;
+        gate(40, e);
+      });
     });
   }
 
