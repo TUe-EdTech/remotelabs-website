@@ -34,9 +34,8 @@ This guide provides comprehensive documentation for the Remote Labs website at E
 - Optimized mobile experience
 - Performance-focused design
 - Accessible components
-- Loading placeholders for lazy media: shimmer behind images, poster panel
-  on the workflow video until it starts playing (script.js
-  `setupMediaPlaceholders`, styles.css section 13)
+- Loading placeholders for lazy images: shimmer behind images, fade-in on
+  load (script.js `setupMediaPlaceholders`, styles.css section 13)
 - Security headers (CSP, X-Frame-Options, HSTS, etc.)
 - Consent-gated analytics (GDPR/ePrivacy): `consent.js` shows a banner and
   loads the self-hosted Umami tracker (`umami-tracker.js`, served from this
@@ -363,7 +362,7 @@ The GitHub Actions workflow (`.github/workflows/build-and-deploy.yml`) runs thes
 - [ ] Responsive design (320px to 1920px+)
 - [ ] All links work
 - [ ] All images load
-- [ ] Videos play correctly (hero autoplays on normal connections; the workflow video loads/plays when scrolled near — see `setupWorkflowVideoLazyPlay` in script.js; on Save-Data/2G the hero video shows the poster until Play)
+- [ ] Hero video plays correctly (autoplays on normal connections; on Save-Data/2G it shows the poster until Play — see `setupHeroVideoDataSaver` in script.js)
 - [ ] Forms submit (if any)
 - [ ] Accessibility (keyboard navigation, screen readers)
 - [ ] **Incognito mode test** (verifies no caching issues)
