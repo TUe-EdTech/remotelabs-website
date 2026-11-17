@@ -331,66 +331,9 @@
         snapTimer = window.setTimeout(detent, 100);
       }, { passive: true });
 
-      // Stepped scrolling inside the runway: while the stage is pinned, wheel/
-      // touch/key input never scrolls freely - each gesture (an input burst
-      // within GESTURE_MS) fires at most ONE chapter step (scrollTo that
-      // chapter's center), so one hard scroll = one chapter. At the track
-      // edges the gesture is swallowed unless it is fresh (no input for
-      // GATE_MS), so leaving the runway always takes a second deliberate
-      // scroll. Programmatic scrolls (anchors, detent, chapter clicks) are not
-      // wheel/touch/key events and pass freely; ctrl+wheel zoom passes through.
-      const GATE_MS = 400;
-      const GESTURE_MS = 250;
-      const STEP_PX = 40;
-      let lastInput = 0;
-      let accum = 0;
-      let fired = false;
-      let lastTouchY = null;
-      const stepScroll = (dy, e) => {
-        const now = Date.now();
-        const fresh = now - lastInput > GATE_MS;
-        if (now - lastInput > GESTURE_MS) { accum = 0; fired = false; }
-        lastInput = now;
-        const rect = track.getBoundingClientRect();
-        if (rect.top > 0 || rect.bottom < window.innerHeight) return; // not pinned
-        const total = rect.height - window.innerHeight;
-        if (total <= 0) return;
-        const minY = rect.top + window.scrollY;
-        const maxY = minY + total;
-        if (window.scrollY + dy > maxY + 1 || window.scrollY + dy < minY - 1) {
-          if (!fresh) e.preventDefault(); // edge: swallow momentum, fresh gesture exits
-          return;
-        }
-        e.preventDefault(); // interior: the step below drives the scroll
-        if (fired) return;
-        accum += dy;
-        if (Math.abs(accum) < STEP_PX) return;
-        fired = true;
-        const n = steps.length;
-        const raw = Math.min(1, Math.max(0, -rect.top / total));
-        const k = Math.max(0, Math.min(n - 1, Math.round(rawToAnimP(raw, SLACK) * n - 0.5)));
-        const target = Math.max(0, Math.min(n - 1, k + (accum > 0 ? 1 : -1)));
-        const y = minY + chapterCenterRaw(target, n, SLACK) * total;
-        window.scrollTo({ top: y, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
-      };
-      window.addEventListener('wheel', (e) => {
-        if (e.ctrlKey) return; // browser zoom
-        stepScroll(e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY, e);
-      }, { passive: false });
-      window.addEventListener('touchstart', (e) => {
-        lastTouchY = e.touches[0].clientY;
-      }, { passive: true });
-      window.addEventListener('touchmove', (e) => {
-        if (lastTouchY === null) return;
-        const y = e.touches[0].clientY;
-        stepScroll(lastTouchY - y, e);
-        lastTouchY = y;
-      }, { passive: false });
-      window.addEventListener('keydown', (e) => {
-        if (!['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', ' ', 'End', 'Home'].includes(e.key)) return;
-        if (e.target && e.target.closest && e.target.closest('button, a, [role="button"], input, textarea, select')) return;
-        stepScroll(['ArrowDown', 'PageDown', ' ', 'End'].includes(e.key) ? 60 : -60, e);
-      });
+      // No wheel/touch/key interception: input scrolls freely (the stage is
+      // sticky, so flicking through is fine and exiting always works), and
+      // the detent above snaps to the nearest chapter center on pause.
     });
   }
 
