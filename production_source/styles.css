@@ -256,19 +256,7 @@ body {
 
 /* ---- 2. Base: reset, body, accessibility helpers, layout container ---- */
 html {
-  scroll-behavior: smooth!important;
-  /* gentle snap: after a long pinned run (the how-it-works track), the
-     page settles onto the next section instead of flying past it.
-     proximity only - never traps, and disabled under reduced motion */
-  scroll-snap-type: y proximity
-}
-main > section {
-  scroll-snap-align: start
-}
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-snap-type: none
-  }
+  scroll-behavior: smooth!important
 }
 body {
   overscroll-behavior: contain;
