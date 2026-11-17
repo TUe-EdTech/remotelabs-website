@@ -15,7 +15,8 @@
      5. Generic sections & headings               videos, workflow steps
      6. Back-to-top button                     12. Responsive overrides are grouped
                                                    with their component or at the end
-                                                 13. Loading placeholders (lazy images)
+                                                 13. Loading placeholders (lazy media,
+                                                   video poster panel)
      14. Consent banner
    ========================================================================== */
 :root {
@@ -167,6 +168,24 @@ body {
 .workflow-section.active {
   display: block
 }
+/* Workflow, shared by all tabs: steps grid on top, full-width video below */
+.workflow-split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--block-gap);
+  margin-top: var(--block-gap)
+}
+.workflow-split .workflow-sections {
+  order: 1
+}
+.workflow-split .video-container {
+  order: 2;
+  margin: 0;
+  padding: 0
+}
+.workflow-split .workflow-steps {
+  margin-top: 0
+}
 .workflow-steps {
   display: grid;
   grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
@@ -180,7 +199,9 @@ body {
   border: 1px solid var(--gray-200);
   text-align: left
 }
-
+.workflow-step:hover {
+  background: var(--gray-50)
+}
 .step-icon {
   display: flex;
   align-items: center;
@@ -1100,6 +1121,22 @@ footer {
   padding-bottom: 56.25% !important; /* 16:9 aspect ratio (1920x1080) - override base */
   
 }
+/* Override external CSS conflicts - WORKFLOW VIDEOS ONLY */
+body .video-container .video-wrapper:not(.hero-video-wrapper) {
+  padding-bottom: 56.25% !important; /* Widescreen 16:9 aspect ratio */
+  
+}
+body .video-container .workflow-video:not(.hero-video) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: var(--radius);
+  object-fit: contain !important;
+  background: #000; /* Restore black for smooth video transitions */
+  
+}
 /* Protect HERO video - ensure it keeps 16:9 */
 body .video-container .video-wrapper.hero-video-wrapper {
   padding-bottom: 56.25% !important; /* Keep 16:9 for hero */
@@ -1146,7 +1183,37 @@ body .video-container .video-wrapper.hero-video-wrapper {
   outline: 2px solid var(--accent);
   outline-offset: 2px
 }
-
+.workflow-step {
+  cursor: pointer;
+  transition: all .3s ease;
+  position: relative
+}
+.workflow-step.active-step {
+  border: 2px solid #000;
+  background: var(--gray-50)
+}
+.workflow-step.active-step::after {
+  content: '';
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  width: 12px;
+  height: 12px;
+  background: #000;
+  border-radius: 50%;
+  animation: playing-pulse 2s infinite
+}
+@keyframes playing-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7
+  }
+}
 .workflow-step h3 {
   font-family: var(--font-display);
   font-weight: 700;
@@ -1159,6 +1226,19 @@ body .video-container .video-wrapper.hero-video-wrapper {
   color: var(--gray-600);
   line-height: 1.6;
   font-size: 1rem
+}
+.workflow-step.active-step h3 {
+  color: #000
+}
+.workflow-step.active-step .step-number {
+  background: white;
+  color: #000;
+  box-shadow: var(--focus-ring)
+}
+/* Active step: black hairline + the pulsing dot (semantic: video playing) */
+.workflow-step.active-step {
+  border: 1px solid #000;
+  background: white
 }
 /* Mobile-specific optimizations */
 @media (max-width: 480px) {
@@ -1288,6 +1368,34 @@ img.media-error {
   opacity: 1;
   background: var(--gray-100);
   border: 1px dashed var(--gray-300)
+}
+
+/* Workflow video: poster-style panel until the video starts playing.
+   .video-playing is added to the wrapper on the video's 'playing' event. */
+.video-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray-900);
+  color: var(--white);
+  border-radius: var(--radius)
+}
+.video-placeholder .icon {
+  width: 4rem;
+  height: 4rem;
+  padding: 1.1rem;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  box-sizing: border-box
+}
+.video-wrapper.video-playing .video-placeholder {
+  display: none
 }
 
 /* Hero video: dark backdrop while the poster/video loads (the poster

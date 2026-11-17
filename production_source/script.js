@@ -5,8 +5,8 @@
 //   1. Tag touch devices and read the reduced-motion preference (used below)
 //   2. Back-to-top button + one rAF-throttled scroll handler (header hide/show)
 //   3. Hero video controls (play/pause, mute) + data-saver gating
-//   4. Workflow section: audience toggle switch
-//   5. Loading placeholders for lazy images (shimmer + fade-in)
+//   4. Workflow section: lazy-playing video, per-step video switching, toggle switch
+//   5. Loading placeholders for lazy media (image shimmer, video poster panel)
 //   6. Smooth scrolling for in-page anchors
 //   7. Service worker registration (after page load, http/https only)
 (function () {
@@ -15,6 +15,19 @@
   // -----------------------------------------------------------------------
   // Helpers
   // -----------------------------------------------------------------------
+
+  // Asset version query (?v=...) taken from this script's own URL
+  // (script.min.js?v=...), so dynamically loaded media - the workflow
+  // video switching below - gets the same cache-busting version as the
+  // HTML-referenced assets. Empty string when unavailable.
+  const ASSET_VERSION = (() => {
+    const el = document.currentScript;
+    if (el && el.src) {
+      const m = el.src.match(/[?&]v=([^&]+)/);
+      if (m) return '?v=' + m[1];
+    }
+    return '';
+  })();
 
   // OS-level "reduce motion" preference (WCAG 2.3.3). CSS handles
   // animations/transitions (see styles.css); videos are handled at the
@@ -168,8 +181,75 @@
   }
 
   // -----------------------------------------------------------------------
-  // 4. Workflow section: audience toggle switch
+  // 4. Workflow section: lazy video, step switching, toggle switch
   // -----------------------------------------------------------------------
+
+  // #workflow-video ships with preload="none" and no autoplay, so
+  // nothing downloads until the section approaches the viewport; then
+  // it loads and plays exactly as it did with eager autoplay.
+  function setupWorkflowVideoLazyPlay() {
+    const video = document.getElementById('workflow-video');
+    if (!video) return;
+
+    if (!('IntersectionObserver' in window)) {
+      // No observer support: restore the old eager behaviour.
+      video.play().catch(() => {});
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          observer.disconnect();
+          video.play().catch(() => {});
+        }
+      });
+    }, { rootMargin: '600px 0px' });
+    observer.observe(video);
+  }
+
+  // Clicking a student workflow step swaps the workflow video to that
+  // step's recording (data-video="<name>" -> assets/videos/<name>.mp4).
+  function setupVideoSwitching() {
+    const steps = document.querySelectorAll('.workflow-step[data-video]');
+    const video = document.getElementById('workflow-video');
+    if (!steps.length || !video) return;
+
+    steps.forEach((step) => {
+      step.addEventListener('click', () => {
+        const videoId = step.getAttribute('data-video');
+        if (!/^[a-zA-Z0-9_-]+$/.test(videoId || '')) return;
+        const videoPath = 'assets/videos/' + videoId + '.mp4' + ASSET_VERSION;
+
+        video.pause();
+        video.currentTime = 0;
+        video.onerror = null;
+        video.oncanplaythrough = null;
+
+        video.src = videoPath;
+        video.load();
+
+        video.onerror = () => {};
+        video.oncanplaythrough = () => {
+          video.play().catch(() => {});
+        };
+
+        steps.forEach((s) => s.classList.remove('active-step'));
+        step.classList.add('active-step');
+      });
+
+      // The steps are focusable (tabindex="0" role="button"); make Enter
+      // and Space activate them like a native button.
+      step.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+          e.preventDefault();
+          step.click();
+        }
+      });
+    });
+
+    steps[0].classList.add('active-step');
+  }
 
   // Students / Educators / Organizations toggle: shows the matching
   // workflow section and updates the heading text.
@@ -260,6 +340,19 @@
       img.addEventListener('load', () => settle('load'), { once: true });
       img.addEventListener('error', () => settle('error'), { once: true });
     });
+
+    // Workflow video: keep the poster-style placeholder panel up until the
+    // video actually starts playing (lazy-played by setupWorkflowVideoLazyPlay
+    // or by step switching).
+    const video = document.getElementById('workflow-video');
+    if (video) {
+      const wrapper = video.closest('.video-wrapper');
+      if (wrapper) {
+        video.addEventListener('playing', () => {
+          wrapper.classList.add('video-playing');
+        }, { once: true });
+      }
+    }
   }
 
   // -----------------------------------------------------------------------
@@ -312,11 +405,13 @@
   // -----------------------------------------------------------------------
 
   function init() {
+    setupVideoSwitching();
     setupHeroVideoDataSaver();
     setupHeroVideoControls();
     setupBackButton();
     setupSmoothScroll();
     setupToggleSwitch();
+    setupWorkflowVideoLazyPlay();
     setupMediaPlaceholders();
   }
 

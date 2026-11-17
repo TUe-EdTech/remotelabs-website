@@ -17,8 +17,8 @@ experiments.
   no tracking without your consent
 - Progressive Web App: service worker with network-first HTML, cache-first
   versioned assets, offline support
-- Loading placeholders for lazy images (shimmer behind images) so
-  below-the-fold content never shows as a blank box
+- Loading placeholders for lazy media (shimmer behind images, poster panel
+  on the workflow video) so below-the-fold content never shows as a blank box
 - Accessibility and performance budgets enforced in CI (Lighthouse)
 - Strict Content-Security-Policy (no inline scripts), SRI-pinned self-hosted
   analytics tracker (ad-blocker resistant) loaded only after consent, full
