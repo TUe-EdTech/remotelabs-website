@@ -243,15 +243,14 @@
         io.observe(track);
       }
       let lastVid = steps[0].dataset.video || null;
-      let ticking = false;
-      const update = () => {
-        ticking = false;
-        const rect = track.getBoundingClientRect();
-        const total = rect.height - window.innerHeight;
-        const p = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
-        // Scroll lock: while the stage is pinned, keep the site header out
-        // of the way so the how-it-works heading stays fully in view.
-        document.body.classList.toggle('runway-locked', rect.top <= 0 && rect.bottom >= window.innerHeight);
+      // Inertia: scroll sets a target progress; a rAF loop eases the applied
+      // progress toward it, so the numeral/rail glide instead of tracking
+      // the wheel 1:1. Reduced-motion users get the raw value directly.
+      const ease = prefersReducedMotion() ? 1 : 0.14;
+      let target = 0;
+      let current = -1;
+      let rafId = 0;
+      const apply = (p) => {
         section.style.setProperty('--p', p.toFixed(4));
         const ch = Math.min(steps.length - 1, Math.floor(p * steps.length));
         section.style.setProperty('--ch', ch);
@@ -260,6 +259,7 @@
           s.classList.toggle('done', i < ch);
         });
         if (swapFn) {
+          const rect = track.getBoundingClientRect();
           const inView = rect.bottom > 0 && rect.top < window.innerHeight;
           const vid = steps[ch].dataset.video;
           if (inView && vid && vid !== lastVid) {
@@ -268,14 +268,30 @@
           }
         }
       };
-      window.addEventListener('scroll', () => {
-        if (!ticking) {
-          window.requestAnimationFrame(update);
-          ticking = true;
+      const tick = () => {
+        rafId = 0;
+        if (current < 0) current = target;
+        const diff = target - current;
+        if (Math.abs(diff) < 0.0005) {
+          current = target;
+        } else {
+          current += diff * ease;
+          rafId = window.requestAnimationFrame(tick);
         }
-      }, { passive: true });
-      window.addEventListener('resize', update, { passive: true });
-      update();
+        apply(current);
+      };
+      const onScroll = () => {
+        const rect = track.getBoundingClientRect();
+        const total = rect.height - window.innerHeight;
+        target = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
+        // Scroll lock: while the stage is pinned, keep the site header out
+        // of the way so the how-it-works heading stays fully in view.
+        document.body.classList.toggle('runway-locked', rect.top <= 0 && rect.bottom >= window.innerHeight);
+        if (!rafId) rafId = window.requestAnimationFrame(tick);
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      onScroll();
     });
   }
 
