@@ -245,6 +245,12 @@ body {
   font-size: 1rem;
   transition: background .3s ease, color .3s ease, border-color .3s ease
 }
+/* Node ignites when the progress line physically reaches it (JS sets .lit) */
+.step-number.lit {
+  background: #000;
+  border-color: #000;
+  color: #fff
+}
 /* Scroll reveal: JS adds .anim-ready only when IntersectionObserver
    exists, so without JS the steps simply render visible. */
 .anim-ready .reveal {
@@ -1031,7 +1037,14 @@ footer {
   margin: var(--block-gap) auto 0;
   padding: 0 15px
 }
-/* Workflow video lives inside the sticky .video-panel (see stepper block) */
+/* Workflow video lives inside the sticky .video-panel (see stepper block).
+   Two stacked players crossfade on step change (.is-hidden = opacity 0). */
+.workflow-video {
+  transition: opacity .6s ease
+}
+.workflow-video.is-hidden {
+  opacity: 0
+}
 .video-wrapper {
   position: relative;
   padding-bottom: 62.5%;

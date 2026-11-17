@@ -224,19 +224,36 @@
     let active = null;
     let currentId = initialId;
     let pendingId = null;
+    // Two stacked players; a step change loads the back one and crossfades.
+    let front = video;
+    let back = document.getElementById('workflow-video-b');
+    if (!back) back = video;
 
     function swapVideo(videoId) {
       if (!/^[a-zA-Z0-9_-]+$/.test(videoId || '')) return;
-      video.pause();
-      video.currentTime = 0;
-      video.onerror = null;
-      video.oncanplaythrough = null;
-      video.src = 'assets/videos/' + videoId + '.mp4' + ASSET_VERSION;
-      video.load();
-      video.onerror = () => {};
-      video.oncanplaythrough = () => {
-        video.play().catch(() => {});
+      if (back === video) {
+        // No second player: plain hard swap.
+        video.pause();
+        video.currentTime = 0;
+        video.oncanplaythrough = () => { video.play().catch(() => {}); };
+        video.src = 'assets/videos/' + videoId + '.mp4' + ASSET_VERSION;
+        video.load();
+        currentId = videoId;
+        return;
+      }
+      const incoming = back;
+      const outgoing = front;
+      incoming.onerror = () => {};
+      incoming.oncanplaythrough = () => {
+        incoming.play().catch(() => {});
+        incoming.classList.remove('is-hidden');
+        outgoing.classList.add('is-hidden');
+        window.setTimeout(() => outgoing.pause(), 700);
+        front = incoming;
+        back = outgoing === incoming ? back : outgoing;
       };
+      incoming.src = 'assets/videos/' + videoId + '.mp4' + ASSET_VERSION;
+      incoming.load();
       currentId = videoId;
     }
 
@@ -318,16 +335,31 @@
   }
 
   // Draws the stepper's progress line as it scrolls through the viewport
-  // (--progress 0..1, consumed by .progress-line's scaleY in styles.css).
+  // (--progress 0..1, consumed by .progress-line's scaleY in styles.css) and
+  // ignites each rail node (.lit) the moment the line reaches it.
   function setupProgressLine() {
     const steps = document.querySelector('.workflow-steps');
     if (!steps) return;
+    const nodes = Array.from(steps.querySelectorAll('.workflow-step')).map((s) => {
+      const n = s.querySelector('.step-number');
+      return n ? { el: n, at: 0 } : null;
+    }).filter(Boolean);
+    const measure = () => {
+      nodes.forEach((n) => {
+        const s = n.el.closest('.workflow-step');
+        n.at = s.offsetTop + n.el.offsetTop + n.el.offsetHeight / 2;
+      });
+    };
+    measure();
+    window.addEventListener('resize', measure, { passive: true });
     let ticking = false;
     const update = () => {
       ticking = false;
       const rect = steps.getBoundingClientRect();
       const progress = Math.min(1, Math.max(0, (window.innerHeight * 0.8 - rect.top) / rect.height));
       steps.style.setProperty('--progress', progress.toFixed(3));
+      const reached = progress * rect.height;
+      nodes.forEach((n) => n.el.classList.toggle('lit', reached >= n.at));
     };
     window.addEventListener('scroll', () => {
       if (!ticking) {

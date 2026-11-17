@@ -32,8 +32,9 @@ This guide provides comprehensive documentation for the Remote Labs website at E
 - Scroll-based header hiding (desktop & mobile)
 - "How it works": scroll-spy stepper rail on the left, title + sticky video
   panel on the right — the step nearest the viewport center dims its
-  siblings, fills its rail node and loads its video; a progress line draws
-  down the rail on scroll
+  siblings and loads its video (two stacked players crossfade on swap);
+  a progress line draws down the rail on scroll and each rail node ignites
+  (.lit) when the line reaches it
 - Optimized mobile experience
 - Performance-focused design
 - Accessible components
