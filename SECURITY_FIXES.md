@@ -306,3 +306,18 @@ If something breaks:
 4. Ask Karel: k.m.a.aarts@tue.nl
 
 Good luck! 🚀
+
+---
+
+## 2026-11-17 audit follow-up (remotelabs-website-security-audit-2026-11-17.md)
+
+Status of the audit findings at v2.1.79:
+
+- **Must fix 1 (experimental/ loads cloud.umami.is without SRI/consent):** already resolved - no Umami reference remains in `experimental/` or `experimental_deploy/`.
+- **CI npm install -> npm ci:** already applied; added an `npm audit --audit-level=high` gate after `npm ci` in `build-and-deploy.yml`.
+- **Lighthouse via tag @lhci/cli@0.14:** fixed by vendoring `@lhci/cli` as a devDependency (0.16.1, lockfile-pinned via `npm ci`; release commit `b0c42f47e6abef0801e90e7ef54e2b22c4c1443f`); CI now runs the local binary instead of a runtime-fetched tag. 0.14.0 was not vendored because its dep tree carries 18 audit advisories.
+- **Old dev dep ws 7.5.13:** `npm audit` now reports 0 vulnerabilities.
+- **shields.io badge IP leak:** already disclosed in `privacy.html` (section 5).
+- **Missing Cross-Origin-Resource-Policy:** already set in `.htaccess`.
+- **style-src unsafe-inline (optional):** left as-is - inline styles cannot execute script; script-src stays strict.
+- **Umami cloud /api/send after consent:** accepted trade-off, tracked as TODO.md item 2 (server-side reverse proxy).

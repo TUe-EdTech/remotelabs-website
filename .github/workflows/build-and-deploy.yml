@@ -31,6 +31,11 @@ jobs:
           cd production_source
           npm ci
 
+      - name: Audit dependencies for known vulnerabilities
+        run: |
+          cd production_source
+          npm audit --audit-level=high
+
       - name: Run source consistency tests
         run: |
           cd production_source
@@ -54,7 +59,11 @@ jobs:
           npm run test:render
 
       - name: Run Lighthouse CI
-        run: npx --yes @lhci/cli@0.14.0 autorun --config=lighthouserc.json
+        # @lhci/cli is a devDependency pinned by package-lock.json (npm ci
+        # above), so the runner executes the lockfile version, not a
+        # runtime-resolved tag. Commit of the published release:
+        # b0c42f47e6abef0801e90e7ef54e2b22c4c1443f (v0.16.1).
+        run: node production_source/node_modules/@lhci/cli/src/cli.js autorun --config=lighthouserc.json
 
       - name: Commit build artifacts
         if: github.ref == 'refs/heads/main'

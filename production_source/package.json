@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/TUe-EdTech/remotelabs-website#readme",
   "devDependencies": {
+    "@lhci/cli": "^0.16.1",
     "chrome-launcher": "^1.2.3",
     "chrome-remote-interface": "^0.34.0",
     "clean-css": "^5.3.3",
