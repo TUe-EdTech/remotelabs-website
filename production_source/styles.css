@@ -691,19 +691,24 @@ footer {
   margin: 0 0 0 0
 }
 .benefits-container {
-  margin: 0
+  margin: 0;
+  display: grid;
+  gap: 1.5rem
 }
 .experiments-showcase {
   margin-top: var(--section-pad)
 }
+/* Same bordered-block component as .workflow-step / .experiment-step */
 .benefit-item {
   display: flex;
   gap: 1.25rem;
-  padding: 1.75rem 0;
-  border-top: 1px solid var(--gray-200)
+  padding: 1.5rem;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  background: var(--white)
 }
-.benefit-item:last-child {
-  border-bottom: 1px solid var(--gray-200)
+.benefit-item:hover {
+  background: var(--gray-50)
 }
 .benefit-icon {
   flex: none;
