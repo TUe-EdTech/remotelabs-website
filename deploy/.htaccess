@@ -27,6 +27,9 @@
     # Cross-origin isolation for the document
     Header always set Cross-Origin-Opener-Policy "same-origin"
 
+    # Only this site may load these resources cross-origin
+    Header always set Cross-Origin-Resource-Policy "same-origin"
+
     # Long cache for fingerprinted/static assets; HTML is handled by the
     # service worker (network-first) so it stays fresh.
     # Every local asset referenced from the HTML (and fonts.css) carries
