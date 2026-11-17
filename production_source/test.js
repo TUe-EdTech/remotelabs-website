@@ -250,33 +250,6 @@ for (const page of PAGES) {
   }
 }
 
-console.log('\nRunway scroll math checks:');
-{
-  const src = fs.readFileSync(path.join(ROOT, 'script.js'), 'utf8');
-  const m = src.match(/\/\/ runway-math:start[^\n]*\n([\s\S]*?)\/\/ runway-math:end/);
-  if (!m) {
-    fail('script.js', 'runway-math markers missing - pure scroll math not extractable');
-  } else {
-    const math = new Function(m[1] + '\nreturn { rawToAnimP, chapterCenterRaw };')();
-    const near = (a, b) => Math.abs(a - b) < 1e-9;
-    const cases = [
-      ['rawToAnimP(0, .12) clamps to 0', near(math.rawToAnimP(0, 0.12), 0)],
-      ['rawToAnimP(1, .12) clamps to 1', near(math.rawToAnimP(1, 0.12), 1)],
-      ['rawToAnimP(.12, .12) = 0 (slack dead zone starts animation)', near(math.rawToAnimP(0.12, 0.12), 0)],
-      ['rawToAnimP(.5, .12) = .5 (mid-track maps to mid-animation)', near(math.rawToAnimP(0.5, 0.12), 0.5)],
-      ['chapterCenterRaw(1, 3, .12) = .5 (step 2 detent at mid-track)', near(math.chapterCenterRaw(1, 3, 0.12), 0.5)]
-    ];
-    for (const [msg, pass] of cases) {
-      if (pass) ok(msg); else fail('script.js', msg);
-    }
-  }
-  const css = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
-  if (css.includes('calc(var(--ch, 0) * -1em)')) {
-    ok('odometer snaps per chapter via --ch * -1em (em, not % - v2.1.63 regression guard)');
-  } else {
-    fail('styles.css', 'odometer translateY must use calc(var(--ch, 0) * -1em); percentages resolve against the 3em track and push 03 out of frame');
-  }
-}
 
 console.log('\n' + (failures === 0 ? 'All checks passed.' : `${failures} check(s) failed.`));
 process.exit(failures === 0 ? 0 : 1);

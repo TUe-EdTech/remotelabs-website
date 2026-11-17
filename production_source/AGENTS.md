@@ -26,18 +26,11 @@
 
 ## 🎯 Project Overview
 
-This guide provides comprehensive documentation for the Remote Labs website at Eindhoven University of Technology. The website has been optimized for performance, accessibility, and user experience with modern features including a scroll-driven "chapter runway" workflow section, responsive design, and security headers.
+This guide provides comprehensive documentation for the Remote Labs website at Eindhoven University of Technology. The website has been optimized for performance, accessibility, and user experience with modern features including responsive design and security headers.
 
 **Key Features**:
-- "How it works" is a "chapter runway" scrollytelling section (styles.css
-  section 15, driven by `setupPrototypes` in script.js): a 260vh track with
-  a sticky 100vh stage — numeral counts 01→03 continuously with scroll
-  (`--p`), chapter text crossfades below it (`--ch`), a rail fills with
-  progress, and the video panel in the right half crossfades to the active
-  step's clip (two stacked players, `makeCrossfader`). The `.proto` class
-  names are historical; the section is `#how-it-works`. Video column is
-  hidden on mobile; no-JS renders a static stack; reduced-motion collapses
-  the track.
+- \"How it works\" is a static three-step section (styles.css section 15,
+  markup in index.html; no JS involved).
 - Optimized mobile experience
 - Performance-focused design
 - Accessible components
@@ -369,7 +362,7 @@ The GitHub Actions workflow (`.github/workflows/build-and-deploy.yml`) runs thes
 - [ ] Responsive design (320px to 1920px+)
 - [ ] All links work
 - [ ] All images load
-- [ ] Videos play correctly (hero autoplays on normal connections; the how-it-works runway video lazy-plays when its stage nears the viewport and crossfades per chapter — see `setupPrototypes` in script.js; on Save-Data/2G the hero video shows the poster until Play)
+- [ ] Videos play correctly (hero autoplays on normal connections; on Save-Data/2G the hero video shows the poster until Play)
 - [ ] Forms submit (if any)
 - [ ] Accessibility (keyboard navigation, screen readers)
 - [ ] **Incognito mode test** (verifies no caching issues)
