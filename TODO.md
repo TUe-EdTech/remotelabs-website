@@ -30,6 +30,14 @@ Lighthouse performance budget stays at 0.7. See production_source/AGENTS.md.
 Items 3-12 come from the design audit of the current production design.
 None are implemented; approve by number before any work starts.
 
+Suggested order:
+- Phase 1 (no visible change, brand-rule enforcement + cleanup):
+  9, 12, 4, 10
+- Phase 2 (visual structure, stays inside the monochrome brand):
+  5, 6, 7, 8
+- Phase 3 (identity, prototype in experimental/ first):
+  3, and 11 only with explicit approval (monochrome exception)
+
 3. **Hero concept** - the most characteristic asset (live rig footage) is
    an unframed full-width video under a plain headline. Proposal: frame it
    as a live viewfinder (corner ticks, monospace caption) plus a thin
