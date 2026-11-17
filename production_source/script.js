@@ -9,7 +9,7 @@
 //   5. Loading placeholders for lazy media (image shimmer, video poster panel)
 //   6. Smooth scrolling for in-page anchors
 //   7. Service worker registration (after page load, http/https only)
-//   8. Workflow prototypes #proto-1/#proto-2: scroll-driven sticky stages
+//   8. Workflow prototypes #proto-1/1a/1b: scroll-driven sticky stages
 (function () {
   'use strict';
 
@@ -209,6 +209,38 @@
     observer.observe(video);
   }
 
+  // Two stacked video players crossfade on swap: the incoming clip fades in
+  // over the outgoing one (0.6s opacity, see .workflow-video in styles.css).
+  // Returns a swap(videoId) function; with a single player it hard-swaps.
+  function makeCrossfader(videoA, videoB) {
+    let front = videoA;
+    let back = videoB;
+    return function swap(videoId) {
+      if (!/^[a-zA-Z0-9_-]+$/.test(videoId || '')) return;
+      if (back === front) {
+        front.pause();
+        front.currentTime = 0;
+        front.oncanplaythrough = () => { front.play().catch(() => {}); };
+        front.src = 'assets/videos/' + videoId + '.mp4' + ASSET_VERSION;
+        front.load();
+        return;
+      }
+      const incoming = back;
+      const outgoing = front;
+      incoming.onerror = () => {};
+      incoming.oncanplaythrough = () => {
+        incoming.play().catch(() => {});
+        incoming.classList.remove('is-hidden');
+        outgoing.classList.add('is-hidden');
+        window.setTimeout(() => outgoing.pause(), 700);
+        front = incoming;
+        back = outgoing;
+      };
+      incoming.src = 'assets/videos/' + videoId + '.mp4' + ASSET_VERSION;
+      incoming.load();
+    };
+  }
+
   // How-it-works stepper: the step nearest the middle of the viewport (or a
   // clicked/tapped step) becomes active - its recording loads into the
   // sticky video panel. Video swaps are deferred while the panel is
@@ -226,35 +258,12 @@
     let currentId = initialId;
     let pendingId = null;
     // Two stacked players; a step change loads the back one and crossfades.
-    let front = video;
-    let back = document.getElementById('workflow-video-b');
-    if (!back) back = video;
+    const back = document.getElementById('workflow-video-b');
+    const swapTo = makeCrossfader(video, back || video);
 
     function swapVideo(videoId) {
       if (!/^[a-zA-Z0-9_-]+$/.test(videoId || '')) return;
-      if (back === video) {
-        // No second player: plain hard swap.
-        video.pause();
-        video.currentTime = 0;
-        video.oncanplaythrough = () => { video.play().catch(() => {}); };
-        video.src = 'assets/videos/' + videoId + '.mp4' + ASSET_VERSION;
-        video.load();
-        currentId = videoId;
-        return;
-      }
-      const incoming = back;
-      const outgoing = front;
-      incoming.onerror = () => {};
-      incoming.oncanplaythrough = () => {
-        incoming.play().catch(() => {});
-        incoming.classList.remove('is-hidden');
-        outgoing.classList.add('is-hidden');
-        window.setTimeout(() => outgoing.pause(), 700);
-        front = incoming;
-        back = outgoing === incoming ? back : outgoing;
-      };
-      incoming.src = 'assets/videos/' + videoId + '.mp4' + ASSET_VERSION;
-      incoming.load();
+      swapTo(videoId);
       currentId = videoId;
     }
 
@@ -335,19 +344,22 @@
     });
   }
 
-  // Evaluation prototypes for the workflow scrollytelling (#proto-1 runway,
-  // #proto-2 deck). Each .proto-track is tall; a sticky stage reacts to the
-  // scroll progress --p (and chapter --ch) set here. .proto-ready gates the
-  // animated states, so without JS the prototypes render as static stacks.
+  // Evaluation prototypes for the workflow scrollytelling (#proto-1 base,
+  // #proto-1a with detail, #proto-1b with video). Each .proto-track is tall;
+  // a sticky stage reacts to the scroll progress --p (and chapter --ch) set
+  // here. In the video variant the chapter change crossfades the clip (only
+  // while the stage is on screen). .proto-ready gates the animated states,
+  // so without JS the prototypes render as static stacks.
   function setupPrototypes() {
     document.querySelectorAll('.proto').forEach((section) => {
       const track = section.querySelector('.proto-track');
       if (!track) return;
       section.classList.add('proto-ready');
       const steps = Array.from(section.querySelectorAll('.runway-step'));
-      const cards = Array.from(section.querySelectorAll('.deck-card'));
-      const ghost = section.querySelector('.deck-ghost');
-      const count = Math.max(steps.length, cards.length, 1);
+      if (!steps.length) return;
+      const players = section.querySelectorAll('.proto-video .workflow-video');
+      const swapFn = players.length === 2 ? makeCrossfader(players[0], players[1]) : null;
+      let lastVid = steps[0].dataset.video || null;
       let ticking = false;
       const update = () => {
         ticking = false;
@@ -355,16 +367,20 @@
         const total = rect.height - window.innerHeight;
         const p = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
         section.style.setProperty('--p', p.toFixed(4));
-        const ch = Math.min(count - 1, Math.floor(p * count));
-        if (steps.length) {
-          section.style.setProperty('--ch', ch);
-          steps.forEach((s, i) => {
-            s.classList.toggle('on', i === ch);
-            s.classList.toggle('done', i < ch);
-          });
+        const ch = Math.min(steps.length - 1, Math.floor(p * steps.length));
+        section.style.setProperty('--ch', ch);
+        steps.forEach((s, i) => {
+          s.classList.toggle('on', i === ch);
+          s.classList.toggle('done', i < ch);
+        });
+        if (swapFn) {
+          const inView = rect.bottom > 0 && rect.top < window.innerHeight;
+          const vid = steps[ch].dataset.video;
+          if (inView && vid && vid !== lastVid) {
+            lastVid = vid;
+            swapFn(vid);
+          }
         }
-        cards.forEach((c, i) => c.classList.toggle('covered', p * count > i + 1));
-        if (ghost) ghost.style.transform = 'translateY(' + ((p - 0.5) * -30).toFixed(2) + 'vh)';
       };
       window.addEventListener('scroll', () => {
         if (!ticking) {

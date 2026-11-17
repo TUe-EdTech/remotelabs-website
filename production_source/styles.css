@@ -1317,12 +1317,13 @@ img.media-error {
 .hero-video-wrapper {
   background: var(--gray-900)
 }
-/* ---- 15. Workflow prototypes (evaluation builds, 2026-11): two candidate
-   scrollytelling treatments for the student workflow. Pick one, fold it into
-   "How it works", delete the other. Each .proto-track is 400vh with a sticky
-   100vh stage; JS sets --p (0..1 scroll progress through the track) and --ch
-   (current chapter) on the section, plus .proto-ready to enable the animated
-   states - without JS everything renders as a plain static stack. ---- */
+/* ---- 15. Workflow prototypes (evaluation builds, 2026-11): the "chapter
+   runway" scrollytelling in three variants - #proto-1 base, #proto-1a with
+   per-chapter detail, #proto-1b with a crossfading per-chapter video. Pick
+   one, fold it into "How it works", delete the others. Each .proto-track is
+   400vh with a sticky 100vh stage; JS sets --p (0..1 scroll progress) and
+   --ch (current chapter) on the section, plus .proto-ready to enable the
+   animated states - without JS everything renders as a plain static stack. ---- */
 .proto-track {
   height: 400vh
 }
@@ -1438,75 +1439,66 @@ img.media-error {
   max-width: 46ch
 }
 
-/* Prototype 2: card deck - sticky cards pile over each other, ghost word
-   parallaxes behind (JS sets its translateY from --p) */
-.proto-deck .proto-stage {
-  display: block;
-  padding-top: 110px
+/* Variant 1A: per-chapter detail - hairline bullet list + time meta chip,
+   children stagger in when the chapter activates */
+.proto-depth .runway-steps {
+  min-height: 24rem
 }
-.deck-ghost {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(6rem, 22vw, 20rem);
-  color: var(--gray-100);
-  user-select: none;
-  pointer-events: none
+.runway-list {
+  list-style: none;
+  margin-top: 1.25rem
 }
-.deck {
-  position: relative;
-  z-index: 1
-}
-.deck-card {
-  position: sticky;
-  top: calc(120px + var(--i) * 28px);
-  background: #fff;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-md);
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  min-height: 52vh;
-  transition: transform .3s ease, opacity .3s ease
-}
-.deck-card + .deck-card {
-  margin-top: 45vh
-}
-.proto-ready .deck-card.covered {
-  transform: scale(.96);
-  opacity: .55
-}
-.deck-num {
-  display: block;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(3rem, 8vw, 4.5rem);
-  line-height: 1;
-  color: var(--gray-200)
-}
-.deck-card h3 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(1.4rem, 2.6vw, 2rem);
-  margin: 1rem 0 .75rem;
-  color: var(--black)
-}
-.deck-card p {
+.runway-list li {
+  border-top: 1px solid var(--gray-200);
+  padding: .5rem 0;
   color: var(--gray-600);
-  font-size: 1.05rem;
-  line-height: 1.6;
-  max-width: 52ch
+  font-size: .95rem
+}
+.runway-meta {
+  display: inline-block;
+  margin-top: 1.25rem;
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--gray-600);
+  border: 1px solid var(--gray-300);
+  border-radius: 999px;
+  padding: .2rem .7rem
+}
+.proto-ready .proto-depth .runway-step > * {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .45s ease, transform .45s ease
+}
+.proto-ready .proto-depth .runway-step.on > * {
+  opacity: 1;
+  transform: none
+}
+.proto-ready .proto-depth .runway-step.on > *:nth-child(2) {
+  transition-delay: .1s
+}
+.proto-ready .proto-depth .runway-step.on > *:nth-child(3) {
+  transition-delay: .18s
+}
+.proto-ready .proto-depth .runway-step.on > *:nth-child(4) {
+  transition-delay: .26s
+}
+
+/* Variant 1B: third grid column carries the crossfading video panel */
+.runway.with-video {
+  grid-template-columns: auto minmax(0, 1fr) minmax(240px, 32%)
+}
+.proto-video {
+  margin: 0;
+  padding: 0;
+  max-width: none
 }
 
 @media (max-width: 768px) {
   .proto-label {
     top: 70px
   }
-  .runway {
+  .runway,
+  .runway.with-video {
     grid-template-columns: 1fr;
     gap: 1.5rem
   }
@@ -1516,11 +1508,12 @@ img.media-error {
   .runway-body {
     padding-left: 2rem
   }
-  .deck-card {
-    min-height: 0
+  .proto-depth .runway-steps {
+    min-height: 30rem
   }
-  .deck-card + .deck-card {
-    margin-top: 60vh
+  /* video column drops out on small screens - the text carries the chapter */
+  .proto-video {
+    display: none
   }
 }
 
@@ -1555,16 +1548,11 @@ img.media-error {
   .runway-fill {
     transform: none
   }
-  .deck-card {
-    position: static;
-    margin-top: 0;
-    transform: none !important;
-    opacity: 1 !important
+  .proto-depth .runway-steps {
+    min-height: 0
   }
-  .deck-card + .deck-card {
-    margin-top: 1.5rem
-  }
-  .deck-ghost {
-    display: none
+  .proto-ready .proto-depth .runway-step > * {
+    opacity: 1;
+    transform: none
   }
 }
