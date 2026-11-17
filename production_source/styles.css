@@ -98,6 +98,11 @@ body {
   transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
   transform: translateY(0)
 }
+/* While the how-it-works runway is locked (stage pinned), keep the site
+   header hidden so it never covers the section heading inside the stage */
+body.runway-locked .main-header {
+  transform: translateY(-100%)
+}
 .main-header.hidden {
   transform: translateY(-100%)
 }

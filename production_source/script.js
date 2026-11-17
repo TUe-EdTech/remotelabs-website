@@ -249,6 +249,9 @@
         const rect = track.getBoundingClientRect();
         const total = rect.height - window.innerHeight;
         const p = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
+        // Scroll lock: while the stage is pinned, keep the site header out
+        // of the way so the how-it-works heading stays fully in view.
+        document.body.classList.toggle('runway-locked', rect.top <= 0 && rect.bottom >= window.innerHeight);
         section.style.setProperty('--p', p.toFixed(4));
         const ch = Math.min(steps.length - 1, Math.floor(p * steps.length));
         section.style.setProperty('--ch', ch);
