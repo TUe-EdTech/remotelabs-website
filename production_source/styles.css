@@ -1116,7 +1116,10 @@ img.media-error {
   top: 0;
   height: 100vh;
   display: flex;
-  align-items: center;
+  /* top-aligned with a header-sized offset: the runway sits right under
+     the site header when pinned instead of floating mid-viewport */
+  align-items: flex-start;
+  padding-top: clamp(5rem, 12vh, 8rem);
   overflow: hidden;
   contain: layout paint
 }
