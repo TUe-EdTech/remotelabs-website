@@ -68,6 +68,10 @@ body {
 .section {
   padding: var(--section-pad) 0
 }
+/* the section right after the pinned runway sits closer to it */
+.how-it-works + .section {
+  padding-top: 2rem
+}
 @media (max-width:768px) {
   :root {
     --section-pad: 3.5rem;
@@ -1132,15 +1136,19 @@ img.media-error {
   position: sticky;
   top: 0;
   height: 100vh;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: clamp(2rem, 6vh, 4rem);
   /* the section header lives inside the pinned stage, so title and runway
      travel together with no dead space above or below */
   padding-top: clamp(4.5rem, 9vh, 6.5rem);
   overflow: hidden;
   contain: layout paint
 }
+/* auto margins center the runway in the stage space left under the
+   header, so there is no oversized empty band below it */
 .runway {
-  margin-top: clamp(2rem, 6vh, 4rem);
+  margin: auto 0;
   display: grid;
   /* numeral top-left, chapter text below it, video spanning both rows on
      the right so it lines up with the numeral and the text */
