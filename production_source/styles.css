@@ -287,7 +287,19 @@ body.runway-locked .main-header {
 html {
   scroll-behavior: smooth!important;
   /* anchor jumps land below the sticky header instead of under it */
-  scroll-padding-top: 5rem
+  scroll-padding-top: 5rem;
+  /* gentle snap: after a long pinned run (the how-it-works track), the
+     page settles onto the next section instead of flying past it.
+     proximity only - never traps, and disabled under reduced motion */
+  scroll-snap-type: y proximity
+}
+main > section {
+  scroll-snap-align: start
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-snap-type: none
+  }
 }
 body {
   overscroll-behavior: contain;
