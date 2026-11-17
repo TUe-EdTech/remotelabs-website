@@ -1044,11 +1044,19 @@ img.media-error {
   overflow: hidden;
   contain: layout paint
 }
-/* runway sits directly under the in-stage header; any leftover stage
-   height stays at the bottom and reads as page background */
+/* the stage content fills the pinned viewport, and the runway centers in
+   the leftover height - no blank band below the runway before the next
+   section scrolls in */
+.proto-stage > .container {
+  height: 100%;
+  display: flex;
+  flex-direction: column
+}
 .runway {
   margin-top: clamp(1.5rem, 4vh, 3rem);
+  flex: 1;
   display: grid;
+  align-content: safe center;
   /* numeral top-left, chapter text below it, video spanning both rows on
      the right so it lines up with the numeral and the text */
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
