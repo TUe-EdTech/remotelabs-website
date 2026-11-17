@@ -217,6 +217,15 @@
     };
   }
 
+  // runway-math:start - pure scroll math for the runway, unit-tested in test.js
+  function rawToAnimP(raw, slack) {
+    return Math.min(1, Math.max(0, (raw - slack) / (1 - slack * 2)));
+  }
+  function chapterCenterRaw(k, n, slack) {
+    return slack + ((k + 0.5) / n) * (1 - slack * 2);
+  }
+  // runway-math:end
+
   // How it works: the .proto-track is tall; a sticky stage reacts to scroll
   // progress --p (and chapter --ch) set here. A chapter change crossfades the
   // clip in the video panel (only while the stage is on screen). .proto-ready
@@ -288,7 +297,7 @@
         // runway does not start advancing the moment it pins (chapter 1
         // holds on arrival) and chapter 3 is reached before the track ends.
         const raw = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
-        target = Math.min(1, Math.max(0, (raw - SLACK) / (1 - SLACK * 2)));
+        target = rawToAnimP(raw, SLACK);
         // Scroll lock: while the stage is pinned, keep the site header out
         // of the way so the how-it-works heading stays fully in view.
         document.body.classList.toggle('runway-locked', rect.top <= 0 && rect.bottom >= window.innerHeight);
@@ -311,9 +320,9 @@
         const raw = Math.min(1, Math.max(0, -rect.top / total));
         if (raw < 0.08 || raw > 0.92) return;
         const n = steps.length;
-        const animP = (raw - SLACK) / (1 - SLACK * 2);
+        const animP = rawToAnimP(raw, SLACK);
         const k = Math.max(0, Math.min(n - 1, Math.round(animP * n - 0.5)));
-        const targetRaw = SLACK + ((k + 0.5) / n) * (1 - SLACK * 2);
+        const targetRaw = chapterCenterRaw(k, n, SLACK);
         const targetY = rect.top + window.scrollY + targetRaw * total;
         const diff = targetY - window.scrollY;
         if (Math.abs(diff) > 2 && Math.abs(diff) < total * 0.15) {

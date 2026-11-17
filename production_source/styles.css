@@ -1278,6 +1278,21 @@ img.media-error {
   }
 }
 
+/* Short viewports (landscape phones, small laptop windows): shrink the
+   stage content so nothing is clipped by the stage overflow: hidden */
+@media (max-height: 700px) and (min-width: 769px) {
+  .proto-stage {
+    padding-top: 4.5rem;
+    padding-bottom: 1.5rem
+  }
+  .runway-num {
+    font-size: 3.5rem
+  }
+  .proto-video {
+    max-width: 340px
+  }
+}
+
 /* Reduced motion: collapse the tall track into plain stacked content */
 @media (prefers-reduced-motion: reduce) {
   .proto-track {
