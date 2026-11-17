@@ -26,11 +26,12 @@
 
 ## 🎯 Project Overview
 
-This guide provides comprehensive documentation for the Remote Labs website at Eindhoven University of Technology. The website has been optimized for performance, accessibility, and user experience with modern features including scroll-based navigation hiding, interactive toggle switches, responsive design, and security headers.
+This guide provides comprehensive documentation for the Remote Labs website at Eindhoven University of Technology. The website has been optimized for performance, accessibility, and user experience with modern features including scroll-based navigation hiding, scroll-animated workflow stepper, responsive design, and security headers.
 
 **Key Features**:
 - Scroll-based header hiding (desktop & mobile)
-- Modern toggle switch for workflow selection
+- "How it works" stepper: scroll-drawn progress line, staggered step reveal,
+  click a step to swap the workflow video
 - Optimized mobile experience
 - Performance-focused design
 - Accessible components

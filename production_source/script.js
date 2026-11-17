@@ -5,7 +5,7 @@
 //   1. Tag touch devices and read the reduced-motion preference (used below)
 //   2. Back-to-top button + one rAF-throttled scroll handler (header hide/show)
 //   3. Hero video controls (play/pause, mute) + data-saver gating
-//   4. Workflow section: lazy-playing video, per-step video switching, toggle switch
+//   4. How it works: scroll reveal + progress line, lazy video, step video switching
 //   5. Loading placeholders for lazy media (image shimmer, video poster panel)
 //   6. Smooth scrolling for in-page anchors
 //   7. Service worker registration (after page load, http/https only)
@@ -181,7 +181,7 @@
   }
 
   // -----------------------------------------------------------------------
-  // 4. Workflow section: lazy video, step switching, toggle switch
+  // 4. How it works: scroll reveal, progress line, step video switching
   // -----------------------------------------------------------------------
 
   // #workflow-video ships with preload="none" and no autoplay, so
@@ -251,64 +251,47 @@
     steps[0].classList.add('active-step');
   }
 
-  // Students / Educators / Organizations toggle: shows the matching
-  // workflow section and updates the heading text.
-  function setupToggleSwitch() {
-    const toggleStudents = document.getElementById('toggle-students');
-    const toggleTeachers = document.getElementById('toggle-teachers');
-    const toggleOrganizations = document.getElementById('toggle-organizations');
-    if (!toggleStudents || !toggleTeachers || !toggleOrganizations) return;
-
-    const studentsSection = document.getElementById('students');
-    const teachersSection = document.getElementById('teachers');
-    const organizationsSection = document.getElementById('organizations');
-
-    function updateWorkflowSection() {
-      const workflowTitle = document.getElementById('workflowTitle');
-      const workflowIntro = document.getElementById('workflowIntro');
-
-      studentsSection.classList.remove('active');
-      teachersSection.classList.remove('active');
-      organizationsSection.classList.remove('active');
-
-      if (toggleStudents.checked) {
-        studentsSection.classList.add('active');
-        if (workflowTitle) workflowTitle.textContent = 'Student Workflow';
-        if (workflowIntro) workflowIntro.textContent = 'Simple 3-step process to conduct experiments remotely at your own pace';
-      } else if (toggleTeachers.checked) {
-        teachersSection.classList.add('active');
-        if (workflowTitle) workflowTitle.textContent = 'Educator Benefits';
-        if (workflowIntro) workflowIntro.textContent = 'Enhance your teaching and student engagement with powerful tools';
-      } else if (toggleOrganizations.checked) {
-        organizationsSection.classList.add('active');
-        if (workflowTitle) workflowTitle.textContent = 'Organizational Gains';
-        if (workflowIntro) workflowIntro.textContent = 'Transform your laboratory operations and expand your research capabilities';
-      }
-    }
-
-    // Click anywhere on the toggle bar for a broader hit area, but let
-    // clicks on the <label> elements drive the radios natively.
-    const toggleSwitch = document.querySelector('.toggle-switch');
-    if (toggleSwitch) {
-      toggleSwitch.addEventListener('click', (e) => {
-        if (e.target.closest('label')) return;
-        const rect = toggleSwitch.getBoundingClientRect();
-        const clickX = e.clientX - rect.left;
-        const thirdWidth = rect.width / 3;
-        if (clickX < thirdWidth) {
-          toggleStudents.checked = true;
-        } else if (clickX < thirdWidth * 2) {
-          toggleTeachers.checked = true;
-        } else {
-          toggleOrganizations.checked = true;
+  // Scroll-driven reveal of the workflow steps and video. .anim-ready is
+  // only added when IntersectionObserver exists, so without JS (or with
+  // reduced motion handled by CSS) everything simply renders visible.
+  function setupScrollReveal() {
+    const section = document.querySelector('.how-it-works');
+    if (!section || !('IntersectionObserver' in window)) return;
+    section.classList.add('anim-ready');
+    const items = section.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
         }
-        updateWorkflowSection();
       });
-    }
+    }, { rootMargin: '0px 0px -15% 0px' });
+    items.forEach((el, i) => {
+      el.style.transitionDelay = (i * 0.12) + 's';
+      observer.observe(el);
+    });
+  }
 
-    toggleStudents.addEventListener('change', updateWorkflowSection);
-    toggleTeachers.addEventListener('change', updateWorkflowSection);
-    toggleOrganizations.addEventListener('change', updateWorkflowSection);
+  // Draws the stepper's progress line as it scrolls through the viewport
+  // (--progress 0..1, consumed by .progress-line's scaleY in styles.css).
+  function setupProgressLine() {
+    const steps = document.querySelector('.workflow-steps');
+    if (!steps) return;
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const rect = steps.getBoundingClientRect();
+      const progress = Math.min(1, Math.max(0, (window.innerHeight * 0.8 - rect.top) / rect.height));
+      steps.style.setProperty('--progress', progress.toFixed(3));
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(update);
+        ticking = true;
+      }
+    }, { passive: true });
+    update();
   }
 
   // -----------------------------------------------------------------------
@@ -406,11 +389,12 @@
 
   function init() {
     setupVideoSwitching();
+    setupScrollReveal();
+    setupProgressLine();
     setupHeroVideoDataSaver();
     setupHeroVideoControls();
     setupBackButton();
     setupSmoothScroll();
-    setupToggleSwitch();
     setupWorkflowVideoLazyPlay();
     setupMediaPlaceholders();
   }
