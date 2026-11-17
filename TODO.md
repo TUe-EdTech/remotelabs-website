@@ -43,7 +43,3 @@ Lighthouse performance budget stays at 0.7. See production_source/AGENTS.md.
    `box-shadow: var(--shadow-sm)`; replace with
    `border-bottom: 1px solid var(--gray-200)` to match the flat
    hairline language of v2.1.37.
-
-6. **Viewfinder frame on the workflow video too** - apply the same frame
-   + mono caption to `#workflow-video` so both rig videos share the
-   visual language (needs the placeholder panel repositioned inside it).

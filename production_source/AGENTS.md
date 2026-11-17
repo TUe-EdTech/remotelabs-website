@@ -30,8 +30,10 @@ This guide provides comprehensive documentation for the Remote Labs website at E
 
 **Key Features**:
 - Scroll-based header hiding (desktop & mobile)
-- "How it works" stepper: scroll-drawn progress line, staggered step reveal,
-  click a step to swap the workflow video
+- "How it works" experiment console: sticky viewfinder video panel (corner
+  ticks, mono caption, scarlet live dot) driven by a scroll-spy stepper —
+  the step nearest the viewport center dims its siblings, fills its rail
+  node and loads its video; a progress line draws down the rail on scroll
 - Optimized mobile experience
 - Performance-focused design
 - Accessible components

@@ -5,7 +5,7 @@
 //   1. Tag touch devices and read the reduced-motion preference (used below)
 //   2. Back-to-top button + one rAF-throttled scroll handler (header hide/show)
 //   3. Hero video controls (play/pause, mute) + data-saver gating
-//   4. How it works: scroll reveal + progress line, lazy video, step video switching
+//   4. How it works: scroll-spy stepper drives a sticky viewfinder video panel
 //   5. Loading placeholders for lazy media (image shimmer, video poster panel)
 //   6. Smooth scrolling for in-page anchors
 //   7. Service worker registration (after page load, http/https only)
@@ -181,7 +181,7 @@
   }
 
   // -----------------------------------------------------------------------
-  // 4. How it works: scroll reveal, progress line, step video switching
+  // 4. How it works: scroll-spy stepper + progress line + viewfinder panel
   // -----------------------------------------------------------------------
 
   // #workflow-video ships with preload="none" and no autoplay, so
@@ -208,47 +208,94 @@
     observer.observe(video);
   }
 
-  // Clicking a student workflow step swaps the workflow video to that
-  // step's recording (data-video="<name>" -> assets/videos/<name>.mp4).
-  function setupVideoSwitching() {
-    const steps = document.querySelectorAll('.workflow-step[data-video]');
+  // How-it-works stepper: the step nearest the middle of the viewport (or a
+  // clicked/tapped step) becomes active - its recording loads into the
+  // viewfinder panel and the mono caption names it. Video swaps are deferred
+  // while the panel is off-screen so a fast scroll never downloads all clips.
+  function setupStepper() {
+    const section = document.querySelector('.how-it-works');
+    const steps = Array.from(document.querySelectorAll('.workflow-step[data-video]'));
     const video = document.getElementById('workflow-video');
-    if (!steps.length || !video) return;
+    const caption = document.getElementById('workflow-caption-text');
+    const panel = document.querySelector('.how-it-works .video-panel');
+    if (!section || !steps.length || !video) return;
+
+    const srcEl = video.querySelector('source');
+    const initialId = srcEl ? (srcEl.getAttribute('src').match(/videos\/([a-z0-9_-]+)\.mp4/) || [])[1] : null;
+    let active = null;
+    let currentId = initialId;
+    let pendingId = null;
+
+    function swapVideo(videoId) {
+      if (!/^[a-zA-Z0-9_-]+$/.test(videoId || '')) return;
+      video.pause();
+      video.currentTime = 0;
+      video.onerror = null;
+      video.oncanplaythrough = null;
+      video.src = 'assets/videos/' + videoId + '.mp4' + ASSET_VERSION;
+      video.load();
+      video.onerror = () => {};
+      video.oncanplaythrough = () => {
+        video.play().catch(() => {});
+      };
+      currentId = videoId;
+    }
+
+    function maybeSwap() {
+      if (!pendingId || pendingId === currentId) return;
+      if (panel) {
+        const rect = panel.getBoundingClientRect();
+        if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+      }
+      swapVideo(pendingId);
+      pendingId = null;
+    }
+
+    function activate(step) {
+      if (step === active) return;
+      active = step;
+      steps.forEach((s) => {
+        const on = s === step;
+        s.classList.toggle('active-step', on);
+        if (on) s.setAttribute('aria-current', 'step');
+        else s.removeAttribute('aria-current');
+      });
+      section.classList.add('has-active');
+      if (caption && step.dataset.label) caption.textContent = step.dataset.label;
+      if (panel) {
+        panel.classList.remove('pulse');
+        void panel.offsetWidth;
+        panel.classList.add('pulse');
+      }
+      pendingId = step.dataset.video;
+      maybeSwap();
+    }
 
     steps.forEach((step) => {
-      step.addEventListener('click', () => {
-        const videoId = step.getAttribute('data-video');
-        if (!/^[a-zA-Z0-9_-]+$/.test(videoId || '')) return;
-        const videoPath = 'assets/videos/' + videoId + '.mp4' + ASSET_VERSION;
-
-        video.pause();
-        video.currentTime = 0;
-        video.onerror = null;
-        video.oncanplaythrough = null;
-
-        video.src = videoPath;
-        video.load();
-
-        video.onerror = () => {};
-        video.oncanplaythrough = () => {
-          video.play().catch(() => {});
-        };
-
-        steps.forEach((s) => s.classList.remove('active-step'));
-        step.classList.add('active-step');
-      });
-
+      step.addEventListener('click', () => activate(step));
       // The steps are focusable (tabindex="0" role="button"); make Enter
       // and Space activate them like a native button.
       step.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
           e.preventDefault();
-          step.click();
+          activate(step);
         }
       });
     });
 
-    steps[0].classList.add('active-step');
+    // Scroll-spy: whichever step crosses the viewport's middle band drives
+    // the panel, so scrolling alone tells the workflow.
+    if ('IntersectionObserver' in window) {
+      const spy = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) activate(entry.target);
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      steps.forEach((s) => spy.observe(s));
+    }
+
+    window.addEventListener('scroll', maybeSwap, { passive: true });
+    activate(steps[0]);
   }
 
   // Scroll-driven reveal of the workflow steps and video. .anim-ready is
@@ -326,7 +373,7 @@
 
     // Workflow video: keep the poster-style placeholder panel up until the
     // video actually starts playing (lazy-played by setupWorkflowVideoLazyPlay
-    // or by step switching).
+    // or by the stepper).
     const video = document.getElementById('workflow-video');
     if (video) {
       const wrapper = video.closest('.video-wrapper');
@@ -388,7 +435,7 @@
   // -----------------------------------------------------------------------
 
   function init() {
-    setupVideoSwitching();
+    setupStepper();
     setupScrollReveal();
     setupProgressLine();
     setupHeroVideoDataSaver();
