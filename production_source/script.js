@@ -187,7 +187,7 @@
         incoming.play().catch(() => {});
         incoming.classList.remove('is-hidden');
         outgoing.classList.add('is-hidden');
-        window.setTimeout(() => outgoing.pause(), 700);
+        window.setTimeout(() => outgoing.pause(), 350);
         front = incoming;
         back = outgoing;
       };
@@ -231,13 +231,8 @@
         io.observe(track);
       }
       let lastVid = steps[0].dataset.video || null;
-      // Inertia: scroll sets a target progress; a rAF loop eases the applied
-      // progress toward it, so the numeral/rail glide instead of tracking
-      // the wheel 1:1. Reduced-motion users get the raw value directly.
-      const ease = prefersReducedMotion() ? 1 : 0.14;
-      let target = 0;
-      let current = -1;
-      let rafId = 0;
+      // Direct drive: scroll maps 1:1 to --p/--ch (no easing loop), so the
+      // numeral, rail and chapter text track the wheel/touch exactly.
       const apply = (p) => {
         section.style.setProperty('--p', p.toFixed(4));
         const ch = Math.min(steps.length - 1, Math.floor(p * steps.length));
@@ -256,28 +251,15 @@
           }
         }
       };
-      const tick = () => {
-        rafId = 0;
-        if (current < 0) current = target;
-        const diff = target - current;
-        if (Math.abs(diff) < 0.0005) {
-          current = target;
-        } else {
-          current += diff * ease;
-          rafId = window.requestAnimationFrame(tick);
-        }
-        apply(current);
-      };
-      const SLACK = 0.12; // dead zone at both track ends (see onScroll)
+      const SLACK = 0.05; // small dead zone at both track ends (see onScroll)
       const onScroll = () => {
         const rect = track.getBoundingClientRect();
         const total = rect.height - window.innerHeight;
         // Slack: the first/last SLACK of the track is a dead zone, so the
-        // runway does not start advancing the moment it pins (chapter 1
-        // holds on arrival) and chapter 3 is reached before the track ends.
+        // runway does not start advancing the instant it pins and the last
+        // chapter is reached just before the track ends.
         const raw = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
-        target = rawToAnimP(raw, SLACK);
-        if (!rafId) rafId = window.requestAnimationFrame(tick);
+        apply(rawToAnimP(raw, SLACK));
       };
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', onScroll, { passive: true });
@@ -315,7 +297,7 @@
         const total = rect.height - window.innerHeight;
         if (total <= 0) return;
         const raw = Math.min(1, Math.max(0, -rect.top / total));
-        if (raw < 0.05 || raw > 0.95) return;
+        if (raw < SLACK || raw > 1 - SLACK) return;
         const n = steps.length;
         const animP = rawToAnimP(raw, SLACK);
         const k = Math.max(0, Math.min(n - 1, Math.round(animP * n - 0.5)));
@@ -328,7 +310,7 @@
       };
       window.addEventListener('scroll', () => {
         window.clearTimeout(snapTimer);
-        snapTimer = window.setTimeout(detent, 100);
+        snapTimer = window.setTimeout(detent, 80);
       }, { passive: true });
 
       // No wheel/touch/key interception: input scrolls freely (the stage is

@@ -10,12 +10,14 @@
      1. Design tokens (monochrome palette)      7. Footer
      2. Base: reset, body, a11y helpers,        8. Contact / benefits / CTA
         layout container                         9. Featured experiments
-     3. Hero section                           10. Device & motion preferences
-     4. Generic sections & headings            11. Partner logos, videos
-     5. Back-to-top button                     12. Responsive overrides are grouped
-                                                  with their component or at the end
-                                               13. Loading placeholders (lazy media)
-     6. Consent banner                          14. How it works: chapter runway
+     4. Hero section                           10. Device & motion preferences
+     5. Generic sections & headings            11. Partner logos, videos, workflow steps
+     6. Back-to-top button                     13. Loading placeholders (lazy media)
+     7. Footer                                 14. Consent banner
+     8. Contact / benefits / CTA               15. How it works: chapter runway
+     9. Featured experiments
+   (plus an unnumbered reusable .fab block; responsive overrides sit
+    with their component or at the end of the file)
       ========================================================================== */
 :root {
   --highlight-color: #000;
@@ -877,7 +879,7 @@ footer {
    how-it-works runway (see section 15).
    Two stacked players crossfade on step change (.is-hidden = opacity 0). */
 .workflow-video {
-  transition: opacity .6s ease
+  transition: opacity .3s ease
 }
 .workflow-video.is-hidden {
   opacity: 0
@@ -1033,7 +1035,7 @@ img.media-error {
   background: var(--gray-900)
 }
 /* ---- 15. How it works: the "chapter runway" scrollytelling ----
-   A 400vh .proto-track drives a sticky 100vh stage (class .proto is kept for
+   A 260vh .proto-track drives a sticky 100vh stage (class .proto is kept for
    the scroll driver). JS sets --p (0..1 scroll progress) and --ch (current
    chapter) on the section, plus .proto-ready to enable the animated states -
    without JS the chapters render as a plain static stack. Layout: numeral on
@@ -1082,15 +1084,14 @@ img.media-error {
   height: 1em;
   overflow: hidden
 }
-/* Continuous odometer: the numeral glides with raw scroll progress --p
-   (no transition - rAF already drives it at display rate) */
 /* Odometer snaps to whole numbers: --ch is the discrete chapter (0..2),
    each span is 1em (line-height 1), so -1em per chapter lands exactly in
-   the 1em frame. Eased transition = the snap. (Percentages would resolve
-   against the 3em track - use em. The rail fill stays continuous via --p.) */
+   the 1em frame. The short eased transition is the snap. (Percentages
+   would resolve against the 3em track - use em. The rail fill stays
+   continuous via --p, driven 1:1 by scroll in JS.) */
 .proto-ready .runway-num-track {
   transform: translateY(calc(var(--ch, 0) * -1em));
-  transition: transform .45s ease;
+  transition: transform .2s cubic-bezier(.3,.9,.3,1);
   will-change: transform
 }
 .runway-body {
@@ -1123,7 +1124,7 @@ img.media-error {
   min-height: 10rem
 }
 .runway-step {
-  transition: opacity .5s ease, transform .5s ease;
+  transition: opacity .28s ease-out, transform .28s ease-out;
   will-change: transform, opacity
 }
 .runway-step + .runway-step {

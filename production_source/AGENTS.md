@@ -30,7 +30,7 @@ This guide provides comprehensive documentation for the Remote Labs website at E
 
 **Key Features**:
 - "How it works" is a "chapter runway" scrollytelling section (styles.css
-  section 14, driven by `setupPrototypes` in script.js): a 400vh track with
+  section 15, driven by `setupPrototypes` in script.js): a 260vh track with
   a sticky 100vh stage — numeral counts 01→03 continuously with scroll
   (`--p`), chapter text crossfades below it (`--ch`), a rail fills with
   progress, and the video panel in the right half crossfades to the active
