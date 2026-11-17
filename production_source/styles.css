@@ -1130,7 +1130,7 @@ img.media-error {
    without JS the chapters render as a plain static stack. Layout: numeral on
    top-left, chapter text below it, video panel in the right half of the page. */
 .proto-track {
-  height: 300vh
+  height: 260vh
 }
 .proto-stage {
   position: sticky;
@@ -1138,17 +1138,17 @@ img.media-error {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-bottom: clamp(2rem, 6vh, 4rem);
+  padding-bottom: 1rem;
   /* the section header lives inside the pinned stage, so title and runway
      travel together with no dead space above or below */
   padding-top: clamp(4.5rem, 9vh, 6.5rem);
   overflow: hidden;
   contain: layout paint
 }
-/* auto margins center the runway in the stage space left under the
-   header, so there is no oversized empty band below it */
+/* runway sits directly under the in-stage header; any leftover stage
+   height stays at the bottom and reads as page background */
 .runway {
-  margin: auto 0;
+  margin-top: clamp(1.5rem, 4vh, 3rem);
   display: grid;
   /* numeral top-left, chapter text below it, video spanning both rows on
      the right so it lines up with the numeral and the text */
