@@ -73,7 +73,11 @@ body {
   padding-bottom: 0
 }
 .how-it-works + .section {
-  padding-top: 0
+  padding-top: 0;
+  /* the pinned stage is 100vh but its content is ~32rem tall; pull the next
+     section up by the blank so it is revealed as soon as the stage starts
+     sliding away (the stage has z-index 1 and covers it while pinned) */
+  margin-top: min(0px, calc(32rem - 100vh))
 }
 @media (max-width:768px) {
   :root {
@@ -1039,6 +1043,7 @@ img.media-error {
   position: sticky;
   top: 0;
   height: 100vh;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   padding-bottom: 1rem;
@@ -1175,6 +1180,9 @@ img.media-error {
 }
 
 @media (max-width: 768px) {
+  .how-it-works + .section {
+    margin-top: min(0px, calc(24rem - 100vh))
+  }
   .proto-track {
     height: 240vh
   }
@@ -1198,6 +1206,9 @@ img.media-error {
 /* Short viewports (landscape phones, small laptop windows): shrink the
    stage content so nothing is clipped by the stage overflow: hidden */
 @media (max-height: 700px) and (min-width: 769px) {
+  .how-it-works + .section {
+    margin-top: min(0px, calc(25rem - 100vh))
+  }
   .proto-stage {
     padding-top: 1rem;
     padding-bottom: 1.5rem
@@ -1212,6 +1223,9 @@ img.media-error {
 
 /* Reduced motion: collapse the tall track into plain stacked content */
 @media (prefers-reduced-motion: reduce) {
+  .how-it-works + .section {
+    margin-top: 0
+  }
   .proto-track {
     height: auto
   }
