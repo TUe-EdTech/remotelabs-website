@@ -250,6 +250,5 @@ for (const page of PAGES) {
   }
 }
 
-
 console.log('\n' + (failures === 0 ? 'All checks passed.' : `${failures} check(s) failed.`));
 process.exit(failures === 0 ? 0 : 1);

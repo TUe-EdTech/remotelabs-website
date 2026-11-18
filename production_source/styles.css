@@ -980,8 +980,8 @@ img.media-error {
 .hero-video-wrapper {
   background: var(--gray-900)
 }
-/* ---- 15. How it works: three steps with their videos, mirroring the ---- */
-/* benefits split layout (section 8): sticky heading left, bordered rows right */
+/* ---- 15. How it works: three steps with their videos, mirroring the benefits
+   split layout (section 8): sticky heading left, bordered rows right ---- */
 .steps-layout {
   display: grid;
   grid-template-columns: 1fr 2fr;
