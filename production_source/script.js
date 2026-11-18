@@ -8,6 +8,7 @@
 //   4. Loading placeholders for lazy media (image shimmer)
 //   5. Smooth scrolling for in-page anchors
 //   6. Service worker registration (after page load, http/https only)
+//   7. Block right-click save on the experiment setup photos
 (function () {
   'use strict';
 
@@ -226,7 +227,21 @@
   // Init
   // -----------------------------------------------------------------------
 
+  // -----------------------------------------------------------------------
+  // 7. Experiment setup photos: no right-click save, no drag
+  // -----------------------------------------------------------------------
+
+  // Deter casual copying of the setup photos: no context menu, no drag.
+  // Not real DRM - devtools/view-source still work.
+  function protectSetupImages() {
+    document.querySelectorAll('.experiment-image').forEach((img) => {
+      img.draggable = false;
+      img.addEventListener('contextmenu', (e) => e.preventDefault());
+    });
+  }
+
   function init() {
+    protectSetupImages();
     setupHeroVideoDataSaver();
     setupHeroVideoControls();
     setupBackButton();

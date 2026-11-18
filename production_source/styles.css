@@ -748,6 +748,10 @@ footer {
   order: -1
 }
 .experiment-image {
+  /* deter casual copying of the setup photos (not real DRM - devtools still works) */
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-touch-callout: none;
   width: 100%;
   height: auto;
   max-height: 250px;
